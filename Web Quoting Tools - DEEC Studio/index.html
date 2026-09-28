@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- Site CSS goes first, right after the mandatory charset/viewport meta —
+     before preconnects, fonts, and the favicon — so the browser discovers
+     and dispatches this render-blocking request at the earliest possible
+     moment during HTML parsing. Fixes an intermittent unstyled-HTML flash
+     seen on iOS Safari after 2-3 rapid reloads: WebKit can cancel/interrupt
+     in-flight requests when reload is triggered again quickly, and every
+     head entry ahead of this link widened the window in which that could
+     hit this specific request. See also the css/js Cache-Control in
+     _headers/.htaccess (stale-while-revalidate/stale-if-error) for the
+     other half of this fix. -->
+<link rel="stylesheet" href="styles.css?v=20260923a" />
+
+<!-- Whop tracking pixel (conversion/attribution for the checkout funnel).
+     CSP script-src is 'self' only with no 'unsafe-inline' — this exact
+     inline script is allowlisted by its SHA-256 hash in _headers/.htaccess
+     instead, so it runs while arbitrary injected inline scripts still
+     don't (see the security-audit finding this was added after: script-src
+     'self' with no unsafe-inline was the reason there's no exploitable XSS
+     path). If you ever edit so much as a character of this snippet, the
+     hash in both header files must be recomputed to match or it'll be
+     silently blocked. t.whop.tw is also allowlisted in script-src (loads
+     s.js) and connect-src (sends tracking events). -->
+<script>!function(w,d,s,u,n,a,b){if(w[n])return;a=w[n]={q:[],t:+new Date,s:[],o:u,track:function(){a.q.push([+new Date].concat([].slice.call(arguments)))},setScope:function(){a.s=[].slice.call(arguments).filter(function(x){return typeof x==="string"});a.q.push([+new Date,"setScope"].concat(a.s))},scope:function(){var c=[].slice.call(arguments);return{track:function(){a.q.push([+new Date].concat([].slice.call(arguments)).concat([{__scope:c}]))}}}};b=d.createElement(s);b.async=1;b.src=u+"/s.js";d.getElementsByTagName(s)[0].parentNode.insertBefore(b,d.getElementsByTagName(s)[0])}(window,document,"script","https://t.whop.tw","whop");whop.setScope("biz_z27YXAf3J61uO9");whop.track("page");</script>
+
+<!-- Meta Pixel Code — base snippet + PageView only. Same hash-allowlist
+     approach as the Whop pixel above (no 'unsafe-inline'). The
+     conversion event for this campaign, "InitiateCheckout", is NOT a
+     second inline <script> — it's called from main.js's checkout click
+     handler instead (main.js is already trusted via script-src 'self',
+     so no extra CSP entry was needed for that part). Do NOT add a
+     "Purchase" event here or in main.js: this plain-iframe checkout has
+     no way to know if a payment actually succeeded inside Whop's iframe,
+     so Purchase is meant to come from Whop server-side (Conversions API)
+     on its own payment.succeeded webhook instead. Edit so much as a
+     character of THIS block and its hash in _headers/.htaccess needs
+     recomputing or it's silently blocked. connect.facebook.net/
+     www.facebook.com are allowlisted in script-src/img-src/connect-src/
+     frame-src/form-action for fbevents.js and its tracking beacons. -->
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1068830012634174');
+  fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1068830012634174&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+
+<title>DEEC Studio — Tu cotizador web personalizado para catering</title>
+<meta name="description" content="DEEC Studio convierte tus servicios, precios y reglas de cobro en una herramienta que genera presupuestos y cotizaciones profesionales en minutos. Pago único de $49.99 USD, sin suscripciones." />
+<meta name="theme-color" content="#F8F9FB" />
+<link rel="canonical" href="https://deecstudio-cateringtools.online/" />
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://deecstudio-cateringtools.online/" />
+<meta property="og:title" content="DEEC Studio — Cotiza. Envía. Cierra." />
+<meta property="og:description" content="Tu forma de cobrar. Convertida en una herramienta. Cotizador web personalizado para empresas de catering." />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="DEEC Studio — Cotiza. Envía. Cierra." />
+<meta name="twitter:description" content="Tu forma de cobrar. Convertida en una herramienta. Cotizador web personalizado para empresas de catering." />
+
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Warms up DNS/TLS to Whop ahead of time so the checkout iframe (loaded
+     lazily on hover/touch/click of a "Comprar ahora" button — see main.js
+     initCheckoutModal) doesn't pay that latency at the moment it's needed.
+     Doesn't load any Whop page content or cookies by itself. -->
+<link rel="preconnect" href="https://whop.com" crossorigin>
+
+<!-- Web fonts — loaded non-render-blocking (media="print" swapped to "all"
+     by main.js, no inline JS so this stays CSP-safe under script-src 'self').
+     styles.css above is the only stylesheet first paint actually waits on;
+     fonts apply as soon as they're ready via font-display:swap, same as any
+     other async font-loading pattern — this isn't a design change, only a
+     loading-strategy change. <noscript> keeps them blocking (and fonts
+     working) if JS is disabled. -->
+<link rel="stylesheet" media="print" data-font-stylesheet href="https://api.fontshare.com/v2/css?f[]=satoshi@700,800,900,400,500&f[]=switzer@400,500,600,700,800,900&display=swap">
+<link rel="stylesheet" media="print" data-font-stylesheet href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap">
+<link rel="stylesheet" media="print" data-font-stylesheet href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap">
+<noscript>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@700,800,900,400,500&f[]=switzer@400,500,600,700,800,900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap">
+</noscript>
+
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+</head>
+<body>
+<a class="skip-link" href="#main" data-i18n="a11y.skipLink">Saltar al contenido</a>
+
+<!-- =========================================================
+     NAV — floating pill, icons + language toggle + menu dropdown
+     ========================================================= -->
+<header class="nav" data-nav>
+  <div class="nav-inner">
+    <a class="nav-brand" href="#top" aria-label="DEEC Studio">
+      <img class="nav-brand-logo" alt="DEEC Studio" width="141" height="30" src="assets/logo-deecstudio.svg" />
+    </a>
+    <div class="nav-actions">
+      <div class="nav-icons">
+        <a href="#faq" class="nav-icon-btn" data-i18n-aria="a11y.faqLink" aria-label="Preguntas frecuentes">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 4.6-1.4c.5.8.3 1.6-.4 2.2-.8.7-1.2 1.1-1.2 2.2"/><circle cx="12" cy="16.5" r=".6" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="#" class="nav-icon-btn" data-whatsapp-cta data-i18n-aria="a11y.whatsappLink" aria-label="Escribir por WhatsApp">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.05 21.9c-1.596 0-3.16-.415-4.53-1.2l-.326-.194-3.37.884.9-3.286-.213-.337a9.86 9.86 0 0 1-1.51-5.25c0-5.45 4.44-9.885 9.9-9.885 2.643 0 5.126 1.03 6.994 2.898a9.82 9.82 0 0 1 2.9 6.994c-.003 5.45-4.444 9.876-9.744 9.876zm8.413-18.28A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.327.157 11.874a11.84 11.84 0 0 0 1.596 5.96L0 24l6.335-1.652a11.9 11.9 0 0 0 5.71 1.452h.005c6.554 0 11.89-5.328 11.893-11.876a11.8 11.8 0 0 0-3.48-8.304z"/></svg>
+        </a>
+      </div>
+      <div class="lang-toggle" data-lang-toggle role="group" data-i18n-aria="a11y.langGroup" aria-label="Idioma">
+        <button type="button" class="lang-btn is-active" data-lang="es" aria-pressed="true" aria-label="Español">
+          <svg class="flag" viewBox="0 0 20 14"><rect width="20" height="14" fill="#AA151B"/><rect y="3.5" width="20" height="7" fill="#F1BF00"/></svg>
+        </button>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false" aria-label="English">
+          <svg class="flag" viewBox="0 0 20 14">
+            <rect width="20" height="14" fill="#B22234"/>
+            <rect y="1.08" width="20" height="1.08" fill="#fff"/><rect y="3.23" width="20" height="1.08" fill="#fff"/><rect y="5.38" width="20" height="1.08" fill="#fff"/><rect y="7.54" width="20" height="1.08" fill="#fff"/><rect y="9.69" width="20" height="1.08" fill="#fff"/><rect y="11.85" width="20" height="1.08" fill="#fff"/>
+            <rect width="8.6" height="7.54" fill="#3C3B6E"/>
+          </svg>
+        </button>
+      </div>
+      <button class="menu-toggle" data-menu-toggle aria-expanded="false" aria-controls="menu-panel" aria-label="Abrir menú">
+        <span class="menu-toggle-bar"></span>
+        <span class="menu-toggle-bar"></span>
+        <span class="menu-toggle-bar"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="menu-backdrop" data-menu-backdrop hidden></div>
+<nav id="menu-panel" class="menu-panel" data-menu-panel data-i18n-aria="a11y.mobileNav" aria-label="Menú de navegación" hidden>
+  <ul class="menu-list">
+    <li><a href="#top" data-i18n="nav.item.home">Inicio</a></li>
+    <li><a href="#problema" data-i18n="nav.item.problem">El problema</a></li>
+    <li><a href="#solucion" data-i18n="nav.item.solution">Solución</a></li>
+    <li><a href="#como-funciona" data-i18n="nav.item.how">Cómo funciona</a></li>
+    <li><a href="#experiencia" data-i18n="nav.item.experience">La experiencia</a></li>
+    <li><a href="#oferta" data-i18n="nav.item.pricing">Precio</a></li>
+    <li><a href="#faq" data-i18n="nav.item.faq">Preguntas frecuentes</a></li>
+    <li><a href="#oferta" class="menu-link-cta" data-cta-buy data-i18n="nav.item.cta">Comprar ahora</a></li>
+  </ul>
+</nav>
+
+<!-- Floating action buttons — FAQ (scrolls to inline accordion) + WhatsApp -->
+<div class="fab-stack" data-fab-stack>
+  <a href="#faq" class="fab-item" data-fab-item data-i18n-aria="a11y.faqLink" aria-label="Preguntas frecuentes">
+    <span class="fab-bubble">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 4.6-1.4c.5.8.3 1.6-.4 2.2-.8.7-1.2 1.1-1.2 2.2"/><circle cx="12" cy="16.5" r=".6" fill="currentColor" stroke="none"/></svg>
+    </span>
+    <span class="fab-tooltip" data-i18n="fab.faq.title">Preguntas frecuentes</span>
+  </a>
+  <a href="#" class="fab-item" data-fab-item data-whatsapp-cta data-i18n-aria="a11y.whatsappLink" aria-label="Escribir por WhatsApp">
+    <span class="fab-bubble fab-bubble-accent">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.05 21.9c-1.596 0-3.16-.415-4.53-1.2l-.326-.194-3.37.884.9-3.286-.213-.337a9.86 9.86 0 0 1-1.51-5.25c0-5.45 4.44-9.885 9.9-9.885 2.643 0 5.126 1.03 6.994 2.898a9.82 9.82 0 0 1 2.9 6.994c-.003 5.45-4.444 9.876-9.744 9.876zm8.413-18.28A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.327.157 11.874a11.84 11.84 0 0 0 1.596 5.96L0 24l6.335-1.652a11.9 11.9 0 0 0 5.71 1.452h.005c6.554 0 11.89-5.328 11.893-11.876a11.8 11.8 0 0 0-3.48-8.304z"/></svg>
+    </span>
+    <span class="fab-tooltip" data-i18n="fab.whatsapp.title">¿Tienes dudas o preguntas? Contáctanos</span>
+  </a>
+</div>
+
+<!-- Sticky CTA bar — appears once the Hero scrolls out of view -->
+<div class="cta-bar" data-cta-bar>
+  <div class="container cta-bar-inner">
+    <div class="cta-bar-price">
+      <span class="cta-bar-amount">$49.99 USD</span>
+      <span class="cta-bar-label" data-i18n="trust.paid">Pago único</span>
+    </div>
+    <a class="btn btn-primary" data-cta-buy href="#oferta"><span data-i18n="ctaBar.cta">Quiero mi cotizador personalizado</span> <span class="btn-arrow" aria-hidden="true">→</span></a>
+  </div>
+  <div class="cta-bar-badges cta-bar-badges-icons">
+    <span class="hero-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="2"/><path d="M2.5 9.5h19"/></svg>
+      <span data-i18n="trust.paid">Pago único</span>
+    </span>
+    <span class="hero-meta-divider" aria-hidden="true"></span>
+    <span class="hero-meta-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="12" r="4"/><circle cx="17" cy="12" r="4"/></svg>
+      <span data-i18n="trust.access">Acceso permanente</span>
+    </span>
+    <span class="hero-meta-divider" aria-hidden="true"></span>
+    <span class="hero-meta-item">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 3 14h7l-1 8 11-14h-8l1-6z"/></svg>
+      <span data-i18n="trust.ready">Listo para usar</span>
+    </span>
+  </div>
+</div>
+
+<!-- Social proof / visitor toasts -->
+<div class="sp-stack" data-sp-stack aria-live="polite" aria-atomic="true"></div>
+
+<!-- WhatsApp not-configured warning toast -->
+<div class="toast" data-toast role="status" aria-live="polite"></div>
+
+<main id="main">
+
+<!-- =========================================================
+     1. HERO
+     ========================================================= -->
+<section class="hero" id="top">
+  <div class="container hero-inner">
+    <div class="hero-copy">
+    <p class="hero-kicker" data-i18n="hero.kicker">Cotizadores web personalizados</p>
+    <h1 class="hero-title" data-i18n="hero.title">Tu cotizador.<br>Tus precios. <em>Tu forma.</em></h1>
+    <p class="hero-sub" data-i18n="hero.sub">Diseñamos y desarrollamos una herramienta de cotización personalizada con los servicios, precios y reglas de tu negocio.</p>
+    </div>
+
+    <div class="hero-rating reveal">
+      <span class="hero-rating-lead">
+        <span class="hero-rating-stars" data-rating-stars="hero" aria-hidden="true"></span>
+        <strong class="hero-rating-score">4.8</strong>
+        <span class="hero-rating-sep" aria-hidden="true">·</span>
+      </span>
+      <span class="hero-rating-text" data-i18n="hero.rating">Más de 214 negocios han confiado en nosotros para crear sus cotizadores.</span>
+    </div>
+
+    <div class="hero-visual" aria-hidden="true">
+      <div class="hero-mockup" data-mockup-tilt>
+        <div class="mockup" data-mockup>
+          <div class="quote-builder-mockup">
+           <div class="qb-shell">
+            <aside class="qb-sidebar">
+              <div class="qb-brand">
+                <span class="qb-brand-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-8H7v8M7 3v5h13" /><path d="M4 3h16v18H4z" /></svg></span>
+                <div>
+                  <div class="qb-brand-name">Lebanquet</div>
+                  <div class="qb-brand-sub" data-i18n="qb.eventQuotingTool">Event Quoting Tool</div>
+                </div>
+              </div>
+              <nav class="qb-nav">
+                <div class="qb-nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14" /></svg><span data-i18n="pv.mockup.newQuote">New quote</span></div>
+                <div class="qb-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6" /></svg><span data-i18n="qb.navQuotes">Quotes</span></div>
+                <div class="qb-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /></svg><span data-i18n="qb.navClients">Clients</span></div>
+                <div class="qb-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg><span data-i18n="mockup.services">Services</span></div>
+                <div class="qb-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg><span data-i18n="qb.navSettings">Settings</span></div>
+              </nav>
+              <div class="qb-sidebar-footer">
+                <div class="qb-sidebar-footer-name">DEEC Studio</div>
+                <div class="qb-sidebar-footer-sub" data-i18n="qb.specializedQuotingTool">Specialized quoting tool</div>
+              </div>
+            </aside>
+            <div class="qb-main">
+            <div class="qb-topbar">
+              <div class="qb-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.3-4.3" /></svg><span data-i18n="qb.searchPlaceholder">Search services...</span></div>
+              <div class="qb-topbar-spacer"></div>
+              <div class="qb-autosaved"><span class="qb-autosaved-dot"></span><span data-i18n="qb.autosaved">Autosaved</span></div>
+              <div class="qb-btn-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14" /></svg><span data-i18n="pv.mockup.newQuote">New quote</span></div>
+            </div>
+
+            <div class="qb-page">
+              <p class="qb-eyebrow" data-i18n="qb.eyebrow">Catering quote builder</p>
+              <div class="qb-page-header-row">
+                <h3 class="qb-page-title" data-i18n="pv.mockup.newQuote">New quote</h3>
+                <span class="qb-folio-badge">PRE-202609-0073</span>
+              </div>
+              <p class="qb-page-subtitle" data-i18n="qb.pageSubtitle">Fill in the details, choose your services, and generate a professional quote.</p>
+
+              <div class="qb-settings-bar">
+                <div class="qb-settings-field">
+                  <span class="qb-settings-label" data-i18n="qb.market">Market</span>
+                  <div class="qb-fake-select"><svg class="qb-flag-us" viewBox="0 0 20 14"><rect width="20" height="14" fill="#B22234" /><rect y="1.08" width="20" height="1.08" fill="#fff" /><rect y="3.23" width="20" height="1.08" fill="#fff" /><rect y="5.38" width="20" height="1.08" fill="#fff" /><rect y="7.54" width="20" height="1.08" fill="#fff" /><rect y="9.69" width="20" height="1.08" fill="#fff" /><rect y="11.85" width="20" height="1.08" fill="#fff" /><rect width="8.6" height="7.54" fill="#3C3B6E" /></svg><span data-i18n="qb.marketValue">United States</span></div>
+                </div>
+                <div class="qb-settings-field">
+                  <span class="qb-settings-label" data-i18n="qb.language">Language</span>
+                  <div class="qb-fake-select"><svg class="qb-flag-us" viewBox="0 0 20 14"><rect width="20" height="14" fill="#B22234" /><rect y="1.08" width="20" height="1.08" fill="#fff" /><rect y="3.23" width="20" height="1.08" fill="#fff" /><rect y="5.38" width="20" height="1.08" fill="#fff" /><rect y="7.54" width="20" height="1.08" fill="#fff" /><rect y="9.69" width="20" height="1.08" fill="#fff" /><rect y="11.85" width="20" height="1.08" fill="#fff" /><rect width="8.6" height="7.54" fill="#3C3B6E" /></svg><span data-i18n="qb.languageValue">English</span></div>
+                </div>
+                <div class="qb-settings-field">
+                  <span class="qb-settings-label" data-i18n="qb.currency">Currency</span>
+                  <div class="qb-fake-select"><svg class="qb-flag-us" viewBox="0 0 20 14"><rect width="20" height="14" fill="#B22234" /><rect y="1.08" width="20" height="1.08" fill="#fff" /><rect y="3.23" width="20" height="1.08" fill="#fff" /><rect y="5.38" width="20" height="1.08" fill="#fff" /><rect y="7.54" width="20" height="1.08" fill="#fff" /><rect y="9.69" width="20" height="1.08" fill="#fff" /><rect y="11.85" width="20" height="1.08" fill="#fff" /><rect width="8.6" height="7.54" fill="#3C3B6E" /></svg>USD</div>
+                </div>
+              </div>
+
+              <div class="qb-stepper">
+                <div class="qb-step">
+                  <span class="qb-step-circle done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></span>
+                  <span class="qb-step-label" data-i18n="qb.stepCustomer">Customer</span>
+                </div>
+                <div class="qb-step">
+                  <span class="qb-step-connector done"></span>
+                  <span class="qb-step-circle done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></span>
+                  <span class="qb-step-label" data-i18n="qb.stepEvent">Event</span>
+                </div>
+                <div class="qb-step">
+                  <span class="qb-step-connector done"></span>
+                  <span class="qb-step-circle done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></span>
+                  <span class="qb-step-label" data-i18n="mockup.services">Services</span>
+                </div>
+                <div class="qb-step">
+                  <span class="qb-step-connector done"></span>
+                  <span class="qb-step-circle done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></span>
+                  <span class="qb-step-label" data-i18n="qb.stepCustom">Custom.</span>
+                </div>
+                <div class="qb-step">
+                  <span class="qb-step-connector done"></span>
+                  <span class="qb-step-circle current"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6" /></svg></span>
+                  <span class="qb-step-label" data-i18n="qb.stepReview">Review</span>
+                </div>
+                <div class="qb-step">
+                  <span class="qb-step-connector"></span>
+                  <span class="qb-step-circle pending"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6" /></svg></span>
+                  <span class="qb-step-label qb-faint" data-i18n="qb.stepQuote">Quote</span>
+                </div>
+              </div>
+
+              <div class="qb-cards">
+                <div class="qb-card">
+                  <div class="qb-card-header">
+                    <span class="qb-card-icon done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></span>
+                    <div class="qb-card-text">
+                      <p class="qb-card-title" data-i18n="qb.cardCustomerInfo">Customer Information</p>
+                      <p class="qb-card-summary">Ana &amp; Robert · 555 123 45 56</p>
+                    </div>
+                    <span class="qb-card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg></span>
+                  </div>
+                </div>
+                <div class="qb-card">
+                  <div class="qb-card-header">
+                    <span class="qb-card-icon done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></span>
+                    <div class="qb-card-text">
+                      <p class="qb-card-title" data-i18n="qb.stepEvent">Event</p>
+                      <p class="qb-card-summary" data-i18n="qb.cardSummaryEvent">Wedding · September 18, 2026 · 150 guests</p>
+                    </div>
+                    <span class="qb-card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg></span>
+                  </div>
+                </div>
+                <div class="qb-card">
+                  <div class="qb-card-header">
+                    <span class="qb-card-icon done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg></span>
+                    <div class="qb-card-text">
+                      <p class="qb-card-title" data-i18n="mockup.services">Services</p>
+                      <p class="qb-card-summary" data-i18n="qb.cardSummaryServices">Package Premium · On-site service</p>
+                    </div>
+                    <span class="qb-card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg></span>
+                  </div>
+                </div>
+
+                <div class="qb-card">
+                  <div class="qb-card-header">
+                    <span class="qb-card-icon current"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6" /></svg></span>
+                    <div class="qb-card-text">
+                      <p class="qb-card-title" data-i18n="qb.stepReview">Review</p>
+                      <p class="qb-card-summary" data-i18n="qb.cardReviewSummary">Full summary and final calculation.</p>
+                    </div>
+                    <span class="qb-card-chevron qb-up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg></span>
+                  </div>
+                  <div class="qb-card-content">
+                    <div class="qb-section">
+                      <div class="qb-section-title-row">
+                        <span class="qb-section-label" data-i18n="mockup.clientAndEvent">Client and event</span>
+                        <span class="qb-section-rule"></span>
+                      </div>
+                      <dl class="qb-info-grid">
+                        <div class="qb-info-item"><dt data-i18n="mockup.client">Client</dt><dd>Ana &amp; Robert</dd></div>
+                        <div class="qb-info-item"><dt data-i18n="qb.type">Type</dt><dd data-i18n="mockup.wedding">Wedding</dd></div>
+                        <div class="qb-info-item"><dt data-i18n="mockup.date">Date</dt><dd data-i18n="mockup.dateSep18">Sep 18, 2026</dd></div>
+                        <div class="qb-info-item"><dt data-i18n="mockup.guests">Guests</dt><dd>150</dd></div>
+                      </dl>
+                    </div>
+                    <div class="qb-section">
+                      <div class="qb-section-title-row">
+                        <span class="qb-section-label" data-i18n="mockup.services">Services</span>
+                        <span class="qb-section-rule"></span>
+                      </div>
+                      <div class="qb-services-list">
+                        <div class="qb-service-row"><span class="qb-service-name" data-i18n="mockup.packagePremium">Package Premium</span><span class="qb-service-price">$133,500.00</span></div>
+                        <div class="qb-service-row"><span class="qb-service-name"><span data-i18n="pv.mockup.tagWaiters">Additional waiters</span> &times; 6</span><span class="qb-service-price">$4,800.00</span></div>
+                      </div>
+                    </div>
+                    <div class="qb-section">
+                      <div class="qb-breakdown">
+                        <div class="qb-breakdown-row"><span data-i18n="mockup.subtotal">Subtotal</span><span class="qb-val">$138,300.00</span></div>
+                        <div class="qb-breakdown-row"><span data-i18n="qb.discountLabel">Discount</span><span class="qb-val qb-faint-val" data-i18n="qb.notApplicable">Not applicable</span></div>
+                        <div class="qb-breakdown-row"><span data-i18n="qb.salesTax14">Sales Tax (14%)</span><span class="qb-val">$19,362.00</span></div>
+                      </div>
+                      <div class="qb-total-block">
+                        <span class="qb-total-label" data-i18n="mockup.total">Total</span>
+                        <span class="qb-total-value">$138,300.00</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+           </div>
+          </div>
+        </div>
+        <div class="mockup-glow" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <div class="hero-cta">
+      <div class="hero-price-block">
+        <div class="price-compare price-compare-hero">
+          <span class="price-was">$66.65</span>
+          <span class="hero-price-now" data-i18n="hero.priceNow">$49.99 USD</span>
+          <span class="price-badge" data-i18n="offer.badge">Ahorra 25%</span>
+        </div>
+      </div>
+
+      <a class="btn btn-primary btn-lg btn-hero" data-cta-buy href="#oferta">
+        <span data-i18n="hero.ctaHero">Quiero mi cotizador</span>
+        <span class="btn-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <div class="trust-row trust-row-simple">
+        <span class="trust-item">
+          <svg class="trust-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M3 10.2H21" stroke="currentColor" stroke-width="1.6"/></svg>
+          <span data-i18n="trust.paid">Pago único</span>
+        </span>
+        <span class="trust-item">
+          <svg class="trust-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 12C7 10.34 8.34 9 10 9C11.66 9 13 10.34 13 12C13 13.66 14.34 15 16 15C17.66 15 19 13.66 19 12C19 10.34 17.66 9 16 9C14.34 9 13 10.34 13 12C13 13.66 11.66 15 10 15C8.34 15 7 13.66 7 12Z" stroke="currentColor" stroke-width="1.6"/></svg>
+          <span data-i18n="trust.access">Acceso permanente</span>
+        </span>
+        <span class="trust-item">
+          <svg class="trust-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13 3L4 14H11L10 21L20 9H13L13 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          <span data-i18n="trust.ready">Listo para usar</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="marquee-wrap">
+    <div class="marquee">
+      <div class="marquee-track" data-marquee>
+        <span class="marquee-item">
+          <span class="mi-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg></span>
+          <span class="mi-copy">
+            <span class="mi-title" data-i18n="marquee.1.title">Cotiza más rápido</span>
+            <span class="mi-desc" data-i18n="marquee.1.desc">Prepara tus presupuestos en minutos.</span>
+          </span>
+        </span>
+        <span class="marquee-item">
+          <span class="mi-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.9 6.26 6.9.6-5.2 4.53 1.57 6.77L12 16.9l-6.17 3.26 1.57-6.77-5.2-4.53 6.9-.6L12 2Z"/></svg></span>
+          <span class="mi-copy">
+            <span class="mi-title" data-i18n="marquee.2.title">Impresiona a tus clientes</span>
+            <span class="mi-desc" data-i18n="marquee.2.desc">Presenta presupuestos claros y profesionales.</span>
+          </span>
+        </span>
+        <span class="marquee-item">
+          <span class="mi-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg></span>
+          <span class="mi-copy">
+            <span class="mi-title" data-i18n="marquee.3.title">Enfócate en tu trabajo</span>
+            <span class="mi-desc" data-i18n="marquee.3.desc">Dedica menos tiempo a hacer cuentas.</span>
+          </span>
+        </span>
+        <span class="marquee-item">
+          <span class="mi-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 3 7v10l9 5 9-5V7l-9-5Z"/><path d="M3 7l9 5 9-5"/><path d="M12 12v10"/></svg></span>
+          <span class="mi-copy">
+            <span class="mi-title" data-i18n="marquee.4.title">Hecha para tu negocio</span>
+            <span class="mi-desc" data-i18n="marquee.4.desc">Personalizada con tus servicios y precios.</span>
+          </span>
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     2. PROBLEMA
+     ========================================================= -->
+<section class="section problema" id="problema">
+  <div class="container">
+    <div class="problema-columns">
+      <div class="problema-intro" data-reveal>
+        <p class="eyebrow" data-i18n="problema.eyebrow">El problema</p>
+        <h2 class="problema-headline" data-i18n="problema.headline">Cotizar no debería quitarte tiempo.</h2>
+      </div>
+
+      <div class="transform-showcase" data-transform aria-hidden="true">
+        <div class="transform-stage">
+          <div class="transform-notebook">
+            <div class="notebook-page">
+              <span class="notebook-margin"></span>
+              <div class="notebook-lines"></div>
+              <div class="notebook-text">
+                <p class="nb-line nb-heading nb-l1" data-i18n="nb.catering">CATERING</p>
+                <p class="nb-line nb-row nb-l2"><span data-i18n="nb.waiters">Meseros x4</span><span class="nb-leader"></span><span>$2,400</span></p>
+                <p class="nb-line nb-row nb-l3"><span data-i18n="nb.tableware">Vajilla x120</span><span class="nb-leader"></span><span>$3,600</span></p>
+                <p class="nb-line nb-row nb-l4"><span data-i18n="nb.setup">Montaje</span><span class="nb-leader"></span><span>$1,800</span></p>
+                <p class="nb-line nb-row nb-total nb-l5"><span data-i18n="nb.total">TOTAL</span><span class="nb-leader"></span><span>$7,800</span></p>
+              </div>
+            </div>
+          </div>
+          <div class="transform-digital">
+            <div class="mockup">
+              <div class="quote-doc-mockup">
+                <div class="qd-header">
+                  <div class="qd-header-left">
+                    <span class="qd-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-8H7v8M7 3v5h13" /><path d="M4 3h16v18H4z" /></svg></span>
+                    <div>
+                      <p class="qd-business-name">Lebanquet Catering</p>
+                      <p class="qd-tagline" data-i18n="qd.tagline">BANQUETS &amp; SPECIAL EVENTS</p>
+                    </div>
+                  </div>
+                  <div class="qd-header-right">
+                    <p class="qd-quote-abbrev" data-i18n="qd.quoteAbbrev">QUOTE</p>
+                    <p class="qd-quote-number">PRE-202609-0073</p>
+                    <p class="qd-issue-date" data-i18n="qd.issueDate">Issued: Sep 18, 2026</p>
+                    <p class="qd-valid-for" data-i18n="qd.validFor">Valid for 15 days</p>
+                  </div>
+                </div>
+                <div class="qd-contact-line">55 8123 4500 · contacto@lebanquet.com</div>
+
+                <div class="qd-section">
+                  <div class="qd-section-title-row">
+                    <span class="qd-section-label" data-i18n="qd.eventInfo">Event information</span>
+                    <span class="qd-section-rule"></span>
+                  </div>
+                  <dl class="qd-info-grid">
+                    <div class="qd-info-item"><dt data-i18n="mockup.client">Client</dt><dd>Ana &amp; Roberto Fernández</dd></div>
+                    <div class="qd-info-item"><dt data-i18n="mockup.eventType">Event type</dt><dd data-i18n="mockup.wedding">Wedding</dd></div>
+                    <div class="qd-info-item"><dt data-i18n="mockup.date">Date</dt><dd data-i18n="mockup.dateSep18">Sep 18, 2026</dd></div>
+                    <div class="qd-info-item"><dt data-i18n="mockup.guests">Guests</dt><dd>150</dd></div>
+                    <div class="qd-info-item"><dt data-i18n="mockup.location">Location</dt><dd data-i18n="mockup.venueLocation">Jardín Los Encinos, Mexico City</dd></div>
+                  </dl>
+                </div>
+
+                <div class="qd-section">
+                  <div class="qd-section-title-row">
+                    <span class="qd-section-label" data-i18n="qd.quotedServices">Quoted services</span>
+                    <span class="qd-section-rule"></span>
+                  </div>
+                  <table class="qd-table">
+                    <thead>
+                      <tr>
+                        <th class="qd-num">#</th>
+                        <th data-i18n="qd.service">Service</th>
+                        <th class="qd-center qd-col-qty" data-i18n="qd.qty">Qty.</th>
+                        <th class="qd-right qd-amount" data-i18n="qd.amount">Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="qd-num">1</td>
+                        <td class="qd-name" data-i18n="mockup.packagePremium">Package Premium</td>
+                        <td class="qd-center qd-col-qty">150</td>
+                        <td class="qd-amount">$133,500.00</td>
+                      </tr>
+                      <tr>
+                        <td class="qd-num">2</td>
+                        <td class="qd-name" data-i18n="pv.mockup.tagWaiters">Additional waiters</td>
+                        <td class="qd-center qd-col-qty">6</td>
+                        <td class="qd-amount">$4,800.00</td>
+                      </tr>
+                      <tr>
+                        <td class="qd-num">3</td>
+                        <td class="qd-name" data-i18n="mockup.floralDecor">Floral decor</td>
+                        <td class="qd-center qd-col-qty">1</td>
+                        <td class="qd-amount">$8,500.00</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <p class="qd-includes" data-i18n="qd.includes">Includes: full banquet, open bar, furniture and service staff</p>
+                </div>
+
+                <div class="qd-section">
+                  <div class="qd-section-title-row">
+                    <span class="qd-section-label" data-i18n="mockup.financialSummary">Financial summary</span>
+                    <span class="qd-section-rule"></span>
+                  </div>
+                  <div class="qd-breakdown">
+                    <div class="qd-breakdown-row"><span data-i18n="mockup.subtotal">Subtotal</span><span class="qd-val">$146,800.00</span></div>
+                    <div class="qd-breakdown-row"><span data-i18n="mockup.discount10">Discount (10%)</span><span class="qd-val qd-discount">- $14,680.00</span></div>
+                    <div class="qd-breakdown-row"><span data-i18n="mockup.salesTax16">Sales Tax (16%)</span><span class="qd-val">$21,139.20</span></div>
+                  </div>
+                  <div class="qd-total-block">
+                    <p class="qd-total-label" data-i18n="mockup.total">Total</p>
+                    <p class="qd-total-value">$153,259.20 MXN</p>
+                  </div>
+                </div>
+
+                <div class="qd-section">
+                  <div class="qd-payment-card">
+                    <p class="qd-payment-title" data-i18n="mockup.paymentTerms">Payment terms</p>
+                    <div class="qd-payment-item">
+                      <p class="qd-payment-item-label" data-i18n="mockup.depositRequired50">Deposit required (50%)</p>
+                      <p class="qd-payment-item-value">$76,629.60</p>
+                    </div>
+                    <div class="qd-payment-item">
+                      <p class="qd-payment-item-label" data-i18n="mockup.balanceDue">Balance due</p>
+                      <p class="qd-payment-item-value qd-dark">$76,629.60</p>
+                    </div>
+                    <p class="qd-valid-until-label" data-i18n="mockup.paymentDueDate">Payment due date</p>
+                    <p class="qd-valid-until-value" data-i18n="mockup.dateOct3">Oct 3, 2026</p>
+                  </div>
+                </div>
+
+                <div class="qd-footer">
+                  <div>
+                    <p class="qd-footer-name">Lebanquet Catering</p>
+                    <p class="qd-footer-contact">55 8123 4500 · contacto@lebanquet.com</p>
+                  </div>
+                  <p class="qd-footer-note" data-i18n="mockup.thankYou">Thank you for your trust</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="problema-content" data-reveal data-reveal-delay="1">
+        <p class="problema-cycle" data-i18n="problema.cycle1">Cada nueva solicitud puede convertirse en el mismo proceso:</p>
+        <div class="problema-steps">
+          <span class="problema-step" data-i18n="problema.step1">Buscar precios</span>
+          <span class="problema-step" data-i18n="problema.step2">Hacer cálculos</span>
+          <span class="problema-step" data-i18n="problema.step3">Agregar servicios</span>
+          <span class="problema-step" data-i18n="problema.step4">Calcular extras</span>
+          <span class="problema-step" data-i18n="problema.step5">Revisar números</span>
+          <span class="problema-step" data-i18n="problema.step6">Preparar el presupuesto</span>
+          <span class="problema-step" data-i18n="problema.step7">Enviarlo</span>
+        </div>
+        <p class="problema-cycle" data-i18n="problema.cycle2">Y cuando terminas... llega la siguiente solicitud.</p>
+        <p class="problema-close" data-i18n="agitacion.headline">Cuando cotizar se vuelve una tarea repetitiva, empiezas a perder tiempo en algo que debería ser mucho más sencillo.</p>
+
+        <ul class="agitacion-list">
+          <li data-n="01"><span data-i18n="agitacion.item1">Un precio que cambia.</span></li>
+          <li data-n="02"><span data-i18n="agitacion.item2">Un servicio o extra que se olvida.</span></li>
+          <li data-n="03"><span data-i18n="agitacion.item3">Una cuenta que tienes que revisar dos veces.</span></li>
+          <li data-n="04"><span data-i18n="agitacion.item4">Una cotización que tarda demasiado en salir.</span></li>
+        </ul>
+        <p class="agitacion-body" data-i18n="agitacion.body">Todo esto se repite cada vez que llega una nueva solicitud.<br><br><strong>Más tiempo administrativo. Más trabajo repetitivo. Más posibilidades de error.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     3. DESEO
+     ========================================================= -->
+<section class="section deseo" id="deseo">
+  <div class="container">
+    <div class="deseo-grid">
+      <div data-reveal>
+        <p class="eyebrow" data-i18n="deseo.eyebrow">Cómo funciona</p>
+        <h2 class="deseo-headline" data-i18n="deseo.headline">Tu cotizador sabrá cómo cobrar tu negocio.</h2>
+        <p class="deseo-copy" data-i18n="deseo.copy">Configuramos tus servicios, precios y reglas de cobro para que cada cotización siga la forma en que trabaja tu negocio.</p>
+        <p class="deseo-copy lede" data-i18n="deseo.lede">Menos cálculo. Más acción.</p>
+      </div>
+
+      <div class="problema-visual review-mockup-wrap" data-reveal data-reveal-delay="2" aria-hidden="true">
+        <div class="review-mockup">
+          <div class="rm-header">
+            <span class="rm-step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" /></svg>
+            </span>
+            <div class="rm-header-text">
+              <h3 class="rm-step-title" data-i18n="qb.stepReview">Review</h3>
+              <p class="rm-step-desc" data-i18n="rm.reviewDesc">Confirm the details before generating the quote</p>
+            </div>
+            <span class="rm-chevron">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+            </span>
+          </div>
+
+          <div class="rm-content">
+            <div class="rm-section">
+              <div class="rm-section-title-row">
+                <span class="rm-section-label" data-i18n="mockup.clientAndEvent">Client and event</span>
+                <span class="rm-section-rule"></span>
+              </div>
+              <dl class="rm-info-grid">
+                <div class="rm-info-item"><dt data-i18n="mockup.client">Client</dt><dd>Ana &amp; Roberto Fernández</dd></div>
+                <div class="rm-info-item"><dt data-i18n="mockup.eventType">Event type</dt><dd data-i18n="mockup.wedding">Wedding</dd></div>
+                <div class="rm-info-item"><dt data-i18n="mockup.date">Date</dt><dd data-i18n="mockup.dateNov14">Nov 14, 2026</dd></div>
+                <div class="rm-info-item"><dt data-i18n="mockup.guests">Guests</dt><dd>120</dd></div>
+                <div class="rm-info-item"><dt data-i18n="mockup.location">Location</dt><dd data-i18n="mockup.venueLocation">Jardín Los Encinos, Mexico City</dd></div>
+              </dl>
+            </div>
+
+            <div class="rm-section">
+              <div class="rm-section-title-row">
+                <span class="rm-section-label" data-i18n="mockup.services">Services</span>
+                <span class="rm-section-rule"></span>
+              </div>
+              <ul class="rm-services-list">
+                <li class="rm-service-row">
+                  <div>
+                    <div class="rm-service-name" data-i18n="mockup.packagePremium">Package Premium</div>
+                    <div class="rm-service-meta" data-i18n="rm.serviceMetaPremium">120 guests · Includes banquet, open bar and furniture</div>
+                  </div>
+                  <div class="rm-service-price">$96,000.00</div>
+                </li>
+                <li class="rm-service-row">
+                  <div>
+                    <div class="rm-service-name" data-i18n="mockup.floralDecor">Floral decor</div>
+                    <div class="rm-service-meta" data-i18n="rm.oneService">1 service</div>
+                  </div>
+                  <div class="rm-service-price">$8,500.00</div>
+                </li>
+                <li class="rm-service-row">
+                  <div>
+                    <div class="rm-service-name" data-i18n="rm.djAndSound">DJ and sound</div>
+                    <div class="rm-service-meta" data-i18n="rm.oneService">1 service</div>
+                  </div>
+                  <div class="rm-service-price">$6,200.00</div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="rm-section">
+              <div class="rm-section-title-row">
+                <span class="rm-section-label" data-i18n="mockup.financialSummary">Financial summary</span>
+                <span class="rm-section-rule"></span>
+              </div>
+              <div class="rm-summary-columns">
+                <div>
+                  <div class="rm-breakdown">
+                    <div class="rm-breakdown-row"><span data-i18n="mockup.subtotal">Subtotal</span><span class="rm-val">$110,700.00</span></div>
+                    <div class="rm-breakdown-row"><span data-i18n="mockup.discount10">Discount (10%)</span><span class="rm-val rm-discount">- $11,070.00</span></div>
+                    <div class="rm-breakdown-row"><span data-i18n="mockup.salesTax16">Sales Tax (16%)</span><span class="rm-val">$15,940.80</span></div>
+                  </div>
+                  <div class="rm-total-block">
+                    <p class="rm-total-label" data-i18n="mockup.total">Total</p>
+                    <p class="rm-total-value">$115,570.80 MXN</p>
+                  </div>
+                </div>
+                <div class="rm-payment-card">
+                  <p class="rm-payment-title" data-i18n="mockup.paymentTerms">Payment terms</p>
+                  <div class="rm-payment-item">
+                    <p class="rm-payment-item-label" data-i18n="mockup.depositRequired50">Deposit required (50%)</p>
+                    <p class="rm-payment-item-value">$57,785.40</p>
+                  </div>
+                  <div class="rm-payment-item">
+                    <p class="rm-payment-item-label" data-i18n="mockup.balanceDue">Balance due</p>
+                    <p class="rm-payment-item-value rm-dark">$57,785.40</p>
+                  </div>
+                  <div class="rm-payment-due">
+                    <p class="rm-payment-item-label" data-i18n="mockup.paymentDueDate">Payment due date</p>
+                    <p class="rm-payment-due-value" data-i18n="mockup.dateSep30">Sep 30, 2026</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="rm-continue-btn" data-i18n="rm.continueBtn">Confirm and continue</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     4. SOLUCIÓN
+     ========================================================= -->
+<section class="section solucion" id="solucion">
+  <div class="container">
+    <div class="pv-track" data-pv-track>
+      <div class="pv-pin" data-pv-pin>
+        <div class="pv-layout">
+
+          <div class="pv-copy" data-reveal>
+            <p class="eyebrow" data-i18n="solucion.eyebrow">Personalizado para tu negocio</p>
+            <h2 class="solucion-headline" data-i18n="solucion.headline">Adaptamos el cotizador a tu negocio.</h2>
+            <p class="solucion-sub" data-i18n="solucion.sub">No es una plantilla genérica. No es un software que tienes que aprender. Es tu propio cotizador, configurado alrededor de tu negocio.</p>
+          </div>
+
+          <div class="pv-mockups">
+
+            <!-- 01 · Genérico -->
+            <div class="pv-mockup is-active" data-pv-stage="generic">
+              <div class="mockup mockup-generic">
+                <div class="mockup-bar">
+                  <span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span>
+                  <span class="mockup-bar-title" data-i18n="pv.mockup.barTitleGeneric">Cotizador Web</span>
+                </div>
+                <div class="mockup-head">
+                  <div class="mockup-biz">
+                    <span class="mockup-biz-mark pv-muted-mark">—</span>
+                    <div>
+                      <p class="mockup-biz-name pv-muted-name" data-i18n="pv.mockup.bizNamePlaceholder">Nombre del negocio</p>
+                      <p class="mockup-biz-role" data-i18n="pv.mockup.bizRoleGeneric">Presupuesto de servicio</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="mockup-body">
+                  <div class="mockup-field">
+                    <label data-i18n="pv.mockup.serviceLabel">Servicio</label>
+                    <div class="mockup-select"><span data-i18n="pv.mockup.selectService">Selecciona un servicio</span> <span>&#9662;</span></div>
+                  </div>
+                  <div class="mockup-field">
+                    <label data-i18n="pv.mockup.priceLabel">Precio</label>
+                    <div class="mockup-input pv-muted-input">—</div>
+                  </div>
+                  <div class="mockup-action pv-disabled-action" data-i18n="pv.mockup.generateQuote">Generar cotización</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 02 · Tu negocio -->
+            <div class="pv-mockup" data-pv-stage="business">
+              <div class="mockup">
+                <div class="mockup-bar">
+                  <span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span>
+                  <span class="mockup-bar-title" data-i18n="pv.mockup.barTitleBranded">Cotizador Web Personalizado</span>
+                </div>
+                <div class="mockup-head">
+                  <div class="mockup-biz">
+                    <span class="mockup-biz-mark">LB</span>
+                    <div>
+                      <p class="mockup-biz-name">Lebanquet</p>
+                      <p class="mockup-biz-role" data-i18n="pv.mockup.bizRoleCatering">Presupuesto de catering</p>
+                    </div>
+                  </div>
+                  <span class="mockup-badge" data-i18n="pv.mockup.newQuote">Nueva cotización</span>
+                </div>
+                <div class="mockup-body">
+                  <div class="mockup-field">
+                    <label data-i18n="pv.mockup.serviceLabel">Servicio</label>
+                    <div class="mockup-select"><span data-i18n="pv.mockup.selectService">Selecciona un servicio</span> <span>&#9662;</span></div>
+                  </div>
+                  <div class="mockup-action pv-disabled-action" data-i18n="pv.mockup.generateQuote">Generar cotización</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 03 · Tus servicios -->
+            <div class="pv-mockup" data-pv-stage="services">
+              <div class="mockup">
+                <div class="mockup-bar">
+                  <span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span>
+                  <span class="mockup-bar-title" data-i18n="pv.mockup.barTitleBranded">Cotizador Web Personalizado</span>
+                </div>
+                <div class="mockup-head">
+                  <div class="mockup-biz">
+                    <span class="mockup-biz-mark">LB</span>
+                    <div>
+                      <p class="mockup-biz-name">Lebanquet</p>
+                      <p class="mockup-biz-role" data-i18n="pv.mockup.bizRoleCatering">Presupuesto de catering</p>
+                    </div>
+                  </div>
+                  <span class="mockup-badge" data-i18n="pv.mockup.newQuote">Nueva cotización</span>
+                </div>
+                <div class="mockup-body">
+                  <div class="mockup-field">
+                    <label data-i18n="pv.mockup.additionalServices">Servicios adicionales</label>
+                    <div class="mockup-tags">
+                      <span class="mockup-tag is-active" data-i18n="pv.mockup.tagWaiters">Meseros adicionales</span>
+                      <span class="mockup-tag is-active" data-i18n="pv.mockup.tagSetup">Montaje y decoración</span>
+                      <span class="mockup-tag is-active" data-i18n="pv.mockup.tagGlassware">Cristalería de autor</span>
+                    </div>
+                  </div>
+                  <div class="mockup-action pv-disabled-action" data-i18n="pv.mockup.generateQuote">Generar cotización</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 04 · Tu cotizador -->
+            <div class="pv-mockup" data-pv-stage="final">
+              <div class="mockup">
+                <div class="mockup-bar">
+                  <span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span>
+                  <span class="mockup-bar-title" data-i18n="pv.mockup.barTitleBranded">Cotizador Web Personalizado</span>
+                </div>
+                <div class="mockup-head">
+                  <div class="mockup-biz">
+                    <span class="mockup-biz-mark">LB</span>
+                    <div>
+                      <p class="mockup-biz-name">Lebanquet</p>
+                      <p class="mockup-biz-role" data-i18n="pv.mockup.bizRoleCatering">Presupuesto de catering</p>
+                    </div>
+                  </div>
+                  <span class="mockup-badge" data-i18n="pv.mockup.newQuote">Nueva cotización</span>
+                </div>
+                <div class="mockup-body">
+                  <div class="mockup-summary">
+                    <div class="mockup-summary-row"><span data-i18n="pv.mockup.tagWaiters">Meseros adicionales</span><span>$800.00</span></div>
+                    <div class="mockup-summary-row"><span data-i18n="pv.mockup.tagSetup">Montaje y decoración</span><span>$5,000.00</span></div>
+                    <div class="mockup-summary-row"><span data-i18n="pv.mockup.tagGlassware">Cristalería de autor</span><span>$1,800.00</span></div>
+                    <div class="mockup-summary-row mockup-summary-total">
+                      <span data-i18n="pv.mockup.quoteTotal">Total de la cotización</span>
+                      <span class="mockup-price">$7,600.00</span>
+                    </div>
+                  </div>
+                  <div class="mockup-action" data-i18n="pv.mockup.generateQuote">Generar cotización</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="pv-timeline" data-pv-timeline>
+          <div class="pv-timeline-line" aria-hidden="true"></div>
+          <div class="pv-step is-active" data-pv-stage="generic">
+            <span class="pv-dot" aria-hidden="true"></span>
+            <h3 data-i18n="pv.stage1.title">Tu negocio</h3>
+            <p data-i18n="pv.stage1.body">Nombre, información e identidad.</p>
+          </div>
+          <div class="pv-step" data-pv-stage="business">
+            <span class="pv-dot" aria-hidden="true"></span>
+            <h3 data-i18n="pv.stage2.title">Tus servicios</h3>
+            <p data-i18n="pv.stage2.body">Los servicios que realmente ofreces.</p>
+          </div>
+          <div class="pv-step" data-pv-stage="services">
+            <span class="pv-dot" aria-hidden="true"></span>
+            <h3 data-i18n="pv.stage3.title">Tus precios</h3>
+            <p data-i18n="pv.stage3.body">Tus tarifas, paquetes y extras.</p>
+          </div>
+          <div class="pv-step" data-pv-stage="final">
+            <span class="pv-dot" aria-hidden="true"></span>
+            <h3 data-i18n="pv.stage4.title">Tu cotizador</h3>
+            <p data-i18n="pv.stage4.body">Todo integrado en una experiencia de cotización propia.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     5. CÓMO FUNCIONA
+     ========================================================= -->
+<section class="section como-funciona" id="como-funciona">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow" data-i18n="pasos.eyebrow">Así lo hacemos</p>
+      <h2 class="como-headline" data-i18n="pasos.headline">Diseñamos tu cotizador a partir de tu negocio.</h2>
+    </div>
+
+    <div class="carousel pasos-carousel" data-reveal data-reveal-delay="1">
+      <ol class="carousel-track pasos" data-carousel-track>
+        <li class="paso">
+          <span class="paso-num">01</span>
+          <h3 data-i18n="pasos.1.title">Entendemos tu negocio</h3>
+          <p data-i18n="pasos.1.body">Nos compartes tus servicios, precios, paquetes, extras y la forma en que actualmente cotizas.</p>
+        </li>
+        <li class="paso">
+          <span class="paso-num">02</span>
+          <h3 data-i18n="pasos.2.title">Definimos cómo cotizas</h3>
+          <p data-i18n="pasos.2.body">Convertimos tus reglas, precios y condiciones en la lógica de tu cotizador.</p>
+        </li>
+        <li class="paso">
+          <span class="paso-num">03</span>
+          <h3 data-i18n="pasos.3.title">Diseñamos tu cotizador</h3>
+          <p data-i18n="pasos.3.body">Creamos la experiencia de cotización alrededor de cómo trabaja tu negocio.</p>
+        </li>
+        <li class="paso">
+          <span class="paso-num">04</span>
+          <h3 data-i18n="pasos.4.title">Lo desarrollamos y configuramos</h3>
+          <p data-i18n="pasos.4.body">Integramos tus servicios, precios, información y estructura de cotización.</p>
+        </li>
+        <li class="paso">
+          <span class="paso-num">05</span>
+          <h3 data-i18n="pasos.5.title">Te entregamos tu cotizador</h3>
+          <p data-i18n="pasos.5.body">Listo para utilizar desde celular, tablet o computadora.</p>
+        </li>
+      </ol>
+
+      <div class="carousel-dots" data-carousel-dots aria-hidden="true">
+        <span class="carousel-dot is-active"></span>
+        <span class="carousel-dot"></span>
+        <span class="carousel-dot"></span>
+        <span class="carousel-dot"></span>
+        <span class="carousel-dot"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     6. LA EXPERIENCIA
+     ========================================================= -->
+<section class="section experiencia" id="experiencia">
+  <div class="container">
+    <div class="section-head is-center" data-reveal>
+      <p class="eyebrow" data-i18n="experiencia.eyebrow">Antes / después</p>
+      <h2 class="experiencia-headline" data-i18n="experiencia.headline">De la solicitud a la cotización.</h2>
+    </div>
+
+    <div class="compare" data-reveal data-reveal-delay="1">
+      <div class="compare-side compare-before">
+        <p class="compare-label" data-i18n="compare.beforeLabel">Antes</p>
+        <ul class="compare-list">
+          <li data-i18n="compare.before1">Revisar precios manualmente</li>
+          <li data-i18n="compare.before2">Sacar cuentas cada vez</li>
+          <li data-i18n="compare.before3">Escribir el presupuesto desde cero</li>
+          <li data-i18n="compare.before4">Revisar que todo esté correcto</li>
+        </ul>
+      </div>
+
+      <div class="compare-arrow" aria-hidden="true">
+        <svg viewBox="0 0 48 24" fill="none"><path d="M2 12H44M44 12L34 3M44 12L34 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </div>
+
+      <div class="compare-side compare-after">
+        <p class="compare-label" data-i18n="compare.afterLabel">Con tu cotizador</p>
+        <ul class="compare-list">
+          <li data-i18n="compare.after1">Tus precios configurados</li>
+          <li data-i18n="compare.after2">Cálculos según tus reglas</li>
+          <li data-i18n="compare.after3">Presupuesto generado al momento</li>
+          <li data-i18n="compare.after4">Formato profesional y consistente</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="experiencia-close" data-reveal data-reveal-delay="2" data-i18n="experiencia.close">Una forma más simple de cotizar.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     7. OFERTA
+     ========================================================= -->
+<section class="section oferta" id="oferta">
+  <div class="container">
+    <div class="oferta-card" data-tilt data-reveal>
+      <div class="oferta-head">
+        <p class="oferta-eyebrow" data-i18n="oferta.eyebrow">Personalizado para tu negocio</p>
+        <h2 class="oferta-title" data-i18n="oferta.title">Tu cotizador personalizado.</h2>
+        <p class="oferta-sub" data-i18n="oferta.sub">Todo lo necesario para comenzar a cotizar digitalmente.</p>
+      </div>
+
+      <div class="oferta-price-block oferta-price-preview">
+        <div class="hero-rating hero-rating-center reveal">
+          <span class="hero-rating-lead">
+            <span class="hero-rating-stars" data-rating-stars="offer-top" aria-hidden="true"></span>
+            <strong class="hero-rating-score">4.8</strong>
+            <span class="hero-rating-sep" aria-hidden="true">·</span>
+          </span>
+          <span class="hero-rating-text" data-i18n="hero.rating">Más de 214 negocios han confiado en nosotros para crear sus cotizadores.</span>
+        </div>
+
+        <p class="price-tag" data-i18n="oferta.priceTag">PRECIO</p>
+
+        <div class="price-compare price-compare-center">
+          <span class="price-was">$66.65</span>
+          <span class="price-badge" data-i18n="offer.badge">Ahorra 25%</span>
+        </div>
+
+        <div class="offer-price">
+          <span class="offer-currency">$49.99</span>
+          <span class="offer-unit">USD</span>
+        </div>
+
+        <p class="oferta-price-note" data-i18n="oferta.priceNote">Pago único.</p>
+      </div>
+
+      <div class="oferta-body">
+        <div>
+          <ul class="oferta-check-list">
+            <li><span class="oferta-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span data-i18n="oferta.check1">Cotizador web funcional Personalizado</span></li>
+            <li><span class="oferta-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span class="oferta-nowrap" data-i18n="oferta.check3">Acceso desde celular, tablet y computadora</span></li>
+          </ul>
+        </div>
+
+        <div>
+          <ul class="oferta-check-list">
+            <li><span class="oferta-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span data-i18n="oferta.check4">Personalización con tu negocio</span></li>
+            <li><span class="oferta-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span data-i18n="oferta.check5">Tus servicios configurados</span></li>
+            <li><span class="oferta-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span data-i18n="oferta.check6">Tus precios configurados</span></li>
+            <li><span class="oferta-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span data-i18n="oferta.check7">Información de tu empresa</span></li>
+            <li><span class="oferta-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span data-i18n="oferta.check8">Estructura de cotización personalizada</span></li>
+            <li><span class="oferta-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span data-i18n="oferta.check9">Diseño listo para usar</span></li>
+          </ul>
+        </div>
+
+        <div>
+          <ul class="oferta-check-list">
+            <li><span class="oferta-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span data-i18n="oferta.check10">Configuración inicial</span></li>
+            <li><span class="oferta-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span data-i18n="oferta.check11">Acompañamiento de implementación</span></li>
+            <li><span class="oferta-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span data-i18n="oferta.check12">Entrega digital por correo</span></li>
+            <li><span class="oferta-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span data-i18n="oferta.check13">Entrega en hasta 24 horas</span></li>
+          </ul>
+        </div>
+
+        <div>
+          <ul class="oferta-check-list">
+            <li><span class="oferta-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span data-i18n="trust.paid">Pago único</span></li>
+            <li><span class="oferta-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span data-i18n="trust.access">Acceso permanente</span></li>
+            <li><span class="oferta-check"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span data-i18n="oferta.check16">Sin suscripciones</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="oferta-price-block oferta-price-final">
+        <a class="btn btn-primary btn-lg btn-hero" data-cta-buy href="#oferta">
+          <span data-i18n="hero.ctaHero">Quiero mi cotizador</span>
+          <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
+
+        <div class="trust-row trust-row-simple">
+          <span class="trust-item">
+            <svg class="trust-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M3 10.2H21" stroke="currentColor" stroke-width="1.6"/></svg>
+            <span data-i18n="trust.paid">Pago único</span>
+          </span>
+          <span class="trust-item">
+            <svg class="trust-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 12C7 10.34 8.34 9 10 9C11.66 9 13 10.34 13 12C13 13.66 14.34 15 16 15C17.66 15 19 13.66 19 12C19 10.34 17.66 9 16 9C14.34 9 13 10.34 13 12C13 13.66 11.66 15 10 15C8.34 15 7 13.66 7 12Z" stroke="currentColor" stroke-width="1.6"/></svg>
+            <span data-i18n="trust.access">Acceso permanente</span>
+          </span>
+          <span class="trust-item">
+            <svg class="trust-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13 3L4 14H11L10 21L20 9H13L13 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            <span data-i18n="trust.ready">Listo para usar</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     8. FAQ
+     ========================================================= -->
+<section class="section faq" id="faq">
+  <div class="container">
+    <p class="eyebrow" data-reveal data-i18n="faq.eyebrow">Antes de comprar.</p>
+    <h2 class="faq-headline" data-reveal data-i18n="faq.headline">Preguntas frecuentes.</h2>
+    <div class="faq-list" data-faq-list data-reveal data-reveal-delay="1">
+      <!-- Contenido hardcodeado como respaldo si JS falla — acordeón de 2 niveles -->
+      <div class="accordion-category" data-accordion-cat>
+        <h3 class="accordion-cat-q"><button type="button" class="accordion-cat-trigger" aria-expanded="false" aria-controls="faq-cat1-panel"><span data-i18n="faq.cat1.name">Sobre el cotizador</span><span class="cat-icon" aria-hidden="true"></span></button></h3>
+        <div class="accordion-cat-panel" data-accordion id="faq-cat1-panel">
+          <div class="accordion-item" data-faq-item>
+            <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-cat1-q1-panel"><span data-i18n="faq.cat1.q1">¿Qué es un cotizador web?</span><span class="faq-icon" aria-hidden="true"></span></button></h4>
+            <div class="faq-a" id="faq-cat1-q1-panel"><p data-i18n="faq.cat1.a1">Es un cotizador digital que permite generar presupuestos a partir de los servicios, precios y opciones configuradas para tu negocio.</p></div>
+          </div>
+          <div class="accordion-item" data-faq-item>
+            <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-cat1-q2-panel"><span data-i18n="faq.cat1.q2">¿Para qué tipo de negocios funciona?</span><span class="faq-icon" aria-hidden="true"></span></button></h4>
+            <div class="faq-a" id="faq-cat1-q2-panel"><p data-i18n="faq.cat1.a2">Para negocios que cotizan sus servicios utilizando precios, cantidades, paquetes, extras u otras variables contempladas dentro del modelo de cotización.</p></div>
+          </div>
+          <div class="accordion-item" data-faq-item>
+            <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-cat1-q3-panel"><span data-i18n="faq.cat1.q3">¿El cotizador se desarrolla desde cero para cada negocio?</span><span class="faq-icon" aria-hidden="true"></span></button></h4>
+            <div class="faq-a" id="faq-cat1-q3-panel"><p data-i18n="faq.cat1.a3">No. DEEC Studio desarrolla el cotizador a partir de un modelo de funcionamiento definido. Lo que se personaliza es la información de cada negocio.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-category" data-accordion-cat>
+        <h3 class="accordion-cat-q"><button type="button" class="accordion-cat-trigger" aria-expanded="false" aria-controls="faq-cat2-panel"><span data-i18n="faq.cat2.name">Personalización</span><span class="cat-icon" aria-hidden="true"></span></button></h3>
+        <div class="accordion-cat-panel" data-accordion id="faq-cat2-panel">
+          <div class="accordion-item" data-faq-item>
+            <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-cat2-q1-panel"><span data-i18n="faq.cat2.q1">¿Qué puedo personalizar?</span><span class="faq-icon" aria-hidden="true"></span></button></h4>
+            <div class="faq-a" id="faq-cat2-q1-panel"><p data-i18n="faq.cat2.a1">Puedes personalizar la información de tu negocio, incluyendo servicios, precios, paquetes, extras, datos comerciales y otros elementos contemplados dentro del alcance.</p></div>
+          </div>
+          <div class="accordion-item" data-faq-item>
+            <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-cat2-q2-panel"><span data-i18n="faq.cat2.q2">¿Tengo que definir cómo debe funcionar?</span><span class="faq-icon" aria-hidden="true"></span></button></h4>
+            <div class="faq-a" id="faq-cat2-q2-panel"><p data-i18n="faq.cat2.a2">No. Tú no tienes que diseñar la lógica ni preocuparte por cómo debe construirse. DEEC Studio define el funcionamiento y configura el cotizador con la información de tu negocio.</p></div>
+          </div>
+          <div class="accordion-item" data-faq-item>
+            <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-cat2-q3-panel"><span data-i18n="faq.cat2.q3">¿Qué información necesitan de mi negocio?</span><span class="faq-icon" aria-hidden="true"></span></button></h4>
+            <div class="faq-a" id="faq-cat2-q3-panel"><p data-i18n="faq.cat2.a3">Servicios, precios, paquetes, extras, datos comerciales y cualquier otro contenido necesario para configurar el cotizador.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-category" data-accordion-cat>
+        <h3 class="accordion-cat-q"><button type="button" class="accordion-cat-trigger" aria-expanded="false" aria-controls="faq-cat3-panel"><span data-i18n="faq.cat3.name">El proyecto</span><span class="cat-icon" aria-hidden="true"></span></button></h3>
+        <div class="accordion-cat-panel" data-accordion id="faq-cat3-panel">
+          <div class="accordion-item" data-faq-item>
+            <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-cat3-q1-panel"><span data-i18n="faq.cat3.q1">¿Qué hace DEEC Studio?</span><span class="faq-icon" aria-hidden="true"></span></button></h4>
+            <div class="faq-a" id="faq-cat3-q1-panel"><p data-i18n="faq.cat3.a1">DEEC Studio se encarga del desarrollo, diseño, configuración y personalización del cotizador de acuerdo con el alcance definido para el proyecto.</p></div>
+          </div>
+          <div class="accordion-item" data-faq-item>
+            <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-cat3-q2-panel"><span data-i18n="faq.cat3.q2">¿Cuánto tarda en estar listo mi cotizador?</span><span class="faq-icon" aria-hidden="true"></span></button></h4>
+            <div class="faq-a" id="faq-cat3-q2-panel"><p data-i18n="faq.cat3.a2">Tu cotizador se desarrolla, personaliza y entrega en <strong>24 horas</strong>.</p></div>
+          </div>
+          <div class="accordion-item" data-faq-item>
+            <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-cat3-q3-panel"><span data-i18n="faq.cat3.q3">¿Qué recibo al finalizar?</span><span class="faq-icon" aria-hidden="true"></span></button></h4>
+            <div class="faq-a" id="faq-cat3-q3-panel"><p data-i18n="faq.cat3.a3">Recibes tu cotizador web completamente desarrollado y configurado con la información de tu negocio, listo para utilizar.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-category" data-accordion-cat>
+        <h3 class="accordion-cat-q"><button type="button" class="accordion-cat-trigger" aria-expanded="false" aria-controls="faq-cat4-panel"><span data-i18n="faq.cat4.name">Uso</span><span class="cat-icon" aria-hidden="true"></span></button></h3>
+        <div class="accordion-cat-panel" data-accordion id="faq-cat4-panel">
+          <div class="accordion-item" data-faq-item>
+            <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-cat4-q1-panel"><span data-i18n="faq.cat4.q1">¿Necesito conocimientos técnicos?</span><span class="faq-icon" aria-hidden="true"></span></button></h4>
+            <div class="faq-a" id="faq-cat4-q1-panel"><p data-i18n="faq.cat4.a1">No. El cotizador se entrega configurado para que puedas utilizarlo sin encargarte de su desarrollo o funcionamiento técnico.</p></div>
+          </div>
+          <div class="accordion-item" data-faq-item>
+            <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-cat4-q2-panel"><span data-i18n="faq.cat4.q2">¿Desde dónde puedo utilizarlo?</span><span class="faq-icon" aria-hidden="true"></span></button></h4>
+            <div class="faq-a" id="faq-cat4-q2-panel"><p data-i18n="faq.cat4.a2">Desde celular, tablet o computadora con acceso a internet.</p></div>
+          </div>
+          <div class="accordion-item" data-faq-item>
+            <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-cat4-q3-panel"><span data-i18n="faq.cat4.q3">¿Puedo utilizarlo directamente con mis clientes?</span><span class="faq-icon" aria-hidden="true"></span></button></h4>
+            <div class="faq-a" id="faq-cat4-q3-panel"><p data-i18n="faq.cat4.a3">Sí. Puedes utilizarlo para generar cotizaciones durante la atención de tus clientes o cuando recibas una solicitud de servicio.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-category" data-accordion-cat>
+        <h3 class="accordion-cat-q"><button type="button" class="accordion-cat-trigger" aria-expanded="false" aria-controls="faq-cat5-panel"><span data-i18n="faq.cat5.name">Después de la entrega</span><span class="cat-icon" aria-hidden="true"></span></button></h3>
+        <div class="accordion-cat-panel" data-accordion id="faq-cat5-panel">
+          <div class="accordion-item" data-faq-item>
+            <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-cat5-q1-panel"><span data-i18n="faq.cat5.q1">¿Puedo cambiar mis precios o servicios después?</span><span class="faq-icon" aria-hidden="true"></span></button></h4>
+            <div class="faq-a" id="faq-cat5-q1-panel"><p data-i18n="faq.cat5.a1">Sí. Puedes actualizar por tu cuenta la información comercial de tu cotizador, como precios, servicios, paquetes o extras. <strong>Al momento de la entrega te enseñamos cómo realizar estos cambios.</strong></p></div>
+          </div>
+          <div class="accordion-item" data-faq-item>
+            <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-cat5-q2-panel"><span data-i18n="faq.cat5.q2">¿Puedo solicitar modificaciones al funcionamiento del cotizador?</span><span class="faq-icon" aria-hidden="true"></span></button></h4>
+            <div class="faq-a" id="faq-cat5-q2-panel"><p data-i18n="faq.cat5.a2">El cotizador se entrega completamente desarrollado y configurado de acuerdo con el alcance definido para el proyecto. <strong>Una vez entregado, no se realizan modificaciones en su lógica, infraestructura o funcionamiento.</strong></p></div>
+          </div>
+          <div class="accordion-item" data-faq-item>
+            <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-cat5-q3-panel"><span data-i18n="faq.cat5.q3">¿Incluye soporte o mantenimiento continuo?</span><span class="faq-icon" aria-hidden="true"></span></button></h4>
+            <div class="faq-a" id="faq-cat5-q3-panel"><p data-i18n="faq.cat5.a3">No. El cotizador no funciona bajo una suscripción ni requiere mantenimiento continuo. Se desarrolla, personaliza y entrega como un proyecto.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-category" data-accordion-cat>
+        <h3 class="accordion-cat-q"><button type="button" class="accordion-cat-trigger" aria-expanded="false" aria-controls="faq-cat6-panel"><span data-i18n="faq.cat6.name">Pago y entrega</span><span class="cat-icon" aria-hidden="true"></span></button></h3>
+        <div class="accordion-cat-panel" data-accordion id="faq-cat6-panel">
+          <div class="accordion-item" data-faq-item>
+            <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-cat6-q1-panel"><span data-i18n="faq.cat6.q1">¿Es una suscripción?</span><span class="faq-icon" aria-hidden="true"></span></button></h4>
+            <div class="faq-a" id="faq-cat6-q1-panel"><p data-i18n="faq.cat6.a1">No. Es un proyecto de desarrollo y personalización con una entrega única.</p></div>
+          </div>
+          <div class="accordion-item" data-faq-item>
+            <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-cat6-q2-panel"><span data-i18n="faq.cat6.q2">¿Cómo recibo mi cotizador?</span><span class="faq-icon" aria-hidden="true"></span></button></h4>
+            <div class="faq-a" id="faq-cat6-q2-panel"><p data-i18n="faq.cat6.a2">La entrega se realiza de forma digital, junto con las indicaciones necesarias para acceder y utilizarlo.</p></div>
+          </div>
+          <div class="accordion-item" data-faq-item>
+            <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faq-cat6-q3-panel"><span data-i18n="faq.cat6.q3">¿Qué incluye la entrega?</span><span class="faq-icon" aria-hidden="true"></span></button></h4>
+            <div class="faq-a" id="faq-cat6-q3-panel"><p data-i18n="faq.cat6.a3">Incluye el cotizador desarrollado y personalizado, además de la explicación necesaria para utilizarlo y actualizar su información comercial por tu cuenta.</p></div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+<footer class="footer">
+  <div class="container footer-minimal">
+    <div class="footer-brand-row">
+      <p class="footer-brand-name"><strong>DEEC Studio</strong></p>
+    </div>
+    <p class="footer-copyright" data-i18n="footer.copyright">© 2026 DEEC Studio. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+<!-- Checkout modal — every [data-cta-buy] button opens this instead of
+     navigating, embedding Whop's own hosted checkout page directly in an
+     iframe. Its origin (whop.com) is the one already approved for Apple
+     Pay/Google Pay — confirmed working: this exact method (plain iframe to
+     whop.com/checkout/{plan}, no js.whop.com or cdn.whop.com script) keeps
+     working wallets. The iframe has no static src in this markup: main.js's
+     initCheckoutModal() sets it, picking between two separate Whop plans
+     (one Spanish, one English — same product, each with its own
+     title/description set on Whop's side) based on currentLang.
+     whop.com/embedded/checkout/{plan}?locale={es|en} was tried twice
+     instead (it's the only Whop path that honors ?locale=) — both times it
+     rendered with no product name/description/price/wallets at all,
+     confirmed both as a direct nav AND actually embedded in this exact
+     iframe. Don't go back to it, and don't reintroduce js.whop.com's
+     loader.js or cdn.whop.com's Elements widget either — both were tried
+     and abandoned earlier for the same reason (broken or missing wallets). -->
+<div class="checkout-modal" data-checkout-modal hidden>
+  <div class="checkout-modal-backdrop" data-checkout-modal-backdrop></div>
+  <div class="checkout-modal-panel" role="dialog" aria-modal="true" data-i18n-aria="a11y.checkoutDialog" aria-label="Pago">
+    <button type="button" class="checkout-modal-close" data-checkout-modal-close data-i18n-aria="a11y.closeCheckout" aria-label="Cerrar">&times;</button>
+    <div id="whop-checkout">
+      <div class="checkout-loading" data-checkout-loading data-state="loading">
+        <div class="checkout-status" role="status" aria-live="polite">
+          <span class="checkout-spinner" aria-hidden="true"></span>
+          <strong data-i18n="checkout.loading">Cargando...</strong>
+          <span data-i18n="checkout.wait">Espera un momento</span>
+        </div>
+        <div class="checkout-error" role="alert">
+          <span data-i18n="checkout.error">No pudimos cargar el pago. Revisa tu conexión e inténtalo de nuevo.</span>
+          <button type="button" class="btn btn-primary" data-checkout-retry data-i18n="checkout.retry">Reintentar</button>
+        </div>
+      </div>
+      <iframe title="Checkout" allow="payment"></iframe>
+    </div>
+  </div>
+</div>
+
+<script defer src="lib/manifest.js?v=20260923a"></script>
+<script defer src="lib/i18n.js?v=20260923a"></script>
+<script defer src="main.js?v=20260923a"></script>
+</body>
+</html>
