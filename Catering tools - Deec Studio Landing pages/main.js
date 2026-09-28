@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CateringTools — main.js (vanilla JS, IIFE, no build step, no deps)
+   DEEC Studio — main.js (vanilla JS, IIFE, no build step, no deps)
    ========================================================================== */
 (function () {
   "use strict";
@@ -11,6 +11,7 @@
   var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   var refreshSocialProofToast = null; // set by initSocialProof(), called from applyLanguage()
   var syncCheckoutModalLocale = null; // set by initCheckoutModal(), called from applyLanguage()
+  var refreshWhatsappLinks = null; // set by initWhatsapp(), called from applyLanguage()
 
   function safe(fn, name) {
     try { fn(); } catch (e) { if (window.console) console.warn("[" + name + "]", e); }
@@ -70,27 +71,10 @@
     var backdrop = $("[data-checkout-modal-backdrop]");
     var closeBtn = $("[data-checkout-modal-close]");
     var triggers = $$("[data-cta-buy]");
-    var loading = $("[data-checkout-loading]");
+    var overlay = $("[data-checkout-loading]");
+    var retryBtn = $("[data-checkout-retry]");
     var iframe = $("#whop-checkout iframe");
     if (!modal || !triggers.length) return;
-
-    // The loading placeholder sits above the embed's iframe (z-index) and
-    // stays up for a fixed beat even after that iframe element appears,
-    // since it still renders blank for a moment while its own page
-    // (whop.com) loads — there's no cross-origin signal telling us when
-    // that's actually done, so a short fixed delay is what smooths over
-    // that gap instead of flashing an empty white box.
-    var loadingHidden = false;
-    function hideLoading() {
-      if (loadingHidden || !loading) return;
-      loadingHidden = true;
-      loading.classList.add("is-hidden");
-    }
-    function showLoading() {
-      if (!loading) return;
-      loadingHidden = false;
-      loading.classList.remove("is-hidden");
-    }
 
     // Two separate Whop plans, not a ?locale= query param — /checkout/{plan}
     // (the only path confirmed to keep the product summary and Apple/Google
@@ -104,26 +88,79 @@
     // for it here.
     var PLAN_ES = "plan_GLifvy5XFV15e";
     var PLAN_EN = "plan_VmdTbp7UKyDnF";
+    // Real failure detector, not a delay: a cross-origin iframe exposes no
+    // error event, so "the page never finished loading" is the only signal.
+    var LOAD_TIMEOUT_MS = 15000;
+
+    var isOpen = false;
+    var ready = false;      // current iframe src has fired its load event
+    var waitTimer = null;
+    var activeTrigger = null;
+
     function checkoutSrc(lang) {
       return "https://whop.com/checkout/" + (lang === "en" ? PLAN_EN : PLAN_ES);
     }
-    function syncCheckoutLocale() {
-      if (!iframe) return;
-      var next = checkoutSrc(currentLang);
-      if (iframe.getAttribute("src") !== next) {
-        showLoading();
-        iframe.src = next;
-      }
+
+    // Overlay states: "loading" (spinner + texts), "error" (message + retry),
+    // "hidden" (checkout is showing). Texts come from the i18n dictionary
+    // via data-i18n, so they follow the page language with no extra logic.
+    function setOverlay(state) {
+      if (overlay) overlay.setAttribute("data-state", state);
     }
-    syncCheckoutModalLocale = syncCheckoutLocale;
+    function setBusy(on) {
+      if (!activeTrigger) return;
+      activeTrigger.classList.toggle("is-loading", on);
+      if (on) activeTrigger.setAttribute("aria-busy", "true");
+      else activeTrigger.removeAttribute("aria-busy");
+    }
+    function stopWaiting() {
+      clearTimeout(waitTimer);
+      waitTimer = null;
+      setBusy(false);
+    }
+    function showError() {
+      stopWaiting();
+      setOverlay("error");
+    }
+    function startWaiting() {
+      setOverlay("loading");
+      setBusy(true);
+      clearTimeout(waitTimer);
+      if (navigator.onLine === false) { showError(); return; }
+      waitTimer = setTimeout(showError, LOAD_TIMEOUT_MS);
+    }
+
+    // Returns true when the iframe was pointed at a different URL.
+    function syncCheckoutLocale() {
+      if (!iframe) return false;
+      var next = checkoutSrc(currentLang);
+      if (iframe.getAttribute("src") === next) return false;
+      ready = false;
+      iframe.src = next;
+      return true;
+    }
+    syncCheckoutModalLocale = function () {
+      if (syncCheckoutLocale() && isOpen) startWaiting();
+    };
+
+    if (iframe) {
+      iframe.addEventListener("load", function () {
+        if (!iframe.getAttribute("src")) return; // initial about:blank
+        ready = true;
+        if (isOpen) {
+          stopWaiting();
+          setOverlay("hidden");
+        }
+      });
+    }
 
     // Warm the iframe up on the first real signal of buying intent —
     // hover on desktop, touch on mobile — instead of waiting for the
     // click that actually opens the modal. Whop's checkout is a full
     // cross-origin page load (DNS/TLS/JS bundle), so by the time open()
     // runs it's often already most of the way loaded instead of starting
-    // from zero. syncCheckoutLocale() itself is guarded against reloading
-    // a src that's already current, so repeated hovers are harmless.
+    // from zero. syncCheckoutLocale() is a no-op for a src that's already
+    // current, so repeated hovers are harmless.
     triggers.forEach(function (btn) {
       btn.addEventListener("mouseenter", syncCheckoutLocale);
       btn.addEventListener("touchstart", syncCheckoutLocale, { passive: true });
@@ -132,22 +169,29 @@
 
     function open(e) {
       if (e) e.preventDefault();
+      if (isOpen) return; // ignore repeat clicks while the checkout is opening/open
+      isOpen = true;
+      activeTrigger = (e && e.currentTarget) || null;
       // Meta Pixel "InitiateCheckout" — the conversion event for this
-      // campaign (Sales → Website), fired on checkout-intent click. NOT
+      // campaign (Sales → Website), fired once per checkout opening. NOT
       // "Purchase": this plain-iframe checkout has no return URL/
       // postMessage to know if the buyer actually paid inside Whop's
       // iframe, so the frontend can't know a sale happened — only that
-      // someone opened the checkout. The real Purchase event is meant to
-      // come from Whop server-side (Conversions API) on its own
-      // payment.succeeded webhook, not from this page. Don't add an
-      // fbq("track","Purchase",...) call here without that server-side
-      // piece existing — see the conversation this was set up in.
+      // someone opened the checkout. The real Purchase event comes from
+      // Whop server-side (Conversions API) on its payment.succeeded
+      // webhook — see functions/api/webhooks/whop.js. Don't add an
+      // fbq("track","Purchase",...) call here.
       // Guarded so a blocked/failed-to-load pixel can't break the
       // checkout modal itself from opening.
       try {
         if (window.fbq) window.fbq("track", "InitiateCheckout", { value: 49.99, currency: "USD" });
       } catch (err) { if (window.console) console.warn("[fbq InitiateCheckout]", err); }
       syncCheckoutLocale();
+      // Modal + overlay appear on the same tick as the click; the overlay
+      // only stays up until the iframe reports it has actually loaded
+      // (immediately, if the hover/touch preload already finished).
+      if (ready) setOverlay("hidden");
+      else startWaiting();
       modal.hidden = false;
       document.body.style.overflow = "hidden";
       // Force a synchronous layout flush between removing [hidden] and
@@ -161,19 +205,33 @@
       // deferred callback that might not run promptly.
       void modal.offsetHeight;
       modal.classList.add("is-open");
-      if (!loadingHidden) setTimeout(hideLoading, 1800);
+      if (closeBtn) closeBtn.focus({ preventScroll: true });
     }
     function close() {
+      if (!isOpen) return;
+      isOpen = false;
+      stopWaiting();
       modal.classList.remove("is-open");
       document.body.style.overflow = "";
-      setTimeout(function () { modal.hidden = true; }, 300);
+      setTimeout(function () { if (!isOpen) modal.hidden = true; }, 300);
+      if (activeTrigger) activeTrigger.focus({ preventScroll: true });
+      activeTrigger = null;
+    }
+
+    function retry() {
+      if (!iframe) return;
+      ready = false;
+      iframe.removeAttribute("src"); // setting the same src again wouldn't reload
+      iframe.src = checkoutSrc(currentLang);
+      startWaiting();
     }
 
     triggers.forEach(function (btn) { btn.addEventListener("click", open); });
+    if (retryBtn) retryBtn.addEventListener("click", retry);
     if (backdrop) backdrop.addEventListener("click", close);
     if (closeBtn) closeBtn.addEventListener("click", close);
     document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && !modal.hidden) close();
+      if (e.key === "Escape") close();
     });
   }
 
@@ -192,12 +250,22 @@
     if (!links.length) return;
     var wa = data.whatsapp || {};
     var configured = isWhatsappConfigured();
-    var href = configured
-      ? "https://wa.me/" + wa.number.replace(/\D/g, "") + "?text=" + encodeURIComponent(wa.message || "")
-      : "#";
+
+    // Message follows the page's current language (i18n) — the phone
+    // number itself doesn't, that's fixed business config in manifest.js.
+    function buildHref() {
+      return configured
+        ? "https://wa.me/" + wa.number.replace(/\D/g, "") + "?text=" + encodeURIComponent(t("whatsapp.message"))
+        : "#";
+    }
+    function applyHref() {
+      var href = buildHref();
+      links.forEach(function (a) { a.setAttribute("href", href); });
+    }
+    refreshWhatsappLinks = configured ? applyHref : null;
+    applyHref();
 
     links.forEach(function (a) {
-      a.setAttribute("href", href);
       if (configured) {
         a.setAttribute("target", "_blank");
         a.setAttribute("rel", "noopener");
@@ -341,6 +409,7 @@
     // its own timer cycles it out.
     if (refreshSocialProofToast) refreshSocialProofToast();
     if (syncCheckoutModalLocale) syncCheckoutModalLocale();
+    if (refreshWhatsappLinks) refreshWhatsappLinks();
   }
 
   function initLangToggle() {
@@ -749,51 +818,6 @@
   }
 
   /* -------------------------------------------------------------
-     Countdown — sección 5a. Shared deadline across Hero + CTA bar.
-     ------------------------------------------------------------- */
-  var COUNTDOWN_KEY = "ct-offer-deadline";
-  var COUNTDOWN_MINUTES = 25;
-
-  function initCountdown() {
-    var mmEls = $$("[data-countdown-mm]");
-    var ssEls = $$("[data-countdown-ss]");
-    if (!mmEls.length && !ssEls.length) return;
-
-    function newDeadline() {
-      var d = Date.now() + COUNTDOWN_MINUTES * 60 * 1000;
-      try { localStorage.setItem(COUNTDOWN_KEY, String(d)); } catch (e) {}
-      return d;
-    }
-    function getDeadline() {
-      var stored = null;
-      try { stored = localStorage.getItem(COUNTDOWN_KEY); } catch (e) {}
-      var d = stored ? parseInt(stored, 10) : NaN;
-      if (!d || isNaN(d) || d <= Date.now()) d = newDeadline();
-      return d;
-    }
-
-    var deadline = getDeadline();
-
-    function render() {
-      var remaining = deadline - Date.now();
-      if (remaining <= 0) {
-        deadline = newDeadline();
-        remaining = deadline - Date.now();
-      }
-      var totalSeconds = Math.max(0, Math.floor(remaining / 1000));
-      var mm = Math.floor(totalSeconds / 60);
-      var ss = totalSeconds % 60;
-      var mmStr = (mm < 10 ? "0" : "") + mm;
-      var ssStr = (ss < 10 ? "0" : "") + ss;
-      mmEls.forEach(function (el) { el.textContent = mmStr; });
-      ssEls.forEach(function (el) { el.textContent = ssStr; });
-    }
-
-    render();
-    setInterval(render, 1000);
-  }
-
-  /* -------------------------------------------------------------
      Social proof / visitor toasts — sección 5b
      ⚠️ Datos de demostración salvo que socialProof.isDemoData === false
      ------------------------------------------------------------- */
@@ -980,7 +1004,6 @@
     safe(initFabTooltips, "initFabTooltips");
     safe(initCtaBarVisibility, "initCtaBarVisibility");
     safe(initCtaBarHeight, "initCtaBarHeight");
-    safe(initCountdown, "initCountdown");
     safe(mountRatingStars, "mountRatingStars");
     safe(initSocialProof, "initSocialProof");
     safe(initLangToggle, "initLangToggle");

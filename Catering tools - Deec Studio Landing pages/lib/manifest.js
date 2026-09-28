@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CateringTools — brand data & central configuration
+   DEEC Studio — brand data & central configuration
    ========================================================================== */
 (function () {
   "use strict";
@@ -11,28 +11,27 @@
    */
   var WHATSAPP_NUMBER = "525642145001";
 
-  /* Mensaje para los puntos de contacto de WhatsApp (nav / FAB) — no
-     usado por los botones "Comprar ahora", que abren el checkout de
-     Whop directamente (ver checkout-modal en index.html / main.js). */
-  var WHATSAPP_CONTACT_MESSAGE =
-    "Hola, tengo una pregunta sobre CateringTools.";
+  // El mensaje de los puntos de contacto de WhatsApp (nav / FAB) vive en
+  // lib/i18n.js (clave "whatsapp.message") para seguir el idioma de la
+  // página — no aquí. No usado por los botones "Comprar ahora", que abren
+  // el checkout de Whop directamente (ver checkout-modal en index.html /
+  // main.js).
 
   window.__BRAND__ = {
-    name: "CateringTools",
+    name: "DEEC Studio",
 
     whatsapp: {
-      number: WHATSAPP_NUMBER,
-      message: WHATSAPP_CONTACT_MESSAGE
+      number: WHATSAPP_NUMBER
     },
 
-    /* ⚠️ DATOS DE DEMOSTRACIÓN — declarado explícitamente por regla de IMPLEMENTATION.md.
+    /* ⚠️ DATOS DE DEMOSTRACIÓN — declarado explícitamente.
        Estos nombres/ubicaciones/contadores NO son eventos reales. Antes de publicar,
        decide: (a) dejar isDemoData:true y mantenerlos como contenido ilustrativo, o
        (b) poner isDemoData:false y conectar names/visitorCounts a datos reales
        (webhook de ventas, analytics), nunca presentar la lista fija como compras reales. */
     socialProof: {
       isDemoData: true,
-      product: "CateringTools",
+      product: "su cotizador personalizado", // fallback only — the i18n keys (socialproof.product) take priority
       names: ["Andrea", "Luis", "Marcela", "Jorge", "Paola", "Daniel"],
       /* Ubicaciones de compra — MX y US mezcladas a propósito. main.js
          alterna el país entre toasts consecutivos (misma lógica que ya usa

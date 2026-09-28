@@ -21,11 +21,11 @@
      event_time        = data.paid_at, converted to unix seconds
      user_data.em      = SHA-256(data.user.email, normalized), only if present
 
-   Required environment bindings (Cloudflare Pages → Settings → Functions):
+   Required environment bindings (Cloudflare Workers → Settings):
      WHOP_WEBHOOK_SECRET   — secret, the "ws_..." value from Whop's webhook config
-     META_DATASET_ID       — the Meta Pixel/Dataset id (1068830012634174)
+     META_DATASET_ID       — plain variable (mirrored in wrangler.jsonc "vars"), the Meta dataset id
      META_ACCESS_TOKEN     — secret, Conversions API system-user token
-     WHOP_PURCHASES        — KV namespace binding, dedup store keyed on pay_...
+     WHOP_PURCHASES        — KV namespace binding (declared in wrangler.jsonc), dedup store keyed on pay_...
    ========================================================================== */
 
 const META_API_VERSION = "v21.0";

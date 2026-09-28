@@ -1,4 +1,4 @@
-# CateringTools — cache strategy for Hostinger / Apache / LiteSpeed
+# DEEC Studio — cache strategy for Hostinger / Apache / LiteSpeed
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresByType text/html "access plus 0 seconds"
@@ -39,12 +39,10 @@
 
 # Security headers — scoped to the resources this site actually loads
 # (self + Fontshare + Google Fonts + Whop's hosted checkout iframe +
-# Whop's tracking pixel). Matches the live, verified-working config on
-# deecstudio-gardentools.online exactly, plus the additions below — don't
-# add script-src exceptions for js.whop.com or cdn.whop.com (the checkout
+# Whop's tracking pixel). Don't add script-src exceptions for js.whop.com or cdn.whop.com (the checkout
 # embed loader/widget scripts); this checkout method still doesn't load
 # either of those, on purpose (see index.html). connect-src has
-# https://whop.com added (beyond that reference site) only so the
+# https://whop.com added only so the
 # <link rel="preconnect" href="https://whop.com"> in index.html isn't
 # silently dropped — it doesn't add any new fetch/XHR capability that
 # frame-src wasn't already granting to the checkout iframe.
@@ -54,10 +52,9 @@
 # instead of using 'unsafe-inline' — that keeps every OTHER inline
 # script still blocked, which is what makes this site's XSS surface a
 # non-issue. If either snippet is ever edited, recompute its hash and
-# update it here (and in _headers) or it'll be silently blocked. The
-# Meta "Purchase" event isn't a third inline script — it's called from
-# main.js's checkout click handler, already trusted via script-src
-# 'self', so it needed no separate hash. https://t.whop.tw is Whop's
+# update it here (and in _headers) or it'll be silently blocked.
+# main.js's InitiateCheckout call isn't a third inline script — it's
+# trusted via script-src 'self', so it needs no hash. https://t.whop.tw is Whop's
 # tracking domain (loads s.js, sends events) — a different Whop
 # subdomain from the checkout iframe's whop.com.
 # https://connect.facebook.net/https://www.facebook.com are Meta's

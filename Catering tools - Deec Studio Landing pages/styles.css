@@ -1,5 +1,5 @@
 /* =============================================================
-   CateringTools — styles.css
+   DEEC Studio — styles.css
    Premium / editorial / minimalist digital product landing.
    Single stylesheet, sectioned. No preprocessor, no framework.
    ============================================================= */
@@ -9,34 +9,32 @@
    ============================================================= */
 :root {
   /* DEEC Studio house palette — earthy/editorial, not SaaS-blue */
-  --bg:        #ffffff;
-  --bg-2:      #f4f4f2;
+  --bg:        #F8F9FB;
+  --bg-2:      #EEF1F5;
   --paper:     #ffffff;
-  --ink:       #1c1d17;
-  --ink-soft:  #34362c;
-  --ink-mute:  #6c6a5c;
-  --ink-faint: #9a9686;
-  --moss:      #8A765C;
-  --moss-2:    #6F5C46;
-  --moss-soft: #C6B49C;
+  --ink:       #0B1220;
+  --ink-soft:  #0B1220;
+  --ink-mute:  #667085;
+  --ink-faint: #6B7686;
+  --moss:      #102A43;
+  --moss-2:    #071A2B;
+  --moss-soft: #DCE6F0;
   --terracotta:   #b35d3a;
   --urgent:      #c23b32;
-  --urgent-2:    #9c2f27;
-  --urgent-rgb:  194, 59, 50;
-  --title-accent: #8A765C; /* headline emphasis color (em inside h1/h2) — not the brand accent */
-  --title-accent-soft: #C6B49C; /* lighter tan for headline emphasis on dark section backgrounds */
-  --cream:     #f6f1e6;
+  --title-accent: #102A43; /* headline emphasis color (em inside h1/h2) — not the brand accent */
+  --title-accent-soft: #DCE6F0; /* lighter tint for headline emphasis on dark section backgrounds */
+  --cream:     #FFFFFF;
 
   /* aliases so brand color / labels map onto the DEEC system */
   --accent:      var(--moss);
   --accent-2:    var(--moss-2);
   --accent-soft: var(--moss-soft);
 
-  --line:      rgba(28, 29, 23, 0.12);
-  --line-soft: rgba(28, 29, 23, 0.07);
+  --line:      rgba(11, 18, 32, 0.12);
+  --line-soft: rgba(11, 18, 32, 0.07);
 
-  --shadow-soft: 0 24px 60px -30px rgba(28, 29, 23, 0.35);
-  --shadow-lift: 0 40px 90px -35px rgba(28, 29, 23, 0.45);
+  --shadow-soft: 0 24px 60px -30px rgba(11, 18, 32, 0.35);
+  --shadow-lift: 0 40px 90px -35px rgba(11, 18, 32, 0.45);
 
   --display: "Satoshi", "Switzer", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --sans: "Switzer", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -203,16 +201,16 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   align-items: center;
   padding-block: .7rem;
   border-radius: 3px;
-  border: 1px solid rgba(28, 29, 23, 0.08);
+  border: 1px solid rgba(11, 18, 32, 0.08);
   background: rgba(255, 255, 255, 0.62);
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
-  box-shadow: 0 10px 30px -14px rgba(28, 29, 23, 0.18);
+  box-shadow: 0 10px 30px -14px rgba(11, 18, 32, 0.18);
   transition: box-shadow .4s var(--ease-out), background-color .4s var(--ease-out);
 }
 .nav.is-scrolled {
   background: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 14px 34px -14px rgba(28, 29, 23, 0.26);
+  box-shadow: 0 14px 34px -14px rgba(11, 18, 32, 0.26);
 }
 .nav-inner {
   width: 100%;
@@ -237,7 +235,7 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   column-gap: 16px;
 }
 .nav-brand { display: inline-flex; }
-.nav-brand-logo { height: 55px; width: auto; display: block; }
+.nav-brand-logo { height: 30px; width: auto; display: block; }
 .nav-actions { display: flex; align-items: center; gap: 11px; }
 .nav-icons { display: flex; align-items: center; gap: 6px; }
 .nav-icon-btn {
@@ -288,7 +286,7 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 /* Menu dropdown panel — anchored, not full-screen; used at every breakpoint */
 .menu-backdrop {
   position: fixed; inset: 0; z-index: 95;
-  background: rgba(28, 29, 23, .32);
+  background: rgba(11, 18, 32, .32);
   opacity: 0;
   transition: opacity .35s var(--ease-out);
 }
@@ -335,7 +333,7 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 .menu-list .menu-link-cta:hover { background: var(--moss-2); color: var(--cream); }
 
 @media (max-width: 719px) {
-  .nav-brand-logo { height: 44px; }
+  .nav-brand-logo { height: 24px; }
   /* Matches .menu-toggle's own mobile size (34px) instead of staying at
      the 38px desktop size — narrows the icon row just enough, alongside
      the tighter gaps/padding below, to keep it on one line with the logo
@@ -359,7 +357,7 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
      down to 320px (iPhone SE width) with the row still fitting on one
      line, including with Android's text-size accessibility setting maxed
      out (tested by forcing the root font-size up to 150%). */
-  .nav-brand-logo { height: 38px; }
+  .nav-brand-logo { height: 21px; }
   .nav-inner { padding-inline: 8px; column-gap: 8px; }
   .nav-actions { gap: 6px; }
   .lang-toggle { gap: 3px; }
@@ -381,7 +379,7 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   position: absolute;
   inset: -20% -10% auto -10%;
   height: 70%;
-  background: radial-gradient(60% 60% at 50% 30%, rgba(59,75,52,0.12), transparent 70%);
+  background: radial-gradient(60% 60% at 50% 30%, rgba(16,42,67,0.12), transparent 70%);
   filter: blur(60px);
   pointer-events: none;
   z-index: -1;
@@ -417,7 +415,7 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 .mockup-glow {
   position: absolute;
   inset: 6% -12% -12% -12%;
-  background: radial-gradient(ellipse 60% 55% at 50% 60%, rgba(59, 75, 52, 0.22), transparent 72%);
+  background: radial-gradient(ellipse 60% 55% at 50% 60%, rgba(16, 42, 67, 0.22), transparent 72%);
   filter: blur(30px);
   z-index: -1;
 }
@@ -431,20 +429,20 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   container-type: inline-size;
   font-family: "Geist", -apple-system, "Segoe UI", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
-  background: #faf8f4;
-  color: #1a1a18;
+  background: #F8F9FB;
+  color: #0B1220;
 
-  --qb-ink: #1a1a18;
-  --qb-ink-soft: #3a382f;
-  --qb-muted: #6b675f;
-  --qb-faint: #a39e91;
+  --qb-ink: #0B1220;
+  --qb-ink-soft: #0B1220;
+  --qb-muted: #667085;
+  --qb-faint: #6B7686;
   --qb-surface: #ffffff;
-  --qb-surface-sunken: #f4f1ea;
-  --qb-border: #e6e1d6;
-  --qb-border-strong: #d8d1c1;
-  --qb-accent: #b3762c;
-  --qb-accent-soft: #f0e2cc;
-  --qb-accent-ink: #6b4718;
+  --qb-surface-sunken: #EEF1F5;
+  --qb-border: #E3E8EE;
+  --qb-border-strong: #C7D2DE;
+  --qb-accent: #102A43;
+  --qb-accent-soft: #DCE6F0;
+  --qb-accent-ink: #071A2B;
   --qb-success: #2f7d4f;
 }
 .qb-shell { display: grid; grid-template-columns: 118px 1fr; min-width: 0; }
@@ -693,14 +691,13 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   color: var(--ink-mute);
   margin-bottom: 1.4rem;
 }
-.hero-kicker strong { color: var(--accent); font-weight: 600; }
 .hero-title {
   font-family: var(--display);
   font-weight: 900;
   letter-spacing: -0.03em;
-  font-size: clamp(2.6rem, 6.4vw, 5rem);
+  font-size: clamp(3.1rem, 7.4vw, 5.75rem);
   line-height: .98;
-  max-width: 20ch;
+  max-width: 30ch;
 }
 .hero-title em { display: block; margin-top: .1em; }
 .hero-sub {
@@ -760,17 +757,6 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   .trust-row-simple .trust-item { padding: 0 .12rem; font-size: .5rem; gap: .12rem; }
   .trust-row-simple .trust-icon { width: 9px; height: 9px; }
 }
-.hero-meta {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: .5rem 1.1rem;
-  font-size: .86rem;
-  color: var(--ink-faint);
-  font-family: var(--mono);
-  letter-spacing: .01em;
-}
-.hero-meta span { white-space: nowrap; }
 .hero-meta-item {
   display: inline-flex;
   align-items: center;
@@ -922,18 +908,18 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 .problema-visual { position: relative; max-width: 30rem; margin-inline: auto; }
 
 /* --- Review mockup: static, non-functional replica of the real product UI.
-   Own scoped design tokens (Geist, amber accent) — intentionally distinct
-   from the landing's own moss/serif brand, because this represents an
-   actual screenshot of CateringTools, not a themed illustration. --- */
+   Own scoped design tokens (Geist, navy accent) — intentionally distinct
+   from the landing's own navy/display brand, because this represents an
+   actual screenshot of the quoting tool, not a themed illustration. --- */
 .review-mockup-wrap { width: 100%; max-width: 30rem; container-type: inline-size; }
 .review-mockup {
-  --rm-ink: #1a1a18;
-  --rm-muted: #6b675f;
-  --rm-faint: #a39e91;
+  --rm-ink: #0B1220;
+  --rm-muted: #667085;
+  --rm-faint: #6B7686;
   --rm-surface: #ffffff;
-  --rm-surface-sunken: #f4f1ea;
-  --rm-border: #e6e1d6;
-  --rm-accent: #b3762c;
+  --rm-surface-sunken: #EEF1F5;
+  --rm-border: #E3E8EE;
+  --rm-accent: #102A43;
   --rm-success: #2f7d4f;
   --rm-radius-sm: 7px;
   --rm-radius-md: 8px;
@@ -1168,18 +1154,18 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   font-family: "Geist", -apple-system, "Segoe UI", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   background: #ffffff;
-  color: #1a1a18;
+  color: #0B1220;
   padding: 16px;
 
-  --qd-ink: #1a1a18;
-  --qd-ink-soft: #3a382f;
-  --qd-muted: #6b675f;
-  --qd-faint: #a39e91;
-  --qd-surface-sunken: #f4f1ea;
-  --qd-border: #e6e1d6;
-  --qd-accent: #b3762c;
+  --qd-ink: #0B1220;
+  --qd-ink-soft: #0B1220;
+  --qd-muted: #667085;
+  --qd-faint: #6B7686;
+  --qd-surface-sunken: #EEF1F5;
+  --qd-border: #E3E8EE;
+  --qd-accent: #102A43;
   --qd-success: #2f7d4f;
-  --qd-table-head: #2f3126;
+  --qd-table-head: #102A43;
 }
 .qd-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
 .qd-header-left { display: flex; align-items: flex-start; gap: 6px; min-width: 0; }
@@ -1323,7 +1309,7 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 }
 .deseo-copy {
   font-size: 1.1rem;
-  color: rgba(246,241,230,0.75);
+  color: rgba(255,255,255,0.75);
   line-height: 1.7;
   max-width: 32rem;
 }
@@ -1496,7 +1482,7 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   font-size: .66rem;
   letter-spacing: .04em;
   color: var(--accent);
-  background: rgba(138, 118, 92, 0.12);
+  background: rgba(16, 42, 67, 0.12);
   padding: .3rem .6rem;
   border-radius: var(--radius-sm);
 }
@@ -1530,7 +1516,7 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   color: var(--ink-mute);
 }
 .mockup-tag.is-active {
-  background: rgba(138, 118, 92, 0.12);
+  background: rgba(16, 42, 67, 0.12);
   border-color: transparent;
   color: var(--accent);
   font-weight: 600;
@@ -1671,7 +1657,7 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   font-size: clamp(2rem, 4vw, 2.9rem);
   max-width: 18ch;
 }
-/* --- compare: tabla "Antes / Con CateringTools" con flecha central --- */
+/* --- compare: tabla "Antes / Con tu cotizador" con flecha central --- */
 .compare {
   margin-top: clamp(2.5rem, 5vw, 3.5rem);
   display: grid;
@@ -1823,7 +1809,6 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 }
 .oferta-price-preview { padding-bottom: .5rem; }
 .oferta-price-final { padding-top: .8rem; }
-.oferta-price-final .urgency-hero { margin-bottom: .5rem; }
 .oferta-price-final .btn { margin-top: .8rem; }
 .oferta-price-note {
   margin-top: .3rem;
@@ -1899,7 +1884,7 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 /* =============================================================
    15. Footer + shared floating/overlay components (15a: footer;
    15b–15h below: FAB stack, sticky CTA bar, social proof toast,
-   urgency countdown, rating stars, price-compare badge, accordion —
+   rating stars, price-compare badge, accordion —
    cross-cutting UI reused across Hero/Oferta/FAQ rather than
    sección-specific)
    ============================================================= */
@@ -1921,7 +1906,6 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   align-items: center;
   gap: .55rem;
 }
-.footer-mark { width: 20px; height: auto; flex-shrink: 0; }
 .footer-brand-name {
   font-family: var(--mono);
   font-size: .82rem;
@@ -1929,14 +1913,9 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   text-transform: uppercase;
 }
 .footer-brand-name strong { font-weight: 700; color: var(--cream); }
-.footer-brand-name span {
-  font-weight: 500;
-  color: rgba(246,241,230,0.5);
-  margin-left: .4rem;
-}
 .footer-copyright {
   font-size: .82rem;
-  color: rgba(246,241,230,0.45);
+  color: rgba(255,255,255,0.45);
 }
 
 /* =============================================================
@@ -2117,71 +2096,13 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 .toast strong { font-weight: 700; }
 .toast code {
   font-family: var(--mono);
-  background: rgba(246,241,230,0.14);
+  background: rgba(255,255,255,0.14);
   padding: .1rem .35rem;
   border-radius: 2px;
   font-size: .82em;
 }
 
-/* =============================================================
-   15e. Urgency (countdown) — Hero, Oferta, CTA bar variants
-   ============================================================= */
-.urgency-hero {
-  margin-bottom: 1rem;
-  display: flex; align-items: center; justify-content: center; gap: .6rem;
-}
-.hero-cta .urgency-hero { margin-top: 1rem; }
-.urgency-hero .urgency-label {
-  font-size: .64rem; font-weight: 700; letter-spacing: .03em;
-  text-transform: uppercase; color: var(--urgent-2);
-}
-.urgency-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--urgent);
-  animation: urgencyPulse 1.8s ease-in-out infinite;
-}
-@keyframes urgencyPulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: .4; transform: scale(0.7); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .urgency-dot { animation: none; }
-}
-.urgency-box {
-  background: rgba(var(--urgent-rgb), 0.08);
-  border-radius: 4px;
-  padding: .28rem .55rem;
-  text-align: center;
-}
-.urgency-box-time {
-  font-weight: 800;
-  font-size: .92rem;
-  color: var(--urgent-2);
-  font-variant-numeric: tabular-nums;
-}
-.urgency-box-colon { margin: 0 .1rem; }
-.urgency-box-labels {
-  display: flex; justify-content: space-between; gap: .55rem;
-  margin-top: .05rem;
-  font-size: .5rem; letter-spacing: .05em; text-transform: uppercase;
-  color: var(--urgent-2); opacity: .7;
-}
-.urgency-caption { margin-top: .4rem; font-size: .78rem; color: var(--ink-mute); text-align: center; }
-
-/* Compact variant — CTA bar */
-.urgency-bar { display: flex; align-items: center; margin-bottom: 0; flex-shrink: 0; gap: .5rem; }
-.urgency-bar .urgency-box { padding: .2rem .45rem; }
-.urgency-bar .urgency-box-time { font-size: .8rem; }
-.urgency-bar .urgency-box-labels { font-size: .44rem; gap: .45rem; }
-.urgency-bar-label {
-  font-size: .64rem; font-weight: 700; letter-spacing: .03em;
-  text-transform: uppercase; color: var(--urgent-2);
-  white-space: nowrap;
-}
 @media (max-width: 539px) {
-  .urgency-bar { flex: 1 1 100%; order: -1; justify-content: center; }
-  .urgency-bar .urgency-box { padding: .16rem .38rem; }
-  .urgency-bar .urgency-box-time { font-size: .72rem; }
   .cta-bar-price { display: none; }
   .cta-bar-inner .btn { order: 1; flex: 1 1 100%; }
   .cta-bar-badges { display: flex; order: 2; }
@@ -2320,7 +2241,7 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 .checkout-modal-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(28, 29, 23, 0.6);
+  background: rgba(11, 18, 32, 0.6);
   opacity: 0;
   transition: opacity .3s var(--ease-out);
 }
@@ -2374,10 +2295,8 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 #whop-checkout { min-height: 640px; position: relative; }
 #whop-checkout iframe { display: block; width: 100%; height: 100%; min-height: 640px; border: 0; position: relative; z-index: 1; }
 
-/* Shown until initCheckoutModal's hideLoading() fires (fixed delay after
-   the modal opens) — without it, the modal opens to a blank white box for
-   however long the iframe's own checkout page takes to load, which reads
-   as broken rather than "still loading". */
+/* Sits over the iframe while the checkout is loading (or failed to load).
+   data-state is driven by initCheckoutModal(): "loading" | "error" | "hidden". */
 .checkout-loading {
   position: absolute;
   inset: 0;
@@ -2390,10 +2309,29 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   background: var(--paper);
   color: var(--ink-mute);
   font-size: .85rem;
+  text-align: center;
   opacity: 1;
   transition: opacity .25s var(--ease-out);
 }
-.checkout-loading.is-hidden { opacity: 0; pointer-events: none; }
+.checkout-loading[data-state="hidden"] {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .25s var(--ease-out), visibility 0s .25s;
+}
+.checkout-status,
+.checkout-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
+  padding: 0 1.5rem;
+}
+.checkout-status strong { color: var(--ink); font-size: 1rem; }
+.checkout-loading[data-state="error"] .checkout-status,
+.checkout-loading:not([data-state="error"]) .checkout-error { display: none; }
+.checkout-error .btn { margin-top: .4rem; }
+[data-cta-buy].is-loading { pointer-events: none; opacity: .7; cursor: progress; }
 .checkout-spinner {
   width: 26px;
   height: 26px;
