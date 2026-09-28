@@ -14,9 +14,11 @@
 # using 'unsafe-inline' — every OTHER inline script stays blocked, which
 # is what makes this site's XSS surface a non-issue. Edit either snippet
 # and its hash goes stale (recompute it and update here + .htaccess, or
-# it's silently blocked). main.js's InitiateCheckout call isn't a third
-# inline script — it's trusted via script-src 'self', so it needs no hash.
-# https://t.whop.tw is Whop's tracking domain (loads s.js, sends events).
+# it's silently blocked). main.js's Lead tracking call (fired on every
+# WhatsApp CTA click) isn't a third inline script — it's trusted via
+# script-src 'self', so it needs no hash. https://t.whop.tw is Whop's
+# tracking domain (loads s.js, sends events) — unrelated to the WhatsApp
+# CTAs, kept for Whop's own analytics.
 # https://connect.facebook.net/https://www.facebook.com are Meta's (loads
 # fbevents.js, sends events, serves the <noscript> fallback pixel image).
 # facebook.com is also in frame-src/form-action: fbevents.js falls back to
