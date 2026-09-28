@@ -63,7 +63,6 @@
       "hero.title": "Tu cotizador.<br>Tus precios. <em>Tu forma.</em>",
       "hero.sub": "Diseñamos y desarrollamos una herramienta de cotización personalizada con los servicios, precios y reglas de tu negocio.",
       "hero.ctaHero": "Quiero mi cotizador",
-      "ctaBar.cta": "Quiero mi cotizador personalizado",
 
       "marquee.1.title": "Cotiza más rápido",
       "marquee.1.desc": "Prepara tus presupuestos en minutos.",
@@ -360,7 +359,6 @@
       "hero.title": "Your quoter.<br>Your prices. <em>Your way.</em>",
       "hero.sub": "We design and build a custom quoting tool with your business's services, prices and rules.",
       "hero.ctaHero": "I want my quoter",
-      "ctaBar.cta": "I want my personalized quoting tool",
 
       "marquee.1.title": "Quote faster",
       "marquee.1.desc": "Put together your quotes in minutes.",
