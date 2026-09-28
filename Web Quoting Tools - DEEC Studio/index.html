@@ -14,7 +14,7 @@
      hit this specific request. See also the css/js Cache-Control in
      _headers/.htaccess (stale-while-revalidate/stale-if-error) for the
      other half of this fix. -->
-<link rel="stylesheet" href="styles.css?v=20260928a" />
+<link rel="stylesheet" href="styles.css?v=20260928b" />
 
 <!-- Whop tracking pixel (conversion/attribution for the checkout funnel).
      CSP script-src is 'self' only with no 'unsafe-inline' — this exact
@@ -30,18 +30,19 @@
 
 <!-- Meta Pixel Code — base snippet + PageView only. Same hash-allowlist
      approach as the Whop pixel above (no 'unsafe-inline'). The
-     conversion event for this campaign, "InitiateCheckout", is NOT a
-     second inline <script> — it's called from main.js's checkout click
-     handler instead (main.js is already trusted via script-src 'self',
-     so no extra CSP entry was needed for that part). Do NOT add a
-     "Purchase" event here or in main.js: this plain-iframe checkout has
-     no way to know if a payment actually succeeded inside Whop's iframe,
-     so Purchase is meant to come from Whop server-side (Conversions API)
-     on its own payment.succeeded webhook instead. Edit so much as a
-     character of THIS block and its hash in _headers/.htaccess needs
-     recomputing or it's silently blocked. connect.facebook.net/
-     www.facebook.com are allowlisted in script-src/img-src/connect-src/
-     frame-src/form-action for fbevents.js and its tracking beacons. -->
+     conversion event for this campaign, "Lead", is NOT a second inline
+     <script> — it's called from main.js's initWhatsapp() click handler
+     instead, once per every CTA that opens a WhatsApp chat (main.js is
+     already trusted via script-src 'self', so no extra CSP entry was
+     needed for that part). Every CTA on the page now opens WhatsApp
+     instead of an embedded checkout, so there's no on-site "Purchase"
+     step left to instrument here — if one is ever needed again it would
+     come from Whop server-side (Conversions API) on a payment.succeeded
+     webhook, as before. Edit so much as a character of THIS block and
+     its hash in _headers/.htaccess needs recomputing or it's silently
+     blocked. connect.facebook.net/www.facebook.com are allowlisted in
+     script-src/img-src/connect-src/frame-src/form-action for fbevents.js
+     and its tracking beacons. -->
 <script>
   !function(f,b,e,v,n,t,s)
   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -75,11 +76,6 @@
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- Warms up DNS/TLS to Whop ahead of time so the checkout iframe (loaded
-     lazily on hover/touch/click of a "Comprar ahora" button — see main.js
-     initCheckoutModal) doesn't pay that latency at the moment it's needed.
-     Doesn't load any Whop page content or cookies by itself. -->
-<link rel="preconnect" href="https://whop.com" crossorigin>
 
 <!-- Web fonts — loaded non-render-blocking (media="print" swapped to "all"
      by main.js, no inline JS so this stays CSP-safe under script-src 'self').
@@ -150,7 +146,7 @@
     <li><a href="#experiencia" data-i18n="nav.item.experience">La experiencia</a></li>
     <li><a href="#oferta" data-i18n="nav.item.pricing">Precio</a></li>
     <li><a href="#faq" data-i18n="nav.item.faq">Preguntas frecuentes</a></li>
-    <li><a href="#oferta" class="menu-link-cta" data-cta-buy data-i18n="nav.item.cta">Comprar ahora</a></li>
+    <li><a href="#" class="menu-link-cta" data-whatsapp-cta data-i18n="nav.item.cta">Comprar ahora</a></li>
   </ul>
 </nav>
 
@@ -177,7 +173,7 @@
       <span class="cta-bar-amount">$49.99 USD</span>
       <span class="cta-bar-label" data-i18n="trust.paid">Pago único</span>
     </div>
-    <a class="btn btn-primary" data-cta-buy href="#oferta"><span data-i18n="ctaBar.cta">Quiero mi cotizador personalizado</span> <span class="btn-arrow" aria-hidden="true">→</span></a>
+    <a class="btn btn-primary" data-whatsapp-cta href="#"><span data-i18n="ctaBar.cta">Quiero mi cotizador personalizado</span> <span class="btn-arrow" aria-hidden="true">→</span></a>
   </div>
   <div class="cta-bar-badges cta-bar-badges-icons">
     <span class="hero-meta-item">
@@ -409,7 +405,7 @@
         </div>
       </div>
 
-      <a class="btn btn-primary btn-lg btn-hero" data-cta-buy href="#oferta">
+      <a class="btn btn-primary btn-lg btn-hero" data-whatsapp-cta href="#">
         <span data-i18n="hero.ctaHero">Quiero mi cotizador</span>
         <span class="btn-arrow" aria-hidden="true">→</span>
       </a>
@@ -1086,7 +1082,7 @@
       </div>
 
       <div class="oferta-price-block oferta-price-final">
-        <a class="btn btn-primary btn-lg btn-hero" data-cta-buy href="#oferta">
+        <a class="btn btn-primary btn-lg btn-hero" data-whatsapp-cta href="#">
           <span data-i18n="hero.ctaHero">Quiero mi cotizador</span>
           <span class="btn-arrow" aria-hidden="true">→</span>
         </a>
@@ -1245,45 +1241,8 @@
   </div>
 </footer>
 
-<!-- Checkout modal — every [data-cta-buy] button opens this instead of
-     navigating, embedding Whop's own hosted checkout page directly in an
-     iframe. Its origin (whop.com) is the one already approved for Apple
-     Pay/Google Pay — confirmed working: this exact method (plain iframe to
-     whop.com/checkout/{plan}, no js.whop.com or cdn.whop.com script) keeps
-     working wallets. The iframe has no static src in this markup: main.js's
-     initCheckoutModal() sets it, picking between two separate Whop plans
-     (one Spanish, one English — same product, each with its own
-     title/description set on Whop's side) based on currentLang.
-     whop.com/embedded/checkout/{plan}?locale={es|en} was tried twice
-     instead (it's the only Whop path that honors ?locale=) — both times it
-     rendered with no product name/description/price/wallets at all,
-     confirmed both as a direct nav AND actually embedded in this exact
-     iframe. Don't go back to it, and don't reintroduce js.whop.com's
-     loader.js or cdn.whop.com's Elements widget either — both were tried
-     and abandoned earlier for the same reason (broken or missing wallets). -->
-<div class="checkout-modal" data-checkout-modal hidden>
-  <div class="checkout-modal-backdrop" data-checkout-modal-backdrop></div>
-  <div class="checkout-modal-panel" role="dialog" aria-modal="true" data-i18n-aria="a11y.checkoutDialog" aria-label="Pago">
-    <button type="button" class="checkout-modal-close" data-checkout-modal-close data-i18n-aria="a11y.closeCheckout" aria-label="Cerrar">&times;</button>
-    <div id="whop-checkout">
-      <div class="checkout-loading" data-checkout-loading data-state="loading">
-        <div class="checkout-status" role="status" aria-live="polite">
-          <span class="checkout-spinner" aria-hidden="true"></span>
-          <strong data-i18n="checkout.loading">Cargando...</strong>
-          <span data-i18n="checkout.wait">Espera un momento</span>
-        </div>
-        <div class="checkout-error" role="alert">
-          <span data-i18n="checkout.error">No pudimos cargar el pago. Revisa tu conexión e inténtalo de nuevo.</span>
-          <button type="button" class="btn btn-primary" data-checkout-retry data-i18n="checkout.retry">Reintentar</button>
-        </div>
-      </div>
-      <iframe title="Checkout" allow="payment"></iframe>
-    </div>
-  </div>
-</div>
-
-<script defer src="lib/manifest.js?v=20260928a"></script>
-<script defer src="lib/i18n.js?v=20260928a"></script>
-<script defer src="main.js?v=20260928a"></script>
+<script defer src="lib/manifest.js?v=20260928b"></script>
+<script defer src="lib/i18n.js?v=20260928b"></script>
+<script defer src="main.js?v=20260928b"></script>
 </body>
 </html>

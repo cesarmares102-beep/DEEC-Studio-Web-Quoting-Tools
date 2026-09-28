@@ -10,7 +10,6 @@
   var fineHover = matchMedia("(hover: hover) and (pointer: fine)").matches;
   var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   var refreshSocialProofToast = null; // set by initSocialProof(), called from applyLanguage()
-  var syncCheckoutModalLocale = null; // set by initCheckoutModal(), called from applyLanguage()
   var refreshWhatsappLinks = null; // set by initWhatsapp(), called from applyLanguage()
 
   function safe(fn, name) {
@@ -56,187 +55,13 @@
   }
 
   /* -------------------------------------------------------------
-     Checkout modal — every [data-cta-buy] button opens this instead
-     of navigating away. This function only handles open/close/backdrop/
-     Escape/the loading placeholder — it doesn't know or care what's
-     mounted inside #whop-checkout (a plain iframe to Whop's hosted
-     checkout page, already in the markup — see index.html for why this
-     specific method and not the js.whop.com/cdn.whop.com alternatives
-     tried in between).
-     href="#oferta" on the buttons stays as a plain anchor fallback
-     if JS is unavailable.
-     ------------------------------------------------------------- */
-  function initCheckoutModal() {
-    var modal = $("[data-checkout-modal]");
-    var backdrop = $("[data-checkout-modal-backdrop]");
-    var closeBtn = $("[data-checkout-modal-close]");
-    var triggers = $$("[data-cta-buy]");
-    var overlay = $("[data-checkout-loading]");
-    var retryBtn = $("[data-checkout-retry]");
-    var iframe = $("#whop-checkout iframe");
-    if (!modal || !triggers.length) return;
-
-    // Two separate Whop plans, not a ?locale= query param — /checkout/{plan}
-    // (the only path confirmed to keep the product summary and Apple/Google
-    // Pay; /embedded/checkout/ was tried twice and dropped both, see the
-    // comment on the modal markup in index.html) doesn't honor ?locale= at
-    // all. Each plan already carries its own title/description in Whop's
-    // dashboard, so picking the plan by currentLang gets those two fields
-    // to match the page. The payment FORM itself (email, card, pay button)
-    // still follows the buyer's own browser language — Whop decides that
-    // from the plain /checkout/ page, not us, and there's no code-side fix
-    // for it here.
-    var PLAN_ES = "plan_GLifvy5XFV15e";
-    var PLAN_EN = "plan_VmdTbp7UKyDnF";
-    // Real failure detector, not a delay: a cross-origin iframe exposes no
-    // error event, so "the page never finished loading" is the only signal.
-    var LOAD_TIMEOUT_MS = 15000;
-
-    var isOpen = false;
-    var ready = false;      // current iframe src has fired its load event
-    var waitTimer = null;
-    var activeTrigger = null;
-
-    function checkoutSrc(lang) {
-      return "https://whop.com/checkout/" + (lang === "en" ? PLAN_EN : PLAN_ES);
-    }
-
-    // Overlay states: "loading" (spinner + texts), "error" (message + retry),
-    // "hidden" (checkout is showing). Texts come from the i18n dictionary
-    // via data-i18n, so they follow the page language with no extra logic.
-    function setOverlay(state) {
-      if (overlay) overlay.setAttribute("data-state", state);
-    }
-    function setBusy(on) {
-      if (!activeTrigger) return;
-      activeTrigger.classList.toggle("is-loading", on);
-      if (on) activeTrigger.setAttribute("aria-busy", "true");
-      else activeTrigger.removeAttribute("aria-busy");
-    }
-    function stopWaiting() {
-      clearTimeout(waitTimer);
-      waitTimer = null;
-      setBusy(false);
-    }
-    function showError() {
-      stopWaiting();
-      setOverlay("error");
-    }
-    function startWaiting() {
-      setOverlay("loading");
-      setBusy(true);
-      clearTimeout(waitTimer);
-      if (navigator.onLine === false) { showError(); return; }
-      waitTimer = setTimeout(showError, LOAD_TIMEOUT_MS);
-    }
-
-    // Returns true when the iframe was pointed at a different URL.
-    function syncCheckoutLocale() {
-      if (!iframe) return false;
-      var next = checkoutSrc(currentLang);
-      if (iframe.getAttribute("src") === next) return false;
-      ready = false;
-      iframe.src = next;
-      return true;
-    }
-    syncCheckoutModalLocale = function () {
-      if (syncCheckoutLocale() && isOpen) startWaiting();
-    };
-
-    if (iframe) {
-      iframe.addEventListener("load", function () {
-        if (!iframe.getAttribute("src")) return; // initial about:blank
-        ready = true;
-        if (isOpen) {
-          stopWaiting();
-          setOverlay("hidden");
-        }
-      });
-    }
-
-    // Warm the iframe up on the first real signal of buying intent —
-    // hover on desktop, touch on mobile — instead of waiting for the
-    // click that actually opens the modal. Whop's checkout is a full
-    // cross-origin page load (DNS/TLS/JS bundle), so by the time open()
-    // runs it's often already most of the way loaded instead of starting
-    // from zero. syncCheckoutLocale() is a no-op for a src that's already
-    // current, so repeated hovers are harmless.
-    triggers.forEach(function (btn) {
-      btn.addEventListener("mouseenter", syncCheckoutLocale);
-      btn.addEventListener("touchstart", syncCheckoutLocale, { passive: true });
-      btn.addEventListener("focus", syncCheckoutLocale);
-    });
-
-    function open(e) {
-      if (e) e.preventDefault();
-      if (isOpen) return; // ignore repeat clicks while the checkout is opening/open
-      isOpen = true;
-      activeTrigger = (e && e.currentTarget) || null;
-      // Meta Pixel "InitiateCheckout" — the conversion event for this
-      // campaign (Sales → Website), fired once per checkout opening. NOT
-      // "Purchase": this plain-iframe checkout has no return URL/
-      // postMessage to know if the buyer actually paid inside Whop's
-      // iframe, so the frontend can't know a sale happened — only that
-      // someone opened the checkout. The real Purchase event comes from
-      // Whop server-side (Conversions API) on its payment.succeeded
-      // webhook — see functions/api/webhooks/whop.js. Don't add an
-      // fbq("track","Purchase",...) call here.
-      // Guarded so a blocked/failed-to-load pixel can't break the
-      // checkout modal itself from opening.
-      try {
-        if (window.fbq) window.fbq("track", "InitiateCheckout", { value: 49.99, currency: "USD" });
-      } catch (err) { if (window.console) console.warn("[fbq InitiateCheckout]", err); }
-      syncCheckoutLocale();
-      // Modal + overlay appear on the same tick as the click; the overlay
-      // only stays up until the iframe reports it has actually loaded
-      // (immediately, if the hover/touch preload already finished).
-      if (ready) setOverlay("hidden");
-      else startWaiting();
-      modal.hidden = false;
-      document.body.style.overflow = "hidden";
-      // Force a synchronous layout flush between removing [hidden] and
-      // adding .is-open, instead of requestAnimationFrame — rAF can be
-      // throttled/delayed (backgrounded tab, low-power mode, some
-      // automation contexts), which left the modal technically open but
-      // stuck at opacity:0 (invisible) until it fired. This read forces
-      // the browser to commit the hidden->visible change first, so the
-      // very next style change (.is-open) still transitions instead of
-      // getting coalesced away — and it happens on the same tick, not a
-      // deferred callback that might not run promptly.
-      void modal.offsetHeight;
-      modal.classList.add("is-open");
-      if (closeBtn) closeBtn.focus({ preventScroll: true });
-    }
-    function close() {
-      if (!isOpen) return;
-      isOpen = false;
-      stopWaiting();
-      modal.classList.remove("is-open");
-      document.body.style.overflow = "";
-      setTimeout(function () { if (!isOpen) modal.hidden = true; }, 300);
-      if (activeTrigger) activeTrigger.focus({ preventScroll: true });
-      activeTrigger = null;
-    }
-
-    function retry() {
-      if (!iframe) return;
-      ready = false;
-      iframe.removeAttribute("src"); // setting the same src again wouldn't reload
-      iframe.src = checkoutSrc(currentLang);
-      startWaiting();
-    }
-
-    triggers.forEach(function (btn) { btn.addEventListener("click", open); });
-    if (retryBtn) retryBtn.addEventListener("click", retry);
-    if (backdrop) backdrop.addEventListener("click", close);
-    if (closeBtn) closeBtn.addEventListener("click", close);
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") close();
-    });
-  }
-
-  /* -------------------------------------------------------------
-     WhatsApp contact points (nav icon + FAB) — sección 4
+     WhatsApp contact points — nav icon, FAB, and every former
+     "Comprar ahora" CTA (nav menu, sticky bar, hero, oferta). All of
+     them now share [data-whatsapp-cta] and open a WhatsApp chat
+     instead of an embedded checkout — the strategy is to qualify the
+     lead in conversation, not to sell inside an iframe. See
+     lib/manifest.js for the number and lib/i18n.js's "whatsapp.message"
+     key for the prefilled text (follows the page's language).
      Falls back to a warning toast if no real number is configured.
      ------------------------------------------------------------- */
   function isWhatsappConfigured() {
@@ -274,7 +99,17 @@
         if (!configured) {
           e.preventDefault();
           showToast(t("toast.whatsappNotConfigured"));
+          return;
         }
+        // Meta Pixel "Lead" — the conversion event for this campaign now
+        // that every CTA opens a WhatsApp chat instead of an embedded
+        // checkout: there's no on-site purchase step left to instrument,
+        // so a lead (someone opening the conversation with buying/inquiry
+        // intent) is the meaningful signal. Guarded so a blocked/failed
+        // pixel can't stop the WhatsApp link from opening.
+        try {
+          if (window.fbq) window.fbq("track", "Lead");
+        } catch (err) { if (window.console) console.warn("[fbq Lead]", err); }
       });
     });
   }
@@ -340,8 +175,13 @@
     function open() {
       panel.hidden = false;
       backdrop.hidden = false;
-      // See initCheckoutModal's open() for why this is a forced reflow
-      // instead of requestAnimationFrame.
+      // Forced reflow instead of requestAnimationFrame: rAF can be
+      // throttled/delayed (backgrounded tab, low-power mode, some
+      // automation contexts), which would leave the panel technically
+      // open but stuck at opacity:0 until it fired. This read forces the
+      // browser to commit the hidden->visible change first, so the very
+      // next style change (.is-open) still transitions instead of getting
+      // coalesced away.
       void panel.offsetHeight;
       panel.classList.add("is-open");
       backdrop.classList.add("is-open");
@@ -408,7 +248,6 @@
     // screen right now instead of leaving it in the old language until
     // its own timer cycles it out.
     if (refreshSocialProofToast) refreshSocialProofToast();
-    if (syncCheckoutModalLocale) syncCheckoutModalLocale();
     if (refreshWhatsappLinks) refreshWhatsappLinks();
   }
 
@@ -949,8 +788,9 @@
     function showSpToast() {
       currentState = pickState(nextType());
       renderToast();
-      // See initCheckoutModal's open() for why this is a forced reflow
-      // instead of requestAnimationFrame.
+      // Forced reflow instead of requestAnimationFrame — see the menu
+      // panel's open() above for why (throttled rAF can leave the toast
+      // stuck invisible instead of transitioning in).
       var node = $("[data-sp-toast]", stack);
       if (node) {
         void node.offsetHeight;
@@ -987,7 +827,6 @@
      ------------------------------------------------------------- */
   function boot() {
     safe(initFontStylesheets, "initFontStylesheets");
-    safe(initCheckoutModal, "initCheckoutModal");
     safe(initWhatsapp, "initWhatsapp");
     safe(initNav, "initNav");
     safe(initNavHeight, "initNavHeight");
