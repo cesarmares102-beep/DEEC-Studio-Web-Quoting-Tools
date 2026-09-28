@@ -303,7 +303,31 @@
       "faq.cat6.q3": "¿Qué incluye la entrega?",
       "faq.cat6.a3": "Incluye el cotizador desarrollado y personalizado, además de la explicación necesaria para utilizarlo y actualizar su información comercial por tu cuenta.",
 
-      "footer.copyright": "© 2026 DEEC Studio. Todos los derechos reservados."
+      "footer.copyright": "© 2026 DEEC Studio. Todos los derechos reservados.",
+      "footer.cookiesLink": "Política de cookies",
+
+      "cookie.banner.text": "Usamos cookies propias y de terceros para analizar el uso del sitio y medir el rendimiento de nuestras campañas de anuncios. Puedes conocer más en nuestra <a class=\"cookie-banner-link\" href=\"politica-cookies.html\">Política de cookies</a>.",
+      "cookie.banner.accept": "Entendido",
+
+      "cookiePolicy.eyebrow": "Legal",
+      "cookiePolicy.title": "Política de cookies",
+      "cookiePolicy.updated": "Última actualización: 28 de septiembre de 2026",
+      "cookiePolicy.intro": "Este sitio (deecstudio-quotingtools.online) utiliza cookies y tecnologías similares para funcionar correctamente y para entender cómo se usa. Aquí explicamos qué cookies usamos, para qué sirven y cómo puedes controlarlas.",
+      "cookiePolicy.whatTitle": "¿Qué es una cookie?",
+      "cookiePolicy.whatBody": "Una cookie es un pequeño archivo que un sitio web guarda en tu navegador. Sirve para recordar información entre visitas, como preferencias, o para medir cómo se usa el sitio. Algunas herramientas de este sitio también usan tecnologías equivalentes, como el almacenamiento local del navegador (localStorage).",
+      "cookiePolicy.typesTitle": "Cookies que usamos",
+      "cookiePolicy.necessaryTitle": "Cookies necesarias",
+      "cookiePolicy.necessaryBody": "Puestas por Cloudflare, el proveedor que aloja y protege este sitio. Se usan para seguridad, distribución de contenido y buen funcionamiento técnico del sitio. No sirven para publicidad ni para identificarte personalmente, y no se pueden desactivar sin afectar el funcionamiento del sitio.",
+      "cookiePolicy.analyticsTitle": "Cookies de medición y publicidad",
+      "cookiePolicy.analyticsBody": "Usamos el Meta Pixel (Facebook/Instagram) para medir el rendimiento de nuestras campañas de anuncios y entender qué visitas provienen de ellas. También usamos una herramienta de seguimiento de Whop, nuestro proveedor de pagos, para reportes internos de visitas. Ninguna de estas herramientas se usa para vender tus datos a terceros.",
+      "cookiePolicy.controlTitle": "Cómo controlar las cookies",
+      "cookiePolicy.controlBody": "Puedes bloquear o eliminar las cookies desde la configuración de tu navegador en cualquier momento — cada navegador tiene su propio proceso, normalmente dentro de \"Privacidad\" o \"Configuración de sitios\". También puedes ajustar qué anuncios ves desde tus <a class=\"cookie-policy-link\" href=\"https://www.facebook.com/adpreferences/ad_settings\" target=\"_blank\" rel=\"noopener\">preferencias de anuncios de Meta</a>. Ten en cuenta que bloquear todas las cookies puede afectar cómo funciona este u otros sitios.",
+      "cookiePolicy.changesTitle": "Cambios a esta política",
+      "cookiePolicy.changesBody": "Podemos actualizar esta política si cambian las herramientas que usamos en el sitio. La fecha de la última actualización siempre aparece al inicio de esta página.",
+      "cookiePolicy.contactTitle": "¿Dudas sobre esta política?",
+      "cookiePolicy.contactBody": "Escríbenos por WhatsApp y con gusto te ayudamos.",
+      "cookiePolicy.contactCta": "Escribir por WhatsApp",
+      "cookiePolicy.backHome": "← Volver al inicio"
     },
     en: {
       "a11y.skipLink": "Skip to content",
@@ -592,7 +616,31 @@
       "faq.cat6.q3": "What does the delivery include?",
       "faq.cat6.a3": "It includes the developed and personalized quoting tool, plus the explanation needed to use it and update its business information yourself.",
 
-      "footer.copyright": "© 2026 DEEC Studio. All rights reserved."
+      "footer.copyright": "© 2026 DEEC Studio. All rights reserved.",
+      "footer.cookiesLink": "Cookie policy",
+
+      "cookie.banner.text": "We use our own and third-party cookies to analyze site usage and measure the performance of our ad campaigns. Learn more in our <a class=\"cookie-banner-link\" href=\"politica-cookies.html\">Cookie policy</a>.",
+      "cookie.banner.accept": "Got it",
+
+      "cookiePolicy.eyebrow": "Legal",
+      "cookiePolicy.title": "Cookie policy",
+      "cookiePolicy.updated": "Last updated: September 28, 2026",
+      "cookiePolicy.intro": "This site (deecstudio-quotingtools.online) uses cookies and similar technologies to work correctly and to understand how it's used. Here we explain which cookies we use, what they're for, and how you can control them.",
+      "cookiePolicy.whatTitle": "What is a cookie?",
+      "cookiePolicy.whatBody": "A cookie is a small file a website stores in your browser. It's used to remember information between visits, such as preferences, or to measure how the site is used. Some tools on this site also use equivalent technologies, such as the browser's local storage (localStorage).",
+      "cookiePolicy.typesTitle": "Cookies we use",
+      "cookiePolicy.necessaryTitle": "Necessary cookies",
+      "cookiePolicy.necessaryBody": "Set by Cloudflare, the provider that hosts and protects this site. They're used for security, content delivery, and the site's technical functioning. They aren't used for advertising or to identify you personally, and they can't be disabled without affecting how the site works.",
+      "cookiePolicy.analyticsTitle": "Measurement and advertising cookies",
+      "cookiePolicy.analyticsBody": "We use the Meta Pixel (Facebook/Instagram) to measure the performance of our ad campaigns and understand which visits come from them. We also use a tracking tool from Whop, our payment provider, for internal visit reports. None of these tools are used to sell your data to third parties.",
+      "cookiePolicy.controlTitle": "How to control cookies",
+      "cookiePolicy.controlBody": "You can block or delete cookies from your browser's settings at any time — each browser has its own process, usually under \"Privacy\" or \"Site settings\". You can also adjust which ads you see from your <a class=\"cookie-policy-link\" href=\"https://www.facebook.com/adpreferences/ad_settings\" target=\"_blank\" rel=\"noopener\">Meta ad preferences</a>. Keep in mind that blocking all cookies may affect how this or other sites work.",
+      "cookiePolicy.changesTitle": "Changes to this policy",
+      "cookiePolicy.changesBody": "We may update this policy if the tools we use on the site change. The date of the last update always appears at the top of this page.",
+      "cookiePolicy.contactTitle": "Questions about this policy?",
+      "cookiePolicy.contactBody": "Message us on WhatsApp and we'll gladly help.",
+      "cookiePolicy.contactCta": "Message us on WhatsApp",
+      "cookiePolicy.backHome": "← Back to home"
     }
   };
 })();
