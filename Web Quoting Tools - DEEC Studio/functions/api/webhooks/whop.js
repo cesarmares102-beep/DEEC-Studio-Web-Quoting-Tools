@@ -7,7 +7,7 @@
    deduped via Cloudflare KV keyed on the payment id (pay_...).
 
    This is the ONLY place Purchase is ever sent to Meta. The frontend
-   (index.html/main.js) intentionally only sends PageView and Lead (fired
+   (index.html/main.js) intentionally only sends PageView and Contact (fired
    on every WhatsApp CTA click) — see the comments there. There's no
    on-site checkout anymore (every CTA opens a WhatsApp chat instead —
    see main.js's initWhatsapp()); this webhook only matters if a sale is
