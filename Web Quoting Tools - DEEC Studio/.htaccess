@@ -1,0 +1,76 @@
+# DEEC Studio — cache strategy for Hostinger / Apache / LiteSpeed
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/css "access plus 1 hours"
+  ExpiresByType application/javascript "access plus 1 hours"
+  ExpiresByType application/json "access plus 1 hours"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType font/woff2 "access plus 1 month"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|json)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  # css/js get stale-while-revalidate/stale-if-error on top of
+  # no-cache/must-revalidate: if a revalidation request gets cut short
+  # (seen on iOS Safari after rapid reloads — it can cancel in-flight
+  # requests), the browser is explicitly allowed to fall back to the
+  # last good cached copy instead of ending up with no stylesheet at
+  # all, which is what was producing the unstyled-HTML flash.
+  <FilesMatch "\.(css|js|mjs)$">
+    Header set Cache-Control "no-cache, must-revalidate, stale-while-revalidate=86400, stale-if-error=86400"
+  </FilesMatch>
+  <FilesMatch "\.(webp|jpg|jpeg|png|svg|woff|woff2)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+  AddType application/javascript .js
+  AddType application/javascript .mjs
+  AddType text/css .css
+</IfModule>
+
+# Security headers — scoped to the resources this site actually loads
+# (self + Fontshare + Google Fonts + Whop's hosted checkout iframe +
+# Whop's tracking pixel). Don't add script-src exceptions for js.whop.com or cdn.whop.com (the checkout
+# embed loader/widget scripts); this checkout method still doesn't load
+# either of those, on purpose (see index.html). connect-src has
+# https://whop.com added only so the
+# <link rel="preconnect" href="https://whop.com"> in index.html isn't
+# silently dropped — it doesn't add any new fetch/XHR capability that
+# frame-src wasn't already granting to the checkout iframe.
+#
+# script-src also allowlists specific inline scripts by their SHA-256
+# hash (the Whop + Meta Pixel base snippets in index.html's <head>)
+# instead of using 'unsafe-inline' — that keeps every OTHER inline
+# script still blocked, which is what makes this site's XSS surface a
+# non-issue. If either snippet is ever edited, recompute its hash and
+# update it here (and in _headers) or it'll be silently blocked.
+# main.js's InitiateCheckout call isn't a third inline script — it's
+# trusted via script-src 'self', so it needs no hash. https://t.whop.tw is Whop's
+# tracking domain (loads s.js, sends events) — a different Whop
+# subdomain from the checkout iframe's whop.com.
+# https://connect.facebook.net/https://www.facebook.com are Meta's
+# (loads fbevents.js, sends events, serves the <noscript> fallback
+# pixel image).
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy 'camera=(), microphone=(), geolocation=(), payment=(self "https://whop.com")'
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-Vj0ZQI6HmRlgG8PCxGgAq25M62GE2IwjbyWbU26rh4Y=' 'sha256-8MexTA4cl23iH+k1us9OYTnOJCky1DyRUzZ+Stho6v4=' https://t.whop.tw https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com; frame-src https://whop.com https://www.facebook.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com; object-src 'none'"
+  # Forces HTTPS for a year on every future visit, including subdomains.
+  # Browsers ignore this header entirely when it arrives over plain HTTP
+  # (per spec), so it's safe to send unconditionally here rather than
+  # gating it on mod_rewrite's HTTPS var. No "; preload" — that submits
+  # the domain to browsers' hardcoded preload list, far harder to
+  # reverse than this header alone.
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</IfModule>
