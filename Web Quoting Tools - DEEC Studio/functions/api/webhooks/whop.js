@@ -7,11 +7,13 @@
    deduped via Cloudflare KV keyed on the payment id (pay_...).
 
    This is the ONLY place Purchase is ever sent to Meta. The frontend
-   (index.html/main.js) intentionally only sends PageView and
-   InitiateCheckout — see the comments there. This file doesn't touch the
-   Whop checkout iframe/modal in any way; it's a separate, async webhook
-   Whop calls after the buyer has already finished paying inside their
-   own iframe.
+   (index.html/main.js) intentionally only sends PageView and Lead (fired
+   on every WhatsApp CTA click) — see the comments there. There's no
+   on-site checkout anymore (every CTA opens a WhatsApp chat instead —
+   see main.js's initWhatsapp()); this webhook only matters if a sale is
+   later closed through a Whop payment link shared in that conversation,
+   in which case Whop still calls it asynchronously once the buyer
+   finishes paying.
 
    Field mapping below was confirmed directly by Whop support for this
    integration — not assumed from generic docs:
