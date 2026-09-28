@@ -11,11 +11,11 @@
    */
   var WHATSAPP_NUMBER = "525642145001";
 
-  // El mensaje de los puntos de contacto de WhatsApp (nav / FAB) vive en
-  // lib/i18n.js (clave "whatsapp.message") para seguir el idioma de la
-  // página — no aquí. No usado por los botones "Comprar ahora", que abren
-  // el checkout de Whop directamente (ver checkout-modal en index.html /
-  // main.js).
+  // El mensaje de todos los puntos de contacto de WhatsApp (nav, FAB, y
+  // los botones que antes decían "Comprar ahora") vive en lib/i18n.js
+  // (clave "whatsapp.message") para seguir el idioma de la página — no
+  // aquí. Todos los CTA del sitio abren WhatsApp; ya no hay checkout
+  // embebido (ver initWhatsapp() en main.js).
 
   window.__BRAND__ = {
     name: "DEEC Studio",
