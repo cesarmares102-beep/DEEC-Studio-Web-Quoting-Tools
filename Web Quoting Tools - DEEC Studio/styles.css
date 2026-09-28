@@ -2004,6 +2004,15 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   transition: transform .5s var(--ease-soft);
 }
 .cta-bar.is-visible { transform: translateY(0); }
+/* The cta-bar button reuses .btn-lg.btn-hero so it matches the hero/oferta
+   CTAs pixel-for-pixel (same font-size/weight/padding/arrow — .btn-hero
+   wins that cascade over .btn-lg since it's declared later). .btn-hero's
+   own width:100% is meant for its original single-column stack though,
+   and would fight this bar's row layout (price block + button side by
+   side) on desktop, so it's reset to auto here; the shared mobile rule
+   below (.cta-bar-inner .btn) still stretches it full-width at narrow
+   widths via flex-basis, same as before. */
+.cta-bar-inner .btn-hero { width: auto; }
 .cta-bar-inner {
   display: flex;
   align-items: center;
