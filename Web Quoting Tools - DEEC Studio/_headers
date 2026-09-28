@@ -14,7 +14,7 @@
 # using 'unsafe-inline' — every OTHER inline script stays blocked, which
 # is what makes this site's XSS surface a non-issue. Edit either snippet
 # and its hash goes stale (recompute it and update here + .htaccess, or
-# it's silently blocked). main.js's Lead tracking call (fired on every
+# it's silently blocked). main.js's Contact tracking call (fired on every
 # WhatsApp CTA click) isn't a third inline script — it's trusted via
 # script-src 'self', so it needs no hash. https://t.whop.tw is Whop's
 # tracking domain (loads s.js, sends events) — unrelated to the WhatsApp

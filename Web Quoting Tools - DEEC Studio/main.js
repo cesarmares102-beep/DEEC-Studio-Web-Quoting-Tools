@@ -101,15 +101,14 @@
           showToast(t("toast.whatsappNotConfigured"));
           return;
         }
-        // Meta Pixel "Lead" — the conversion event for this campaign now
-        // that every CTA opens a WhatsApp chat instead of an embedded
-        // checkout: there's no on-site purchase step left to instrument,
-        // so a lead (someone opening the conversation with buying/inquiry
-        // intent) is the meaningful signal. Guarded so a blocked/failed
-        // pixel can't stop the WhatsApp link from opening.
+        // Meta Pixel "Contact" — Meta's standard event for a click that
+        // opens a messaging app (WhatsApp/Messenger), which is exactly
+        // what every CTA on the page does now instead of an embedded
+        // checkout. Guarded so a blocked/failed pixel can't stop the
+        // WhatsApp link from opening.
         try {
-          if (window.fbq) window.fbq("track", "Lead");
-        } catch (err) { if (window.console) console.warn("[fbq Lead]", err); }
+          if (window.fbq) window.fbq("track", "Contact");
+        } catch (err) { if (window.console) console.warn("[fbq Contact]", err); }
       });
     });
   }
