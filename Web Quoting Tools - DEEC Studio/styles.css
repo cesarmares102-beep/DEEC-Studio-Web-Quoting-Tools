@@ -1913,9 +1913,62 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   text-transform: uppercase;
 }
 .footer-brand-name strong { font-weight: 700; color: var(--cream); }
+.footer-links {
+  display: flex;
+  gap: 1.2rem;
+  font-size: .82rem;
+}
+.footer-links a { color: rgba(255,255,255,0.7); text-decoration: underline; text-underline-offset: 2px; }
+.footer-links a:hover { color: var(--cream); }
 .footer-copyright {
   font-size: .82rem;
   color: rgba(255,255,255,0.45);
+}
+
+/* Cookie consent banner — informational notice, not a script gate: every
+   tracker on the site (Meta Pixel, Whop) already loads regardless of this
+   banner's state; accepting only dismisses the notice and remembers the
+   choice in localStorage (see initCookieBanner() in main.js). Positioned
+   right above the sticky cta-bar (--cta-bar-h is always its true height,
+   even while the bar itself is translated off-screen — see
+   initCtaBarHeight()) so the two never overlap. */
+.cookie-banner[hidden] { display: none; }
+.cookie-banner {
+  position: fixed;
+  left: 0; right: 0;
+  bottom: var(--cta-bar-h, 0px);
+  z-index: 150;
+  background: var(--ink);
+  color: var(--cream);
+  box-shadow: var(--shadow-lift);
+  transform: translateY(100%);
+  transition: transform .4s var(--ease-soft);
+}
+.cookie-banner.is-visible { transform: translateY(0); }
+.cookie-banner-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  padding-block: 1rem;
+  flex-wrap: wrap;
+}
+.cookie-banner-text {
+  font-size: .85rem;
+  color: rgba(255,255,255,0.82);
+  flex: 1 1 260px;
+}
+.cookie-banner-link,
+.cookie-policy-link {
+  color: var(--cream);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.cookie-banner-link:hover,
+.cookie-policy-link:hover { color: rgba(255,255,255,0.7); }
+@media (max-width: 539px) {
+  .cookie-banner-inner { justify-content: center; text-align: center; }
+  .cookie-banner [data-cookie-accept] { flex: 1 1 100%; }
 }
 
 /* =============================================================
@@ -2261,3 +2314,52 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation-duration: 70s; }
 }
+
+/* =============================================================
+   18. Legal page (politica-cookies.html) — plain prose content,
+   reuses .section/.container/.eyebrow from above for the page
+   chrome (nav/footer/cookie-banner are the exact same markup+CSS
+   as index.html, so nothing extra was needed for those).
+   ============================================================= */
+.legal-page { max-width: 46rem; }
+.legal-title { font-size: clamp(1.9rem, 4vw, 2.6rem); margin-top: .6rem; }
+.legal-updated {
+  font-size: .82rem;
+  color: var(--ink-mute);
+  margin-top: .6rem;
+}
+.legal-intro {
+  margin-top: 1.6rem;
+  font-size: 1.05rem;
+  color: var(--ink-mute);
+}
+.legal-body h2 {
+  font-size: 1.25rem;
+  margin-top: 2.4rem;
+  margin-bottom: .8rem;
+}
+.legal-body h3 {
+  font-size: 1.05rem;
+  margin-top: 1.6rem;
+  margin-bottom: .6rem;
+}
+.legal-body p { margin-bottom: 1rem; color: var(--ink-soft); }
+.legal-body a { text-decoration: underline; text-underline-offset: 2px; color: var(--moss); }
+.legal-body a:hover { color: var(--moss-2); }
+.legal-contact {
+  margin-top: 2.8rem;
+  padding: 1.6rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--paper);
+}
+.legal-contact h2 { margin-top: 0; }
+.legal-back {
+  display: inline-block;
+  margin-top: 2.4rem;
+  font-size: .9rem;
+  color: var(--ink-mute);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.legal-back:hover { color: var(--ink); }

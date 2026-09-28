@@ -656,6 +656,36 @@
   }
 
   /* -------------------------------------------------------------
+     Cookie consent banner — informational notice (no script gating:
+     every tracker on the site already loads regardless of this
+     banner's state). Shown once per browser until dismissed; the
+     choice is remembered in localStorage so it doesn't reappear on
+     every visit. Present on both index.html and politica-cookies.html.
+     ------------------------------------------------------------- */
+  function initCookieBanner() {
+    var banner = $("[data-cookie-banner]");
+    var acceptBtn = $("[data-cookie-accept]");
+    if (!banner || !acceptBtn) return;
+    var STORAGE_KEY = "deec_cookie_consent";
+    var consented = false;
+    try { consented = window.localStorage.getItem(STORAGE_KEY) === "1"; } catch (err) {}
+    if (consented) return;
+
+    banner.hidden = false;
+    // Forced reflow instead of requestAnimationFrame — see the menu
+    // panel's open() above for why (throttled rAF can leave it stuck
+    // invisible instead of sliding in).
+    void banner.offsetHeight;
+    banner.classList.add("is-visible");
+
+    acceptBtn.addEventListener("click", function () {
+      try { window.localStorage.setItem(STORAGE_KEY, "1"); } catch (err) {}
+      banner.classList.remove("is-visible");
+      setTimeout(function () { banner.hidden = true; }, 400);
+    });
+  }
+
+  /* -------------------------------------------------------------
      Social proof / visitor toasts — sección 5b
      ⚠️ Datos de demostración salvo que socialProof.isDemoData === false
      ------------------------------------------------------------- */
@@ -842,6 +872,7 @@
     safe(initFabTooltips, "initFabTooltips");
     safe(initCtaBarVisibility, "initCtaBarVisibility");
     safe(initCtaBarHeight, "initCtaBarHeight");
+    safe(initCookieBanner, "initCookieBanner");
     safe(mountRatingStars, "mountRatingStars");
     safe(initSocialProof, "initSocialProof");
     safe(initLangToggle, "initLangToggle");
