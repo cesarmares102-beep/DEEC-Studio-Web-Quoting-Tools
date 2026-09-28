@@ -1,5 +1,5 @@
 {
-  "name": "catering-tools-by-deecstudio",
+  "name": "deec-studio-web-quoting-tools",
   "compatibility_date": "2026-09-21",
   "main": "dist_worker/index.js",
   "assets": {
