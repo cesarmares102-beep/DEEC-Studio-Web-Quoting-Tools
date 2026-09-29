@@ -715,6 +715,11 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   margin-inline: auto;
 }
 .hero-price-block { margin-bottom: .9rem; }
+.hero-price-legend {
+  margin-top: .3rem;
+  font-size: .85rem;
+  color: var(--ink-mute);
+}
 .btn-hero {
   width: 100%;
   justify-content: center;
@@ -2198,8 +2203,8 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 }
 .fab-bubble:hover { transform: translateY(-3px) scale(1.05); box-shadow: var(--shadow-lift); }
 .fab-bubble svg { width: 19px; height: 19px; }
-.fab-bubble-accent { background: var(--moss); color: var(--cream); border-color: var(--moss); }
-.fab-bubble-accent:hover { background: var(--moss-2); border-color: var(--moss-2); }
+.fab-bubble-accent { background: #25D366; color: var(--cream); border-color: #25D366; }
+.fab-bubble-accent:hover { background: #1DA851; border-color: #1DA851; }
 .fab-tooltip {
   position: absolute;
   right: calc(100% + .65rem);
@@ -2381,11 +2386,17 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 .sp-toast-body .hero-rating-lead { margin-bottom: .3rem; }
 
 /* =============================================================
-   15g. Price compare + savings badge — Hero, Oferta
+   15g. Price display — Hero, Oferta
    ============================================================= */
+.hero-price-now {
+  font-weight: 800;
+  font-size: clamp(1.3rem, 2.6vw, 1.6rem);
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
 .price-compare { display: inline-flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
 .price-compare-center { justify-content: center; margin-bottom: .6rem; }
-.price-compare-hero { justify-content: center; gap: .45rem; margin-bottom: 0; }
+.price-compare-hero { gap: .45rem; margin-bottom: 0; }
 .price-was {
   font-weight: 600;
   font-size: .95rem;
@@ -2395,12 +2406,6 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   text-decoration-thickness: 1.5px;
 }
 .price-compare-hero .price-was { font-size: .78rem; }
-.hero-price-now {
-  font-weight: 800;
-  font-size: clamp(1.3rem, 2.6vw, 1.6rem);
-  color: var(--ink);
-  letter-spacing: -0.01em;
-}
 .price-badge {
   font-weight: 700;
   font-size: .68rem;
