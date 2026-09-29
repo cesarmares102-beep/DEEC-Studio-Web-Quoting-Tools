@@ -1905,14 +1905,11 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 .footer-identity {
   padding-bottom: clamp(1.8rem, 4vw, 2.6rem);
 }
-.footer-brand-name {
-  font-family: var(--display);
-  font-size: clamp(1.4rem, 3vw, 1.8rem);
-  font-weight: 800;
-  letter-spacing: -.01em;
-  color: var(--cream);
+.footer-logo {
+  display: block;
+  height: clamp(26px, 4vw, 34px);
+  width: auto;
 }
-.footer-brand-name strong { font-weight: 800; }
 .footer-tagline {
   margin-top: .5rem;
   max-width: 30rem;
@@ -2004,10 +2001,21 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
     cursor: default;
     padding: 0 0 1rem;
   }
+  .footer-cat-title { font-size: 1.05rem; }
   .footer-cat-chevron { display: none; }
 }
 .footer-links a,
-.footer-links button { color: rgba(255,255,255,0.7); text-decoration: none; text-align: left; }
+.footer-links button {
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+}
 .footer-links a:hover,
 .footer-links button:hover { color: var(--cream); text-decoration: underline; text-underline-offset: 2px; }
 .footer-copyright {
