@@ -1897,106 +1897,124 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 .footer-minimal {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: .9rem;
-  text-align: center;
-}
-.footer-brand-row {
-  display: flex;
-  align-items: center;
-  gap: .55rem;
-}
-.footer-brand-name {
-  font-family: var(--mono);
-  font-size: .82rem;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-}
-.footer-brand-name strong { font-weight: 700; color: var(--cream); }
-/* Footer legal information — organized as four editorial groups (not
-   cards — no borders/backgrounds) so the link count doesn't read as one
-   flat list. Each group is a <details> element: on desktop it is forced
-   open and the summary is inert (always fully visible, no toggle — see
-   initFooterAccordion() in main.js which blocks the click there), giving
-   4 balanced static columns. On mobile the same markup becomes a real
-   collapsible accordion per category, so a long link list doesn't dump
-   as one tall stack. */
-.footer-legal {
-  width: 100%;
-  padding-top: 1.6rem;
-  border-top: 1px solid rgba(255,255,255,0.14);
-}
-.footer-legal-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 2.2rem 1.8rem;
-  max-width: 64rem;
-  margin-inline: auto;
+  align-items: stretch;
   text-align: left;
 }
-.footer-legal-cat {
-  font-family: var(--mono);
-  font-size: .68rem;
-  font-weight: 700;
-  letter-spacing: .09em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.42);
-  margin-bottom: 1rem;
-  list-style: none;
-  cursor: default;
+/* Identity — brand + one-line pitch, left-aligned, sets the editorial
+   tone for the structured list of categories below it. */
+.footer-identity {
+  padding-bottom: clamp(1.8rem, 4vw, 2.6rem);
 }
-.footer-legal-cat::-webkit-details-marker { display: none; }
-.footer-legal-cat::marker { content: ""; }
-.footer-links {
+.footer-brand-name {
+  font-family: var(--display);
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  font-weight: 800;
+  letter-spacing: -.01em;
+  color: var(--cream);
+}
+.footer-brand-name strong { font-weight: 800; }
+.footer-tagline {
+  margin-top: .5rem;
+  max-width: 30rem;
+  font-size: .95rem;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.6);
+}
+/* Categories — a real collapsible accordion on mobile (each is a native
+   <details>, so no chevron/description alignment logic needs JS to
+   work). From 720px up, initFooterAccordion() in main.js forces every
+   <details> open and blocks the click that would close it, and the
+   @media block further down turns the same markup into 4 static
+   columns — no separate desktop markup to keep in sync. */
+.footer-categories {
+  border-top: 1px solid rgba(255,255,255,0.14);
+}
+.footer-cat {
+  border-bottom: 1px solid rgba(255,255,255,0.14);
+}
+.footer-cat-summary {
+  display: block;
+  padding: clamp(1.2rem, 3vw, 1.6rem) 0;
+  cursor: pointer;
+  list-style: none;
+}
+.footer-cat-summary::-webkit-details-marker { display: none; }
+.footer-cat-summary::marker { content: ""; }
+.footer-cat-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+}
+.footer-cat-heading {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  min-width: 0;
+}
+.footer-cat-glyph {
+  flex: none;
+  color: rgba(255,255,255,0.55);
+}
+.footer-cat-title {
+  font-family: var(--display);
+  font-size: clamp(1.15rem, 2.6vw, 1.55rem);
+  font-weight: 700;
+  color: var(--cream);
+}
+.footer-cat-chevron {
+  flex: none;
+  color: rgba(255,255,255,0.55);
+  transition: transform .22s var(--ease-out);
+}
+.footer-cat[open] .footer-cat-chevron { transform: rotate(180deg); }
+.footer-cat-desc {
+  display: block;
+  margin-top: .5rem;
+  margin-left: 2.2rem; /* aligns under the title text, past the glyph + gap */
+  max-width: 34rem;
+  font-size: .88rem;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.55);
+}
+.footer-cat .footer-links {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: .65rem;
-  font-size: .82rem;
+  gap: .7rem;
+  padding: .2rem 0 1.7rem;
+  margin-left: 2.2rem;
+  font-size: .88rem;
+}
+/* Desktop: 4 static columns instead of a vertical accordion list — the
+   <details> elements are forced open by initFooterAccordion() (main.js)
+   at this same breakpoint, so this only needs to restyle the container
+   and quiet the now-inert summary (no toggle, no chevron). */
+@media (min-width: 720px) {
+  .footer-categories {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2.4rem 1.8rem;
+    border-top: none;
+  }
+  .footer-cat {
+    border-bottom: none;
+  }
+  .footer-cat-summary {
+    cursor: default;
+    padding: 0 0 1rem;
+  }
+  .footer-cat-chevron { display: none; }
 }
 .footer-links a,
 .footer-links button { color: rgba(255,255,255,0.7); text-decoration: none; text-align: left; }
 .footer-links a:hover,
 .footer-links button:hover { color: var(--cream); text-decoration: underline; text-underline-offset: 2px; }
 .footer-copyright {
+  margin-top: clamp(1.8rem, 4vw, 2.4rem);
   font-size: .82rem;
   color: rgba(255,255,255,0.45);
-  margin-top: 1.6rem;
-  text-align: center;
-}
-@media (max-width: 719px) {
-  .footer-legal-grid {
-    grid-template-columns: 1fr;
-    gap: 0;
-    max-width: 26rem;
-    text-align: center;
-  }
-  .footer-legal-group {
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-  }
-  .footer-legal-group:first-child {
-    border-top: 1px solid rgba(255,255,255,0.1);
-  }
-  .footer-legal-cat {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: .5rem;
-    margin-bottom: 0;
-    padding: 1rem 0;
-  }
-  .footer-legal-cat::after {
-    content: "+";
-    font-size: .9rem;
-    font-weight: 400;
-    color: rgba(255,255,255,0.4);
-  }
-  .footer-legal-group[open] .footer-legal-cat::after { content: "−"; }
-  .footer-legal-group .footer-links {
-    align-items: center;
-    padding-bottom: 1.2rem;
-  }
+  text-align: left;
 }
 
 /* Cookie consent modal — blocks interaction with the rest of the page

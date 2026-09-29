@@ -274,20 +274,21 @@
   }
 
   /* -------------------------------------------------------------
-     Footer legal accordion — each category is a native <details>.
-     On mobile (<=719px) it behaves as a real collapsible accordion;
-     on desktop it must always stay fully open with no toggle at all,
-     so clicks on the summary are blocked above that breakpoint and
-     any group left closed by a mobile visit is forced back open when
-     the viewport grows past it (e.g. rotating a tablet, resizing).
+     Footer categories accordion — each category is a native <details>.
+     Below 720px it's a real collapsible accordion (see styles.css); at
+     720px and up the CSS turns the same markup into 4 static columns,
+     so every <details> must be forced open there and stay that way —
+     clicks on the summary are blocked above that breakpoint, and any
+     group left closed by a narrower visit is forced back open when the
+     viewport grows past it (e.g. rotating a tablet, resizing).
      ------------------------------------------------------------- */
   function initFooterAccordion() {
-    var groups = $$(".footer-legal-group");
+    var groups = $$(".footer-cat");
     if (!groups.length) return;
     var bp = 719;
 
     document.addEventListener("click", function (e) {
-      var summary = e.target.closest ? e.target.closest(".footer-legal-group > summary") : null;
+      var summary = e.target.closest ? e.target.closest(".footer-cat > summary") : null;
       if (!summary) return;
       if (window.innerWidth > bp) e.preventDefault();
     });
@@ -297,6 +298,7 @@
         groups.forEach(function (g) { g.open = true; });
       }
     }
+    syncOpenState();
     window.addEventListener("resize", syncOpenState);
   }
 

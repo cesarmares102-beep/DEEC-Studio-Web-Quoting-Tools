@@ -6,7 +6,7 @@
 
 <!-- Site CSS goes first, right after the mandatory charset/viewport meta —
      see index.html for the full rationale (iOS Safari unstyled-flash fix). -->
-<link rel="stylesheet" href="styles.css?v=20260929g" />
+<link rel="stylesheet" href="styles.css?v=20260929j" />
 
 <!-- Whop tracking pixel + Meta Pixel: NOT loaded here — same consent-gated
      approach as index.html. See loadAnalyticsTracking() / initCookieConsent()
@@ -317,42 +317,77 @@
 
 <footer class="footer">
   <div class="container footer-minimal">
-    <div class="footer-brand-row">
-      <p class="footer-brand-name"><strong>DEEC Studio</strong></p>
+    <div class="footer-identity">
+      <p class="footer-brand-name"><strong>DEEC</strong>STUDIO</p>
+      <p class="footer-tagline" data-i18n="footer.tagline">Cotizadores web personalizados para negocios de servicios.</p>
     </div>
-    <div class="footer-legal">
-      <div class="footer-legal-grid">
-        <details class="footer-legal-group" open>
-          <summary class="footer-legal-cat" data-i18n="footer.cat.legal">Información legal</summary>
-          <nav class="footer-links" aria-label="Información legal">
-            <a href="aviso-de-uso.html" data-i18n="footer.termsLink">Aviso de Uso del Sitio</a>
-            <a href="aviso-uso-ia.html" data-i18n="footer.aiNoticeLink">Aviso de Uso de Inteligencia Artificial</a>
-            <a href="politica-propiedad-intelectual.html" data-i18n="footer.ipPolicyLink">Política de Propiedad Intelectual</a>
-          </nav>
-        </details>
-        <details class="footer-legal-group" open>
-          <summary class="footer-legal-cat" data-i18n="footer.cat.privacy">Privacidad y cookies</summary>
-          <nav class="footer-links" aria-label="Privacidad y cookies">
-            <a href="politica-privacidad.html" data-i18n="footer.privacyLink">Política de Privacidad</a>
-            <a href="politica-cookies.html" data-i18n="footer.cookiesLink">Política de Cookies</a>
-            <button type="button" data-cookie-reopen data-i18n="footer.cookiePrefsLink">Preferencias de cookies</button>
-          </nav>
-        </details>
-        <details class="footer-legal-group" open>
-          <summary class="footer-legal-cat" data-i18n="footer.cat.purchases">Compras y pagos</summary>
-          <nav class="footer-links" aria-label="Compras y pagos">
-            <a href="terminos-condiciones-compra.html" data-i18n="footer.termsOfPurchaseLink">Términos y Condiciones de Compra</a>
-            <a href="politica-pagos.html" data-i18n="footer.paymentsPolicyLink">Política de Pagos, Cancelaciones y Reembolsos</a>
-          </nav>
-        </details>
-        <details class="footer-legal-group" open>
-          <summary class="footer-legal-cat" data-i18n="footer.cat.support">Servicio y soporte</summary>
-          <nav class="footer-links" aria-label="Servicio y soporte">
-            <a href="index.html#faq" data-i18n="footer.faqLink">Preguntas Frecuentes</a>
-            <a href="#" data-whatsapp-cta data-i18n="footer.contactLink">Contacto</a>
-          </nav>
-        </details>
-      </div>
+    <div class="footer-categories">
+      <details class="footer-cat">
+        <summary class="footer-cat-summary">
+          <span class="footer-cat-summary-row">
+            <span class="footer-cat-heading">
+              <svg class="footer-cat-glyph" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+              <span class="footer-cat-title" data-i18n="footer.cat.purchases.title">Compras y pagos</span>
+            </span>
+            <svg class="footer-cat-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+          <span class="footer-cat-desc" data-i18n="footer.cat.purchases.desc">Métodos de pago, facturación, reembolsos y condiciones de compra.</span>
+        </summary>
+        <nav class="footer-links" aria-label="Compras y pagos">
+          <a href="terminos-condiciones-compra.html" data-i18n="footer.termsOfPurchaseLink">Términos y Condiciones de Compra</a>
+          <a href="politica-pagos.html" data-i18n="footer.paymentsPolicyLink">Política de Pagos, Cancelaciones y Reembolsos</a>
+        </nav>
+      </details>
+      <details class="footer-cat">
+        <summary class="footer-cat-summary">
+          <span class="footer-cat-summary-row">
+            <span class="footer-cat-heading">
+              <svg class="footer-cat-glyph" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2h9l5 5v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"/><polyline points="15 2 15 7 20 7"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+              <span class="footer-cat-title" data-i18n="footer.cat.legal.title">Información legal</span>
+            </span>
+            <svg class="footer-cat-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+          <span class="footer-cat-desc" data-i18n="footer.cat.legal.desc">Términos de servicio, avisos legales y otros documentos.</span>
+        </summary>
+        <nav class="footer-links" aria-label="Información legal">
+          <a href="aviso-de-uso.html" data-i18n="footer.termsLink">Aviso de Uso del Sitio</a>
+          <a href="aviso-uso-ia.html" data-i18n="footer.aiNoticeLink">Aviso de Uso de Inteligencia Artificial</a>
+          <a href="politica-propiedad-intelectual.html" data-i18n="footer.ipPolicyLink">Política de Propiedad Intelectual</a>
+        </nav>
+      </details>
+      <details class="footer-cat">
+        <summary class="footer-cat-summary">
+          <span class="footer-cat-summary-row">
+            <span class="footer-cat-heading">
+              <svg class="footer-cat-glyph" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z"/><polyline points="9 12 11 14 15 10"/></svg>
+              <span class="footer-cat-title" data-i18n="footer.cat.privacy.title">Privacidad y cookies</span>
+            </span>
+            <svg class="footer-cat-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+          <span class="footer-cat-desc" data-i18n="footer.cat.privacy.desc">Uso de datos, cookies y preferencias.</span>
+        </summary>
+        <nav class="footer-links" aria-label="Privacidad y cookies">
+          <a href="politica-privacidad.html" data-i18n="footer.privacyLink">Política de Privacidad</a>
+          <a href="politica-cookies.html" data-i18n="footer.cookiesLink">Política de Cookies</a>
+          <button type="button" data-cookie-reopen data-i18n="footer.cookiePrefsLink">Preferencias de cookies</button>
+        </nav>
+      </details>
+      <details class="footer-cat">
+        <summary class="footer-cat-summary">
+          <span class="footer-cat-summary-row">
+            <span class="footer-cat-heading">
+              <svg class="footer-cat-glyph" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="2" y="13" width="4" height="6" rx="1"/><rect x="18" y="13" width="4" height="6" rx="1"/></svg>
+              <span class="footer-cat-title" data-i18n="footer.cat.support.title">Servicio y soporte</span>
+            </span>
+            <svg class="footer-cat-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+          <span class="footer-cat-desc" data-i18n="footer.cat.support.desc">Preguntas frecuentes, contacto y soporte.</span>
+        </summary>
+        <nav class="footer-links" aria-label="Servicio y soporte">
+          <a href="index.html#faq" data-i18n="footer.faqLink">Preguntas Frecuentes</a>
+          <a href="#" data-whatsapp-cta data-i18n="footer.contactLink">Contacto</a>
+        </nav>
+      </details>
     </div>
     <p class="footer-copyright" data-i18n="footer.copyright">© 2026 DEEC Studio. Todos los derechos reservados.</p>
   </div>
@@ -395,9 +430,9 @@
   </div>
 </div>
 
-<script defer src="lib/manifest.js?v=20260929g"></script>
-<script defer src="lib/i18n.js?v=20260929g"></script>
-<script defer src="lib/legal-versions.js?v=20260929g"></script>
-<script defer src="main.js?v=20260929g"></script>
+<script defer src="lib/manifest.js?v=20260929j"></script>
+<script defer src="lib/i18n.js?v=20260929j"></script>
+<script defer src="lib/legal-versions.js?v=20260929j"></script>
+<script defer src="main.js?v=20260929j"></script>
 </body>
 </html>
