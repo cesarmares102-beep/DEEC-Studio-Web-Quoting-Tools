@@ -76,12 +76,31 @@
     var wa = data.whatsapp || {};
     var configured = isWhatsappConfigured();
 
+    // Reads ?v= from the ad's URL and validates it against
+    // window.__BRAND__.verticalLabels (see manifest.js). An unrecognized
+    // value is silently ignored and falls back to the generic message —
+    // free-form query-string text is never interpolated unvalidated.
+    function getVerticalLabel() {
+      try {
+        var raw = new URLSearchParams(window.location.search).get("v");
+        if (!raw) return null;
+        var key = raw.toLowerCase().trim();
+        var labels = (data.verticalLabels && data.verticalLabels[currentLang]) || (data.verticalLabels && data.verticalLabels.es) || {};
+        return labels[key] || null;
+      } catch (e) {
+        return null;
+      }
+    }
+
     // Message follows the page's current language (i18n) — the phone
     // number itself doesn't, that's fixed business config in manifest.js.
     function buildHref() {
-      return configured
-        ? "https://wa.me/" + wa.number.replace(/\D/g, "") + "?text=" + encodeURIComponent(t("whatsapp.message"))
-        : "#";
+      if (!configured) return "#";
+      var vertical = getVerticalLabel();
+      var message = vertical
+        ? fillTemplate(t("whatsapp.messageVertical"), { vertical: vertical })
+        : t("whatsapp.message");
+      return "https://wa.me/" + wa.number.replace(/\D/g, "") + "?text=" + encodeURIComponent(message);
     }
     function applyHref() {
       var href = buildHref();
