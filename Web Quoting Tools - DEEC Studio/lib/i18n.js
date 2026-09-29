@@ -38,6 +38,7 @@
 
       "toast.whatsappNotConfigured":
         "<strong>WhatsApp por configurar.</strong> Agrega tu número real en <code>lib/manifest.js</code> (marcador actual: <code>521XXXXXXXXXX</code>).",
+      "toast.pdfError": "No se pudo generar el PDF. Intenta de nuevo.",
 
       "whatsapp.message":
         "Hola, estoy interesado en un cotizador web personalizado para mi negocio. Tengo algunas dudas, ¿podrían ayudarme?",
@@ -304,7 +305,7 @@
       "faq.cat6.a3": "Incluye el cotizador desarrollado y personalizado, además de la explicación necesaria para utilizarlo y actualizar su información comercial por tu cuenta.",
 
       "footer.copyright": "© 2026 DEEC Studio. Todos los derechos reservados.",
-      "footer.cookiesLink": "Política de cookies",
+      "footer.cookiesLink": "Política de Cookies",
       "footer.cookiePrefsLink": "Preferencias de cookies",
 
       "a11y.cookieModal": "Preferencias de cookies",
@@ -322,14 +323,27 @@
       "cookie.modal.save": "Guardar preferencias",
 
       "legal.eyebrow": "Legal",
-      "legal.contactTitle": "¿Dudas sobre este documento?",
-      "legal.contactBody": "Escríbenos por WhatsApp y con gusto te ayudamos.",
-      "legal.contactCta": "Escribir por WhatsApp",
       "legal.backHome": "← Volver al inicio",
+      "legal.versionLabel": "Versión vigente:",
+      "legal.versionHistoryLabel": "Historial de versiones",
+      "legal.versionTableVersion": "Versión",
+      "legal.versionTableDate": "Fecha",
+      "legal.versionTableDescription": "Descripción",
+      "legal.downloadPdf": "↓ Descargar PDF",
+      "legal.downloadingPdf": "Generando PDF…",
 
-      "footer.termsLink": "Aviso de uso",
-      "footer.privacyLink": "Política de privacidad",
-      "footer.aiNoticeLink": "Aviso de uso de IA",
+      "footer.termsLink": "Aviso de Uso del Sitio",
+      "footer.privacyLink": "Política de Privacidad",
+      "footer.aiNoticeLink": "Aviso de Uso de Inteligencia Artificial",
+      "footer.paymentsPolicyLink": "Política de Pagos, Cancelaciones y Reembolsos",
+      "footer.termsOfPurchaseLink": "Términos y Condiciones de Compra",
+      "footer.ipPolicyLink": "Política de Propiedad Intelectual",
+      "footer.faqLink": "Preguntas Frecuentes",
+      "footer.contactLink": "Contacto",
+      "footer.cat.legal": "Información legal",
+      "footer.cat.privacy": "Privacidad y cookies",
+      "footer.cat.purchases": "Compras y pagos",
+      "footer.cat.support": "Servicio y soporte",
     },
     en: {
       "a11y.skipLink": "Skip to content",
@@ -360,6 +374,7 @@
 
       "toast.whatsappNotConfigured":
         "<strong>WhatsApp not set up yet.</strong> Add your real number in <code>lib/manifest.js</code> (current placeholder: <code>521XXXXXXXXXX</code>).",
+      "toast.pdfError": "Could not generate the PDF. Please try again.",
 
       "whatsapp.message":
         "Hi, I'm interested in a custom online quote calculator for my business. I have a few questions. Could you help me?",
@@ -619,7 +634,7 @@
       "faq.cat6.a3": "It includes the developed and personalized quoting tool, plus the explanation needed to use it and update its business information yourself.",
 
       "footer.copyright": "© 2026 DEEC Studio. All rights reserved.",
-      "footer.cookiesLink": "Cookie policy",
+      "footer.cookiesLink": "Cookie Policy",
       "footer.cookiePrefsLink": "Cookie preferences",
 
       "a11y.cookieModal": "Cookie preferences",
@@ -637,14 +652,27 @@
       "cookie.modal.save": "Save preferences",
 
       "legal.eyebrow": "Legal",
-      "legal.contactTitle": "Questions about this document?",
-      "legal.contactBody": "Message us on WhatsApp and we'll gladly help.",
-      "legal.contactCta": "Message us on WhatsApp",
       "legal.backHome": "← Back to home",
+      "legal.versionLabel": "Current version:",
+      "legal.versionHistoryLabel": "Version history",
+      "legal.versionTableVersion": "Version",
+      "legal.versionTableDate": "Date",
+      "legal.versionTableDescription": "Description",
+      "legal.downloadPdf": "↓ Download PDF",
+      "legal.downloadingPdf": "Generating PDF…",
 
-      "footer.termsLink": "Terms of use",
-      "footer.privacyLink": "Privacy policy",
-      "footer.aiNoticeLink": "AI usage notice",
+      "footer.termsLink": "Site Usage Notice",
+      "footer.privacyLink": "Privacy Policy",
+      "footer.aiNoticeLink": "Artificial Intelligence Usage Notice",
+      "footer.paymentsPolicyLink": "Payment, Cancellation and Refund Policy",
+      "footer.termsOfPurchaseLink": "Terms and Conditions of Purchase",
+      "footer.ipPolicyLink": "Intellectual Property Policy",
+      "footer.faqLink": "Frequently Asked Questions",
+      "footer.contactLink": "Contact",
+      "footer.cat.legal": "Legal Information",
+      "footer.cat.privacy": "Privacy & Cookies",
+      "footer.cat.purchases": "Purchases & Payments",
+      "footer.cat.support": "Service & Support",
     }
   };
 })();
