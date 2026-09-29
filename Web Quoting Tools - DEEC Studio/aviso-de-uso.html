@@ -6,7 +6,7 @@
 
 <!-- Site CSS goes first, right after the mandatory charset/viewport meta —
      see index.html for the full rationale (iOS Safari unstyled-flash fix). -->
-<link rel="stylesheet" href="styles.css?v=20260928i" />
+<link rel="stylesheet" href="styles.css?v=20260929g" />
 
 <!-- Whop tracking pixel + Meta Pixel: NOT loaded here — same consent-gated
      approach as index.html. See loadAnalyticsTracking() / initCookieConsent()
@@ -42,7 +42,7 @@
 
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 </head>
-<body>
+<body data-legal-doc="site-usage-notice">
 <a class="skip-link" href="#main" data-i18n="a11y.skipLink">Saltar al contenido</a>
 
 <header class="nav" data-nav>
@@ -119,7 +119,24 @@
 
     <div data-lang-content="es">
       <h1 class="legal-title">Aviso de Uso del Sitio</h1>
-      <p class="legal-updated">Última actualización: 28 de septiembre de 2026</p>
+      <p class="legal-updated" data-legal-updated>Última actualización: 28 de septiembre de 2026</p>
+      <div class="legal-version-block">
+        <p class="legal-version-current"><span data-i18n="legal.versionLabel">Versión vigente:</span> <strong data-legal-version-current>v1.0</strong></p>
+        <p class="legal-version-history-label" data-i18n="legal.versionHistoryLabel">Historial de versiones</p>
+        <table class="legal-version-table" data-legal-version-table>
+          <thead>
+            <tr>
+              <th data-i18n="legal.versionTableVersion">Versión</th>
+              <th data-i18n="legal.versionTableDate">Fecha</th>
+              <th data-i18n="legal.versionTableDescription">Descripción</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <button type="button" class="btn btn-outline legal-pdf-btn" data-legal-pdf-download>
+          <span data-i18n="legal.downloadPdf">↓ Descargar PDF</span>
+        </button>
+      </div>
       <p class="legal-intro">Bienvenido a Deec Studio. Este Aviso de Uso del Sitio establece las condiciones generales aplicables al acceso y utilización del sitio web <a href="https://deecstudio-quotingtools.online/">https://deecstudio-quotingtools.online/</a>. Al acceder, navegar o utilizar este sitio, reconoces que has leído y comprendido este Aviso y que aceptas utilizar el sitio de manera responsable y de conformidad con las leyes aplicables. Si no estás de acuerdo con alguna de estas condiciones, debes abstenerte de utilizar el sitio.</p>
 
       <div class="legal-body">
@@ -140,40 +157,50 @@
         <p>Procuramos mantener la información del sitio actualizada y precisa. Sin embargo, no garantizamos que todo el contenido sea siempre completo, exacto, actualizado o libre de errores.</p>
         <p>Deec Studio puede modificar, actualizar, suspender o retirar contenido o funcionalidades del sitio en cualquier momento, cuando resulte necesario.</p>
 
-        <h2>3. Información general</h2>
+        <h2>3. Representaciones visuales y contenido ilustrativo</h2>
+        <p>El sitio puede incluir mockups, prototipos, renderizados, capturas de pantalla, interfaces demostrativas, composiciones visuales, animaciones, gráficos, fotografías, ejemplos de productos o servicios, escenarios hipotéticos y otros elementos presentados con fines ilustrativos, demostrativos o conceptuales.</p>
+        <p>Salvo que se indique expresamente lo contrario, estos elementos pueden utilizar contenido ficticio, datos de ejemplo, nombres, precios, métricas, configuraciones, interfaces, funcionalidades, resultados o escenarios que no correspondan necesariamente a una situación, producto, servicio, cliente, proyecto, implementación o resultado real.</p>
+        <p>Las representaciones visuales utilizadas en el sitio no deben interpretarse por sí mismas como una declaración, garantía, oferta contractual o compromiso de que un producto o servicio específico tendrá exactamente las características, apariencia, configuración, contenido, funcionalidades o resultados mostrados en dicha representación.</p>
+        <p>La representación visual de una funcionalidad, interfaz o resultado tampoco implica por sí misma que dicha funcionalidad, configuración o resultado esté incluido en un producto o servicio determinado. Las características específicas de un producto o servicio adquirido se determinarán conforme a la información, condiciones y documentos contractuales que resulten aplicables a dicha adquisición.</p>
+        <p>Los ejemplos visuales podrán utilizarse para comunicar conceptos, posibilidades de diseño, estructura, experiencia de usuario o funcionamiento general. Su apariencia o contenido podrá diferir de una implementación final o de una configuración realizada para un usuario determinado.</p>
+        <p>Cuando se utilicen nombres, marcas, logotipos, imágenes, datos o referencias correspondientes a terceros con fines ilustrativos, demostrativos o de referencia, dichos elementos no implican necesariamente una relación comercial, patrocinio, autorización, asociación o participación de dichos terceros con Deec Studio.</p>
+        <p>La utilización de una imagen, mockup, interfaz o representación visual como material demostrativo no constituye por sí misma evidencia de que el resultado mostrado corresponda a un cliente real, a un proyecto ejecutado por Deec Studio o a un resultado efectivamente obtenido, salvo que se indique expresamente lo contrario.</p>
+        <p>En caso de que una representación visual entre en conflicto con las características expresamente establecidas para un producto o servicio adquirido, prevalecerán las condiciones específicas aplicables a dicha adquisición.</p>
+
+        <h2>4. Información general</h2>
         <p>La información proporcionada en este sitio tiene carácter general y se proporciona con fines informativos.</p>
         <p>El contenido del sitio no constituye asesoramiento legal, financiero, médico, profesional o de cualquier otra naturaleza especializada, salvo que expresamente se indique lo contrario.</p>
         <p>Antes de tomar decisiones basadas en información disponible en el sitio, debes evaluar si dicha información es adecuada para tus circunstancias particulares.</p>
 
-        <h2>4. Herramientas, cotizaciones y resultados</h2>
+        <h2>5. Herramientas, cotizaciones y resultados</h2>
         <p>Algunas funcionalidades del sitio pueden permitirte introducir información, configurar opciones, realizar cálculos, generar estimaciones o solicitar cotizaciones.</p>
         <p>Los resultados proporcionados por estas herramientas pueden depender de la información introducida por el usuario, configuraciones disponibles, datos de referencia y otros factores.</p>
         <p>Salvo que se indique expresamente lo contrario, cualquier cálculo, estimación, cotización o resultado generado mediante una herramienta del sitio debe considerarse orientativo y puede requerir verificación antes de utilizarse para tomar una decisión comercial o financiera.</p>
         <p>Una cotización generada mediante una herramienta no constituye automáticamente una obligación contractual por parte de Deec Studio.</p>
         <p>Cuando corresponda, los términos específicos de una contratación estarán sujetos a la propuesta, cotización, acuerdo o contrato correspondiente.</p>
 
-        <h2>5. Disponibilidad del sitio</h2>
+        <h2>6. Disponibilidad del sitio</h2>
         <p>Procuramos mantener el sitio disponible y funcionando correctamente, pero no garantizamos que estará disponible de manera continua o sin interrupciones.</p>
         <p>El acceso puede verse afectado por mantenimiento, actualizaciones, problemas técnicos, proveedores externos, fallos de infraestructura, interrupciones de Internet u otras circunstancias fuera de nuestro control razonable.</p>
         <p>Podemos realizar mantenimiento o modificaciones al sitio sin previo aviso cuando sea necesario.</p>
 
-        <h2>6. Enlaces a terceros</h2>
+        <h2>7. Enlaces a terceros</h2>
         <p>El sitio puede contener enlaces hacia sitios web, plataformas o servicios operados por terceros. Estos enlaces se proporcionan únicamente como referencia o para facilitar determinadas funcionalidades.</p>
         <p>Deec Studio no controla necesariamente esos sitios y no es responsable de su contenido, disponibilidad, seguridad, políticas o prácticas.</p>
         <p>El acceso a servicios de terceros está sujeto a los términos y políticas establecidos por sus respectivos operadores.</p>
 
-        <h2>7. Propiedad intelectual</h2>
+        <h2>8. Propiedad intelectual</h2>
         <p>Salvo que se indique expresamente lo contrario, los contenidos, diseños, elementos visuales, marcas, logotipos, interfaces, código, textos y demás materiales disponibles en este sitio pertenecen a Deec Studio o se utilizan con las autorizaciones correspondientes.</p>
         <p>No está permitido copiar, reproducir, modificar, distribuir, vender, publicar, transmitir, crear obras derivadas o utilizar comercialmente dichos materiales sin la autorización correspondiente, salvo cuando una ley aplicable permita expresamente dicho uso.</p>
         <p>Las marcas y nombres de terceros que puedan aparecer en el sitio pertenecen a sus respectivos propietarios.</p>
 
-        <h2>8. Uso de herramientas y tecnología</h2>
+        <h2>9. Uso de herramientas y tecnología</h2>
         <p>El sitio puede incorporar herramientas automatizadas, sistemas de inteligencia artificial, integraciones de terceros y otras tecnologías. El uso de estas tecnologías puede estar sujeto a condiciones adicionales.</p>
         <p>Para obtener información específica sobre el uso de inteligencia artificial, consulta nuestro <a href="aviso-uso-ia.html">Aviso de Uso de Inteligencia Artificial</a>.</p>
         <p>Para información sobre el tratamiento de información personal, consulta nuestra <a href="politica-privacidad.html">Política de Privacidad</a>.</p>
         <p>Para información sobre cookies y tecnologías similares, consulta nuestra <a href="politica-cookies.html">Política de Cookies</a>.</p>
 
-        <h2>9. Conductas prohibidas</h2>
+        <h2>10. Conductas prohibidas</h2>
         <p>Al utilizar el sitio, no debes:</p>
         <ul>
           <li>Intentar acceder sin autorización a sistemas o áreas restringidas.</li>
@@ -188,7 +215,7 @@
           <li>Intentar interferir con la experiencia de otros usuarios.</li>
         </ul>
 
-        <h2>10. Limitación de responsabilidad</h2>
+        <h2>11. Limitación de responsabilidad</h2>
         <p>En la medida permitida por la legislación aplicable, Deec Studio no será responsable por daños o pérdidas derivados de:</p>
         <ul>
           <li>La imposibilidad temporal de acceder al sitio.</li>
@@ -201,23 +228,40 @@
         </ul>
         <p>Nada de lo establecido en este Aviso pretende excluir o limitar responsabilidades que legalmente no puedan excluirse o limitarse.</p>
 
-        <h2>11. Modificaciones</h2>
+        <h2>12. Modificaciones</h2>
         <p>Podemos modificar este Aviso de Uso del Sitio en cualquier momento para reflejar cambios en nuestros servicios, funcionalidades, operaciones o requisitos legales.</p>
         <p>La versión más reciente estará disponible en este sitio y la fecha de actualización aparecerá al inicio del documento.</p>
         <p>El uso continuado del sitio después de la publicación de modificaciones puede estar sujeto a la versión actualizada del Aviso, en la medida permitida por la legislación aplicable.</p>
 
-        <h2>12. Legislación aplicable</h2>
+        <h2>13. Legislación aplicable</h2>
         <p>Este Aviso debe interpretarse de acuerdo con las leyes que resulten aplicables a la relación entre el usuario y Deec Studio.</p>
         <p>Cuando las leyes de protección al consumidor u otras disposiciones obligatorias otorguen derechos específicos al usuario, dichos derechos prevalecerán sobre cualquier disposición incompatible de este Aviso.</p>
 
-        <h2>13. Contacto</h2>
+        <h2>14. Contacto</h2>
         <p>Deec Studio<br>Sitio web: <a href="https://deecstudio-quotingtools.online/">https://deecstudio-quotingtools.online/</a><br>Correo electrónico: <a href="mailto:customers@deecstudio-quotingtools.online">customers@deecstudio-quotingtools.online</a></p>
       </div>
     </div>
 
     <div data-lang-content="en" hidden>
       <h1 class="legal-title">Site Usage Notice</h1>
-      <p class="legal-updated">Last updated: September 28, 2026</p>
+      <p class="legal-updated" data-legal-updated>Last updated: September 28, 2026</p>
+      <div class="legal-version-block">
+        <p class="legal-version-current"><span data-i18n="legal.versionLabel">Versión vigente:</span> <strong data-legal-version-current>v1.0</strong></p>
+        <p class="legal-version-history-label" data-i18n="legal.versionHistoryLabel">Historial de versiones</p>
+        <table class="legal-version-table" data-legal-version-table>
+          <thead>
+            <tr>
+              <th data-i18n="legal.versionTableVersion">Versión</th>
+              <th data-i18n="legal.versionTableDate">Fecha</th>
+              <th data-i18n="legal.versionTableDescription">Descripción</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <button type="button" class="btn btn-outline legal-pdf-btn" data-legal-pdf-download>
+          <span data-i18n="legal.downloadPdf">↓ Descargar PDF</span>
+        </button>
+      </div>
       <p class="legal-intro">Welcome to Deec Studio. This Site Usage Notice sets out the general terms applicable to accessing and using the website <a href="https://deecstudio-quotingtools.online/">https://deecstudio-quotingtools.online/</a>. By accessing, browsing, or using this site, you acknowledge that you have read and understood this Notice and agree to use the site responsibly and in accordance with applicable law. If you do not agree with any of these terms, you should refrain from using the site.</p>
 
       <div class="legal-body">
@@ -238,40 +282,50 @@
         <p>We strive to keep the site's information up to date and accurate. However, we do not guarantee that all content will always be complete, accurate, current, or error-free.</p>
         <p>Deec Studio may modify, update, suspend, or remove content or features of the site at any time, when necessary.</p>
 
-        <h2>3. General Information</h2>
+        <h2>3. Visual Representations and Illustrative Content</h2>
+        <p>The site may include mockups, prototypes, renderings, screenshots, demonstration interfaces, visual compositions, animations, graphics, photographs, examples of products or services, hypothetical scenarios, and other elements presented for illustrative, demonstrative, or conceptual purposes.</p>
+        <p>Unless expressly stated otherwise, these elements may use fictitious content, sample data, names, prices, metrics, configurations, interfaces, features, results, or scenarios that do not necessarily correspond to a real situation, product, service, client, project, implementation, or outcome.</p>
+        <p>The visual representations used on the site should not, by themselves, be interpreted as a statement, warranty, contractual offer, or commitment that a specific product or service will have exactly the characteristics, appearance, configuration, content, features, or results shown in that representation.</p>
+        <p>The visual depiction of a feature, interface, or result likewise does not by itself imply that such feature, configuration, or result is included in a given product or service. The specific characteristics of a purchased product or service will be determined according to the information, terms, and contractual documents applicable to that purchase.</p>
+        <p>Visual examples may be used to communicate concepts, design possibilities, structure, user experience, or general functioning. Their appearance or content may differ from a final implementation or a configuration built for a specific user.</p>
+        <p>When names, trademarks, logos, images, data, or references belonging to third parties are used for illustrative, demonstrative, or reference purposes, such elements do not necessarily imply a business relationship, sponsorship, authorization, association, or involvement of those third parties with Deec Studio.</p>
+        <p>The use of an image, mockup, interface, or visual representation as demonstration material does not by itself constitute evidence that the result shown corresponds to a real client, a project carried out by Deec Studio, or a result actually achieved, unless expressly stated otherwise.</p>
+        <p>If a visual representation conflicts with the characteristics expressly established for a purchased product or service, the specific terms applicable to that purchase will prevail.</p>
+
+        <h2>4. General Information</h2>
         <p>The information provided on this site is of a general nature and is provided for informational purposes.</p>
         <p>The site's content does not constitute legal, financial, medical, professional, or any other specialized advice, unless expressly stated otherwise.</p>
         <p>Before making decisions based on information available on the site, you should assess whether such information is appropriate for your particular circumstances.</p>
 
-        <h2>4. Tools, Quotes, and Results</h2>
+        <h2>5. Tools, Quotes, and Results</h2>
         <p>Some features of the site may allow you to enter information, configure options, perform calculations, generate estimates, or request quotes.</p>
         <p>The results provided by these tools may depend on the information entered by the user, available configurations, reference data, and other factors.</p>
         <p>Unless expressly stated otherwise, any calculation, estimate, quote, or result generated through a site tool should be considered indicative and may require verification before being used to make a business or financial decision.</p>
         <p>A quote generated through a tool does not automatically constitute a contractual obligation on the part of Deec Studio.</p>
         <p>Where applicable, the specific terms of an engagement will be subject to the corresponding proposal, quote, agreement, or contract.</p>
 
-        <h2>5. Site Availability</h2>
+        <h2>6. Site Availability</h2>
         <p>We strive to keep the site available and functioning properly, but we do not guarantee that it will be available continuously or without interruptions.</p>
         <p>Access may be affected by maintenance, updates, technical issues, external providers, infrastructure failures, Internet outages, or other circumstances beyond our reasonable control.</p>
         <p>We may perform maintenance or modifications to the site without prior notice when necessary.</p>
 
-        <h2>6. Third-Party Links</h2>
+        <h2>7. Third-Party Links</h2>
         <p>The site may contain links to websites, platforms, or services operated by third parties. These links are provided solely for reference or to facilitate certain features.</p>
         <p>Deec Studio does not necessarily control those sites and is not responsible for their content, availability, security, policies, or practices.</p>
         <p>Access to third-party services is subject to the terms and policies established by their respective operators.</p>
 
-        <h2>7. Intellectual Property</h2>
+        <h2>8. Intellectual Property</h2>
         <p>Unless expressly stated otherwise, the content, designs, visual elements, trademarks, logos, interfaces, code, text, and other materials available on this site belong to Deec Studio or are used with the corresponding authorizations.</p>
         <p>You may not copy, reproduce, modify, distribute, sell, publish, transmit, create derivative works from, or commercially use such materials without the corresponding authorization, except where applicable law expressly permits such use.</p>
         <p>Third-party trademarks and names that may appear on the site belong to their respective owners.</p>
 
-        <h2>8. Use of Tools and Technology</h2>
+        <h2>9. Use of Tools and Technology</h2>
         <p>The site may incorporate automated tools, artificial intelligence systems, third-party integrations, and other technologies. The use of these technologies may be subject to additional terms.</p>
         <p>For specific information about our use of artificial intelligence, see our <a href="aviso-uso-ia.html">AI Usage Notice</a>.</p>
         <p>For information about the processing of personal information, see our <a href="politica-privacidad.html">Privacy Policy</a>.</p>
         <p>For information about cookies and similar technologies, see our <a href="politica-cookies.html">Cookie Policy</a>.</p>
 
-        <h2>9. Prohibited Conduct</h2>
+        <h2>10. Prohibited Conduct</h2>
         <p>When using the site, you must not:</p>
         <ul>
           <li>Attempt to gain unauthorized access to systems or restricted areas.</li>
@@ -286,7 +340,7 @@
           <li>Attempt to interfere with other users' experience.</li>
         </ul>
 
-        <h2>10. Limitation of Liability</h2>
+        <h2>11. Limitation of Liability</h2>
         <p>To the extent permitted by applicable law, Deec Studio will not be liable for damages or losses arising from:</p>
         <ul>
           <li>The temporary inability to access the site.</li>
@@ -299,30 +353,27 @@
         </ul>
         <p>Nothing in this Notice is intended to exclude or limit liabilities that cannot legally be excluded or limited.</p>
 
-        <h2>11. Modifications</h2>
+        <h2>12. Modifications</h2>
         <p>We may modify this Site Usage Notice at any time to reflect changes in our services, features, operations, or legal requirements.</p>
         <p>The most recent version will be available on this site, and the update date will appear at the top of the document.</p>
         <p>Continued use of the site after modifications are published may be subject to the updated version of the Notice, to the extent permitted by applicable law.</p>
 
-        <h2>12. Governing Law</h2>
+        <h2>13. Governing Law</h2>
         <p>This Notice must be interpreted in accordance with the laws applicable to the relationship between the user and Deec Studio.</p>
         <p>Where consumer protection laws or other mandatory provisions grant specific rights to the user, those rights will prevail over any incompatible provision of this Notice.</p>
 
-        <h2>13. Contact</h2>
+        <h2>14. Contact</h2>
         <p>Deec Studio<br>Website: <a href="https://deecstudio-quotingtools.online/">https://deecstudio-quotingtools.online/</a><br>Email: <a href="mailto:customers@deecstudio-quotingtools.online">customers@deecstudio-quotingtools.online</a></p>
       </div>
     </div>
 
-    <div class="legal-contact">
-      <h2 data-i18n="legal.contactTitle">¿Dudas sobre este documento?</h2>
-      <p data-i18n="legal.contactBody">Escríbenos por WhatsApp y con gusto te ayudamos.</p>
-      <a class="btn btn-primary" data-whatsapp-cta href="#"><span data-i18n="legal.contactCta">Escribir por WhatsApp</span></a>
-    </div>
-
     <nav class="legal-doc-nav" aria-label="Otros documentos legales">
-      <a href="politica-privacidad.html" data-i18n="footer.privacyLink">Política de privacidad</a>
-      <a href="politica-cookies.html" data-i18n="footer.cookiesLink">Política de cookies</a>
-      <a href="aviso-uso-ia.html" data-i18n="footer.aiNoticeLink">Aviso de uso de IA</a>
+      <a href="politica-privacidad.html" data-i18n="footer.privacyLink">Política de Privacidad</a>
+      <a href="politica-cookies.html" data-i18n="footer.cookiesLink">Política de Cookies</a>
+      <a href="aviso-uso-ia.html" data-i18n="footer.aiNoticeLink">Aviso de Uso de Inteligencia Artificial</a>
+      <a href="politica-pagos.html" data-i18n="footer.paymentsPolicyLink">Política de Pagos, Cancelaciones y Reembolsos</a>
+      <a href="terminos-condiciones-compra.html" data-i18n="footer.termsOfPurchaseLink">Términos y Condiciones de Compra</a>
+      <a href="politica-propiedad-intelectual.html" data-i18n="footer.ipPolicyLink">Política de Propiedad Intelectual</a>
     </nav>
 
     <a class="legal-back" href="index.html" data-i18n="legal.backHome">← Volver al inicio</a>
@@ -335,13 +386,40 @@
     <div class="footer-brand-row">
       <p class="footer-brand-name"><strong>DEEC Studio</strong></p>
     </div>
-    <nav class="footer-links" aria-label="Legal">
-      <a href="aviso-de-uso.html" data-i18n="footer.termsLink">Aviso de uso</a>
-      <a href="politica-privacidad.html" data-i18n="footer.privacyLink">Política de privacidad</a>
-      <a href="politica-cookies.html" data-i18n="footer.cookiesLink">Política de cookies</a>
-      <a href="aviso-uso-ia.html" data-i18n="footer.aiNoticeLink">Aviso de uso de IA</a>
-      <button type="button" data-cookie-reopen data-i18n="footer.cookiePrefsLink">Preferencias de cookies</button>
-    </nav>
+    <div class="footer-legal">
+      <div class="footer-legal-grid">
+        <details class="footer-legal-group" open>
+          <summary class="footer-legal-cat" data-i18n="footer.cat.legal">Información legal</summary>
+          <nav class="footer-links" aria-label="Información legal">
+            <a href="aviso-de-uso.html" data-i18n="footer.termsLink">Aviso de Uso del Sitio</a>
+            <a href="aviso-uso-ia.html" data-i18n="footer.aiNoticeLink">Aviso de Uso de Inteligencia Artificial</a>
+            <a href="politica-propiedad-intelectual.html" data-i18n="footer.ipPolicyLink">Política de Propiedad Intelectual</a>
+          </nav>
+        </details>
+        <details class="footer-legal-group" open>
+          <summary class="footer-legal-cat" data-i18n="footer.cat.privacy">Privacidad y cookies</summary>
+          <nav class="footer-links" aria-label="Privacidad y cookies">
+            <a href="politica-privacidad.html" data-i18n="footer.privacyLink">Política de Privacidad</a>
+            <a href="politica-cookies.html" data-i18n="footer.cookiesLink">Política de Cookies</a>
+            <button type="button" data-cookie-reopen data-i18n="footer.cookiePrefsLink">Preferencias de cookies</button>
+          </nav>
+        </details>
+        <details class="footer-legal-group" open>
+          <summary class="footer-legal-cat" data-i18n="footer.cat.purchases">Compras y pagos</summary>
+          <nav class="footer-links" aria-label="Compras y pagos">
+            <a href="terminos-condiciones-compra.html" data-i18n="footer.termsOfPurchaseLink">Términos y Condiciones de Compra</a>
+            <a href="politica-pagos.html" data-i18n="footer.paymentsPolicyLink">Política de Pagos, Cancelaciones y Reembolsos</a>
+          </nav>
+        </details>
+        <details class="footer-legal-group" open>
+          <summary class="footer-legal-cat" data-i18n="footer.cat.support">Servicio y soporte</summary>
+          <nav class="footer-links" aria-label="Servicio y soporte">
+            <a href="index.html#faq" data-i18n="footer.faqLink">Preguntas Frecuentes</a>
+            <a href="#" data-whatsapp-cta data-i18n="footer.contactLink">Contacto</a>
+          </nav>
+        </details>
+      </div>
+    </div>
     <p class="footer-copyright" data-i18n="footer.copyright">© 2026 DEEC Studio. Todos los derechos reservados.</p>
   </div>
 </footer>
@@ -383,8 +461,9 @@
   </div>
 </div>
 
-<script defer src="lib/manifest.js?v=20260928i"></script>
-<script defer src="lib/i18n.js?v=20260928i"></script>
-<script defer src="main.js?v=20260928i"></script>
+<script defer src="lib/manifest.js?v=20260929g"></script>
+<script defer src="lib/i18n.js?v=20260929g"></script>
+<script defer src="lib/legal-versions.js?v=20260929g"></script>
+<script defer src="main.js?v=20260929g"></script>
 </body>
 </html>

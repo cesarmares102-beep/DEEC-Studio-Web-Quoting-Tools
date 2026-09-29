@@ -6,7 +6,7 @@
 
 <!-- Site CSS goes first, right after the mandatory charset/viewport meta —
      see index.html for the full rationale (iOS Safari unstyled-flash fix). -->
-<link rel="stylesheet" href="styles.css?v=20260928i" />
+<link rel="stylesheet" href="styles.css?v=20260929g" />
 
 <!-- Whop tracking pixel + Meta Pixel: NOT loaded here — same consent-gated
      approach as index.html. See loadAnalyticsTracking() / initCookieConsent()
@@ -42,7 +42,7 @@
 
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 </head>
-<body>
+<body data-legal-doc="privacy-policy">
 <a class="skip-link" href="#main" data-i18n="a11y.skipLink">Saltar al contenido</a>
 
 <header class="nav" data-nav>
@@ -119,324 +119,195 @@
 
     <div data-lang-content="es">
       <h1 class="legal-title">Política de Privacidad</h1>
-      <p class="legal-updated">Última actualización: 28 de septiembre de 2026</p>
-      <p class="legal-intro">En Deec Studio respetamos tu privacidad y nos comprometemos a tratar la información personal de manera responsable, transparente y de acuerdo con las leyes de protección de datos que resulten aplicables. Esta Política de Privacidad explica qué información podemos recopilar, para qué podemos utilizarla, cómo podemos compartirla, cómo la protegemos y qué opciones pueden estar disponibles para ti. Al utilizar nuestro sitio web, puedes proporcionarnos información personal de manera voluntaria. Dependiendo de tu ubicación y de las circunstancias, determinados tratamientos pueden estar sujetos a requisitos legales específicos.</p>
+      <p class="legal-updated" data-legal-updated>Última actualización: 29 de septiembre de 2026</p>
+      <div class="legal-version-block">
+        <p class="legal-version-current"><span data-i18n="legal.versionLabel">Versión vigente:</span> <strong data-legal-version-current>v1.0</strong></p>
+        <p class="legal-version-history-label" data-i18n="legal.versionHistoryLabel">Historial de versiones</p>
+        <table class="legal-version-table" data-legal-version-table>
+          <thead>
+            <tr>
+              <th data-i18n="legal.versionTableVersion">Versión</th>
+              <th data-i18n="legal.versionTableDate">Fecha</th>
+              <th data-i18n="legal.versionTableDescription">Descripción</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <button type="button" class="btn btn-outline legal-pdf-btn" data-legal-pdf-download>
+          <span data-i18n="legal.downloadPdf">↓ Descargar PDF</span>
+        </button>
+      </div>
+      <p class="legal-intro">En Deec Studio respetamos tu privacidad y tratamos la información personal de manera responsable, transparente y de acuerdo con las leyes aplicables. Esta Política explica qué información podemos recopilar, para qué utilizarla, cómo podemos compartirla, cómo la protegemos y qué opciones pueden estar disponibles.</p>
 
       <div class="legal-body">
         <h2>1. ¿Quiénes somos?</h2>
-        <p>Deec Studio es responsable del sitio web <a href="https://deecstudio-quotingtools.online/">https://deecstudio-quotingtools.online/</a>.</p>
-        <p>Para cualquier consulta relacionada con esta Política de Privacidad o con el tratamiento de información personal: <a href="mailto:customers@deecstudio-quotingtools.online">customers@deecstudio-quotingtools.online</a>.</p>
+        <p>Deec Studio es responsable del sitio <a href="https://deecstudio-quotingtools.online/">https://deecstudio-quotingtools.online/</a>.</p>
+        <p>Contacto: <a href="mailto:customers@deecstudio-quotingtools.online">customers@deecstudio-quotingtools.online</a>.</p>
 
-        <h2>2. ¿Qué información podemos recopilar?</h2>
-        <h3>Información que proporcionas directamente</h3>
-        <p>Podemos recopilar información que decides proporcionarnos voluntariamente, por ejemplo cuando:</p>
-        <ul>
-          <li>Nos contactas.</li>
-          <li>Solicitas información sobre nuestros servicios.</li>
-          <li>Completas un formulario.</li>
-          <li>Solicitas una cotización.</li>
-          <li>Te comunicas con nosotros por correo electrónico.</li>
-          <li>Solicitas soporte o asistencia.</li>
-          <li>Participas en determinadas actividades o comunicaciones.</li>
-        </ul>
-        <p>Esta información puede incluir, según corresponda:</p>
-        <ul>
-          <li>Nombre.</li>
-          <li>Dirección de correo electrónico.</li>
-          <li>Número de teléfono.</li>
-          <li>Nombre de la empresa o negocio.</li>
-          <li>Información relacionada con tu solicitud.</li>
-          <li>Información que decidas incluir en tus mensajes.</li>
-        </ul>
-        <p>No solicitamos deliberadamente información personal sensible cuando no sea necesaria para proporcionar nuestros servicios.</p>
+        <h2>2. Información que podemos recopilar</h2>
+        <p>Podemos recopilar información que proporcionas voluntariamente al contactarnos, solicitar información, completar formularios, solicitar cotizaciones, comunicarte por correo electrónico o solicitar soporte.</p>
+        <p>Puede incluir nombre, correo electrónico, teléfono, empresa o negocio e información incluida en tus mensajes.</p>
+        <p>Cuando una compra requiere personalización, también podemos recibir información comercial o técnica proporcionada para configurar el producto, como datos del negocio, productos, servicios, precios, reglas de cobro, imágenes, logotipos y otros datos necesarios.</p>
 
-        <h3>Información recopilada automáticamente</h3>
-        <p>Cuando visitas nuestro sitio web, determinados datos técnicos pueden recopilarse automáticamente, dependiendo de las herramientas y configuraciones utilizadas en el sitio. Estos datos pueden incluir:</p>
-        <ul>
-          <li>Dirección IP.</li>
-          <li>Tipo y versión del navegador.</li>
-          <li>Tipo de dispositivo.</li>
-          <li>Sistema operativo.</li>
-          <li>Idioma y configuración regional.</li>
-          <li>Páginas visitadas.</li>
-          <li>Fecha y hora de acceso.</li>
-          <li>Sitio web de procedencia.</li>
-          <li>Información relacionada con la interacción con nuestro sitio.</li>
-        </ul>
-        <p>La recopilación de determinados datos técnicos puede depender de las cookies y tecnologías similares utilizadas en el sitio. Para obtener más información, consulta nuestra <a href="politica-cookies.html">Política de Cookies</a>.</p>
+        <h2>3. Información para personalización de productos digitales</h2>
+        <p>La información proporcionada exclusivamente para la configuración inicial será utilizada para realizar la personalización solicitada.</p>
+        <p>Una vez concluida la configuración, Deec Studio no conservará deliberadamente dicha información como información operativa de personalización. Podrá eliminarse una vez cumplida su finalidad, sin perjuicio de información que deba conservarse por obligaciones legales, fiscales, contables, contractuales, seguridad, prevención de fraude, disputas o ejercicio y defensa de derechos.</p>
+        <p>El comprador es responsable de la exactitud de la información y de contar con derechos o autorizaciones para proporcionarla.</p>
+        <p>Esta regla no limita la conservación de otros datos personales necesarios para gestionar la compra, acreditar transacciones, atender reclamaciones o cumplir obligaciones legales.</p>
 
-        <h2>3. ¿Para qué utilizamos la información?</h2>
-        <p>Podemos utilizar la información recopilada para:</p>
-        <ul>
-          <li>Proporcionar y operar nuestro sitio web.</li>
-          <li>Responder consultas y solicitudes.</li>
-          <li>Preparar o proporcionar cotizaciones.</li>
-          <li>Proporcionar información sobre nuestros servicios.</li>
-          <li>Gestionar comunicaciones con usuarios.</li>
-          <li>Proporcionar soporte.</li>
-          <li>Mejorar nuestros servicios y experiencias digitales.</li>
-          <li>Analizar el uso y rendimiento del sitio.</li>
-          <li>Mantener la seguridad del sitio y prevenir fraude o abuso.</li>
-          <li>Detectar y solucionar problemas técnicos.</li>
-          <li>Cumplir obligaciones legales aplicables.</li>
-          <li>Establecer, ejercer o defender derechos legales.</li>
-          <li>Enviar comunicaciones comerciales cuando esté permitido y cuando corresponda.</li>
-          <li>Gestionar nuestras relaciones comerciales.</li>
-        </ul>
-        <p>No utilizaremos información personal para finalidades incompatibles con aquellas para las que fue recopilada, salvo que exista una base legal válida o una autorización cuando sea necesaria.</p>
+        <h2>4. Información recopilada automáticamente</h2>
+        <p>Dependiendo de las herramientas utilizadas, pueden recopilarse IP, navegador, dispositivo, sistema operativo, idioma, páginas visitadas, fecha y hora, procedencia e interacción con el sitio.</p>
+        <p>La recopilación puede depender de cookies y tecnologías similares. Consulta la <a href="politica-cookies.html">Política de Cookies</a>.</p>
 
-        <h2>4. Bases legales para el tratamiento</h2>
-        <p>Dependiendo de la jurisdicción aplicable, podemos basarnos en:</p>
-        <ul>
-          <li>Tu consentimiento.</li>
-          <li>La necesidad de ejecutar un contrato o tomar medidas solicitadas antes de celebrar un contrato.</li>
-          <li>El cumplimiento de obligaciones legales.</li>
-          <li>Nuestros intereses legítimos, cuando sean aplicables y no prevalezcan sobre tus derechos y libertades.</li>
-          <li>La necesidad de proteger derechos, seguridad o intereses legítimos.</li>
-        </ul>
-        <p>Cuando el tratamiento se base en tu consentimiento, puedes retirarlo posteriormente, sin que ello afecte la legalidad del tratamiento realizado antes de su retiro.</p>
+        <h2>5. Finalidades</h2>
+        <p>Podemos utilizar información para operar el sitio, responder consultas, preparar cotizaciones, proporcionar servicios y soporte, mejorar servicios, analizar rendimiento, mantener seguridad, prevenir fraude, solucionar problemas, cumplir obligaciones legales, ejercer derechos y gestionar relaciones comerciales.</p>
 
-        <h2>5. Comunicaciones</h2>
-        <p>Si nos proporcionas tus datos de contacto, podemos utilizarlos para responder a tus solicitudes o mantener contigo comunicaciones relacionadas con nuestros servicios. Cuando corresponda y de acuerdo con la legislación aplicable, también podremos enviarte comunicaciones comerciales.</p>
-        <p>Puedes solicitar dejar de recibir comunicaciones comerciales siguiendo las instrucciones incluidas en dichas comunicaciones o contactándonos directamente.</p>
-        <p>Incluso si optas por no recibir comunicaciones comerciales, podremos enviarte comunicaciones necesarias relacionadas con solicitudes, transacciones, seguridad, servicios o cuestiones administrativas.</p>
+        <h2>6. Bases legales</h2>
+        <p>Dependiendo de la jurisdicción, podemos basarnos en consentimiento, ejecución contractual, obligaciones legales, intereses legítimos aplicables y protección de derechos o seguridad.</p>
 
-        <h2>6. ¿Con quién podemos compartir información?</h2>
-        <p>No vendemos deliberadamente tu información personal a terceros.</p>
-        <p>Podemos compartir información personal con determinados proveedores de servicios cuando sea necesario para operar nuestro negocio o proporcionar nuestros servicios. Estos proveedores pueden incluir servicios relacionados con:</p>
-        <ul>
-          <li>Alojamiento web e infraestructura.</li>
-          <li>Formularios y comunicaciones.</li>
-          <li>Análisis y medición.</li>
-          <li>Seguridad.</li>
-          <li>Gestión de clientes.</li>
-          <li>Procesamiento de pagos, cuando corresponda.</li>
-          <li>Herramientas de marketing.</li>
-          <li>Automatización.</li>
-          <li>Servicios tecnológicos.</li>
-          <li>Soporte y mantenimiento.</li>
-        </ul>
-        <p>Estos proveedores solo deberían acceder a la información necesaria para realizar los servicios correspondientes y estarán sujetos a obligaciones contractuales o legales cuando resulte aplicable.</p>
-        <p>También podemos divulgar información cuando sea necesario para cumplir obligaciones legales, responder a solicitudes válidas de autoridades, proteger nuestros derechos, detectar fraude o abuso, proteger la seguridad de usuarios o terceros, o en relación con una operación corporativa.</p>
+        <h2>7. Comunicaciones</h2>
+        <p>Podemos utilizar datos de contacto para responder solicitudes y comunicaciones relacionadas con servicios. Las comunicaciones comerciales estarán sujetas a la legislación aplicable y a las opciones disponibles.</p>
 
-        <h2>7. Servicios de terceros</h2>
-        <p>Nuestro sitio web puede integrar servicios proporcionados por terceros. Estos servicios pueden utilizar sus propias tecnologías de recopilación de información y pueden estar sujetos a sus propias políticas de privacidad.</p>
-        <p>Entre ellos pueden encontrarse proveedores de analítica, publicidad, formularios, vídeo, redes sociales, alojamiento, seguridad, automatización y comunicación.</p>
-        <p>Te recomendamos consultar las políticas de privacidad de estos terceros cuando corresponda.</p>
+        <h2>8. Compartición</h2>
+        <p>No vendemos deliberadamente información personal. Podemos compartirla con proveedores necesarios para alojamiento, formularios, comunicaciones, análisis, seguridad, pagos, marketing, automatización y servicios tecnológicos, y cuando sea necesario por ley, fraude, seguridad o defensa de derechos.</p>
 
-        <h2>8. Cookies y tecnologías similares</h2>
-        <p>Nuestro sitio puede utilizar cookies, píxeles, almacenamiento local y tecnologías similares. Para obtener información detallada sobre estas tecnologías y las opciones disponibles, consulta nuestra <a href="politica-cookies.html">Política de Cookies</a>.</p>
+        <h2>9. Terceros</h2>
+        <p>Los servicios de terceros pueden tener sus propias políticas y tecnologías. Consulta sus políticas cuando corresponda.</p>
 
-        <h2>9. Conservación de la información</h2>
-        <p>Conservaremos la información personal únicamente durante el tiempo razonablemente necesario para cumplir las finalidades descritas en esta Política, prestar los servicios correspondientes, cumplir obligaciones legales, resolver disputas y hacer cumplir nuestros acuerdos.</p>
-        <p>El período de conservación puede variar dependiendo de la naturaleza de la información, la finalidad para la que fue recopilada, la relación con el usuario, los requisitos legales o regulatorios y las necesidades legítimas de seguridad y protección.</p>
-        <p>Cuando la información ya no sea necesaria, podremos eliminarla, anonimizarla o aplicar otras medidas apropiadas, sujeto a las obligaciones legales aplicables.</p>
+        <h2>10. Cookies</h2>
+        <p>El sitio puede utilizar cookies, píxeles, almacenamiento local y tecnologías similares. Consulta la <a href="politica-cookies.html">Política de Cookies</a>.</p>
 
-        <h2>10. Seguridad</h2>
-        <p>Implementamos medidas técnicas, administrativas y organizativas razonables destinadas a proteger la información personal contra pérdida, acceso no autorizado, alteración, divulgación o destrucción.</p>
-        <p>Sin embargo, ningún sistema de almacenamiento, transmisión o comunicación electrónica puede garantizar una seguridad absoluta.</p>
+        <h2>11. Conservación</h2>
+        <p>Conservaremos información personal durante el tiempo razonablemente necesario para las finalidades descritas, servicios, obligaciones legales, disputas y cumplimiento de acuerdos. Cuando ya no sea necesaria podremos eliminarla o anonimizarla, sujeto a obligaciones legales.</p>
 
-        <h2>11. Transferencias internacionales</h2>
-        <p>Deec Studio puede utilizar proveedores de servicios ubicados en diferentes países. Como consecuencia, la información personal puede ser procesada o almacenada en un país distinto de aquel en el que resides.</p>
-        <p>Cuando una transferencia internacional esté sujeta a requisitos legales específicos, procuraremos implementar los mecanismos y salvaguardas requeridos por la legislación aplicable.</p>
+        <h2>12. Seguridad</h2>
+        <p>Implementamos medidas técnicas, administrativas y organizativas razonables, aunque ningún sistema electrónico garantiza seguridad absoluta.</p>
 
-        <h2>12. Derechos de privacidad</h2>
-        <p>Dependiendo de tu ubicación y de la legislación aplicable, puedes tener derechos respecto de tu información personal, incluyendo, cuando corresponda:</p>
-        <ul>
-          <li>Acceso.</li>
-          <li>Rectificación.</li>
-          <li>Eliminación.</li>
-          <li>Limitación de determinados tratamientos.</li>
-          <li>Oposición.</li>
-          <li>Retiro del consentimiento.</li>
-          <li>Portabilidad de determinados datos.</li>
-          <li>Información sobre determinadas prácticas relacionadas con el uso de información personal.</li>
-          <li>Presentación de una reclamación ante una autoridad de protección de datos.</li>
-        </ul>
-        <p>La disponibilidad y alcance de estos derechos pueden variar dependiendo de la jurisdicción. Para ejercer un derecho: <a href="mailto:customers@deecstudio-quotingtools.online">customers@deecstudio-quotingtools.online</a>. Podremos solicitar información razonablemente necesaria para verificar tu identidad antes de procesar determinadas solicitudes.</p>
+        <h2>13. Transferencias internacionales</h2>
+        <p>Podemos utilizar proveedores en diferentes países. Cuando existan requisitos legales específicos para transferencias internacionales, procuraremos implementar las salvaguardas requeridas.</p>
 
-        <h2>13. Privacidad de menores</h2>
-        <p>Nuestro sitio web no está diseñado específicamente para recopilar deliberadamente información personal de menores de edad. No solicitamos conscientemente información personal de menores cuando dicha recopilación no esté permitida por la legislación aplicable.</p>
+        <h2>14. Derechos</h2>
+        <p>Dependiendo de la jurisdicción pueden existir derechos de acceso, rectificación, eliminación, limitación, oposición, retiro de consentimiento, portabilidad y reclamación ante autoridades. Contacto: <a href="mailto:customers@deecstudio-quotingtools.online">customers@deecstudio-quotingtools.online</a>.</p>
 
-        <h2>14. Enlaces a otros sitios</h2>
-        <p>Nuestro sitio puede contener enlaces a sitios web, servicios o plataformas de terceros. No somos responsables de las prácticas de privacidad, seguridad o contenido de esos terceros.</p>
+        <h2>15. Menores</h2>
+        <p>El sitio no está diseñado específicamente para recopilar deliberadamente información de menores y no solicitamos conscientemente dicha información cuando no esté permitida por la ley.</p>
 
-        <h2>15. Cambios corporativos</h2>
-        <p>En caso de una reorganización, adquisición, fusión, venta de activos o transacción similar, la información personal podría transferirse como parte de dicha operación cuando esté permitido por la legislación aplicable.</p>
+        <h2>16. Enlaces</h2>
+        <p>No somos responsables de las prácticas de privacidad, seguridad o contenido de terceros enlazados.</p>
 
-        <h2>16. Cambios a esta Política de Privacidad</h2>
-        <p>Podemos actualizar esta Política de Privacidad periódicamente para reflejar cambios en nuestros servicios, tecnologías, prácticas de tratamiento de información, proveedores o requisitos legales. Cuando realicemos cambios importantes, actualizaremos la fecha indicada al comienzo de esta Política.</p>
+        <h2>17. Cambios corporativos</h2>
+        <p>En reorganizaciones, adquisiciones, fusiones o ventas de activos, la información podrá transferirse cuando esté permitido.</p>
 
-        <h2>17. Contacto</h2>
+        <h2>18. Cambios a esta política</h2>
+        <p>Podemos actualizar esta Política para reflejar cambios en servicios, tecnologías, proveedores o requisitos legales. Actualizaremos la fecha cuando corresponda.</p>
+
+        <h2>19. Contacto</h2>
         <p>Deec Studio<br>Sitio web: <a href="https://deecstudio-quotingtools.online/">https://deecstudio-quotingtools.online/</a><br>Correo electrónico: <a href="mailto:customers@deecstudio-quotingtools.online">customers@deecstudio-quotingtools.online</a></p>
+
+        <h3>Referencia a la Política de Propiedad Intelectual</h3>
+        <p>La titularidad, protección y alcance de los derechos de propiedad intelectual relacionados con el producto y sus elementos se regulan específicamente en la <a href="politica-propiedad-intelectual.html">Política de Propiedad Intelectual</a> de Deec Studio, que forma parte del marco legal aplicable al producto y deberá interpretarse conjuntamente con estos términos.</p>
       </div>
     </div>
 
     <div data-lang-content="en" hidden>
       <h1 class="legal-title">Privacy Policy</h1>
-      <p class="legal-updated">Last updated: September 28, 2026</p>
-      <p class="legal-intro">At Deec Studio we respect your privacy and are committed to handling personal information responsibly, transparently, and in accordance with applicable data protection laws. This Privacy Policy explains what information we may collect, what we may use it for, how we may share it, how we protect it, and what options may be available to you. When using our website, you may voluntarily provide us with personal information. Depending on your location and the circumstances, certain processing may be subject to specific legal requirements.</p>
+      <p class="legal-updated" data-legal-updated>Last updated: September 29, 2026</p>
+      <div class="legal-version-block">
+        <p class="legal-version-current"><span data-i18n="legal.versionLabel">Versión vigente:</span> <strong data-legal-version-current>v1.0</strong></p>
+        <p class="legal-version-history-label" data-i18n="legal.versionHistoryLabel">Historial de versiones</p>
+        <table class="legal-version-table" data-legal-version-table>
+          <thead>
+            <tr>
+              <th data-i18n="legal.versionTableVersion">Versión</th>
+              <th data-i18n="legal.versionTableDate">Fecha</th>
+              <th data-i18n="legal.versionTableDescription">Descripción</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <button type="button" class="btn btn-outline legal-pdf-btn" data-legal-pdf-download>
+          <span data-i18n="legal.downloadPdf">↓ Descargar PDF</span>
+        </button>
+      </div>
+      <p class="legal-intro">At Deec Studio we respect your privacy and handle personal information responsibly, transparently, and in accordance with applicable law. This Policy explains what information we may collect, what we may use it for, how we may share it, how we protect it, and what options may be available.</p>
 
       <div class="legal-body">
         <h2>1. Who We Are</h2>
-        <p>Deec Studio is responsible for the website <a href="https://deecstudio-quotingtools.online/">https://deecstudio-quotingtools.online/</a>.</p>
-        <p>For any inquiry related to this Privacy Policy or the processing of personal information: <a href="mailto:customers@deecstudio-quotingtools.online">customers@deecstudio-quotingtools.online</a>.</p>
+        <p>Deec Studio is responsible for the site <a href="https://deecstudio-quotingtools.online/">https://deecstudio-quotingtools.online/</a>.</p>
+        <p>Contact: <a href="mailto:customers@deecstudio-quotingtools.online">customers@deecstudio-quotingtools.online</a>.</p>
 
-        <h2>2. What Information May We Collect?</h2>
-        <h3>Information You Provide Directly</h3>
-        <p>We may collect information you choose to provide voluntarily, for example when you:</p>
-        <ul>
-          <li>Contact us.</li>
-          <li>Request information about our services.</li>
-          <li>Complete a form.</li>
-          <li>Request a quote.</li>
-          <li>Communicate with us by email.</li>
-          <li>Request support or assistance.</li>
-          <li>Participate in certain activities or communications.</li>
-        </ul>
-        <p>This information may include, as applicable:</p>
-        <ul>
-          <li>Name.</li>
-          <li>Email address.</li>
-          <li>Phone number.</li>
-          <li>Company or business name.</li>
-          <li>Information related to your request.</li>
-          <li>Information you choose to include in your messages.</li>
-        </ul>
-        <p>We do not deliberately request sensitive personal information when it is not necessary to provide our services.</p>
+        <h2>2. Information We May Collect</h2>
+        <p>We may collect information you voluntarily provide when you contact us, request information, complete forms, request quotes, communicate with us by email, or request support.</p>
+        <p>It may include name, email, phone number, company or business, and information included in your messages.</p>
+        <p>When a purchase requires customization, we may also receive business or technical information provided to configure the product, such as business data, products, services, prices, billing rules, images, logos, and other necessary data.</p>
 
-        <h3>Automatically Collected Information</h3>
-        <p>When you visit our website, certain technical data may be collected automatically, depending on the tools and settings used on the site. This data may include:</p>
-        <ul>
-          <li>IP address.</li>
-          <li>Browser type and version.</li>
-          <li>Device type.</li>
-          <li>Operating system.</li>
-          <li>Language and regional settings.</li>
-          <li>Pages visited.</li>
-          <li>Date and time of access.</li>
-          <li>Referring website.</li>
-          <li>Information related to your interaction with our site.</li>
-        </ul>
-        <p>The collection of certain technical data may depend on the cookies and similar technologies used on the site. For more information, see our <a href="politica-cookies.html">Cookie Policy</a>.</p>
+        <h2>3. Information for Customizing Digital Products</h2>
+        <p>Information provided exclusively for initial configuration will be used to carry out the requested customization.</p>
+        <p>Once configuration is complete, Deec Studio will not deliberately retain that information as operational customization information. It may be deleted once its purpose has been fulfilled, without prejudice to information that must be retained for legal, tax, accounting, contractual, security, fraud-prevention, dispute, or rights defense purposes.</p>
+        <p>The buyer is responsible for the accuracy of the information and for holding the rights or authorizations to provide it.</p>
+        <p>This rule does not limit the retention of other personal data necessary to manage the purchase, evidence transactions, handle claims, or comply with legal obligations.</p>
 
-        <h2>3. How Do We Use the Information?</h2>
-        <p>We may use the information collected to:</p>
-        <ul>
-          <li>Provide and operate our website.</li>
-          <li>Respond to inquiries and requests.</li>
-          <li>Prepare or provide quotes.</li>
-          <li>Provide information about our services.</li>
-          <li>Manage communications with users.</li>
-          <li>Provide support.</li>
-          <li>Improve our services and digital experiences.</li>
-          <li>Analyze site usage and performance.</li>
-          <li>Maintain site security and prevent fraud or abuse.</li>
-          <li>Detect and resolve technical issues.</li>
-          <li>Comply with applicable legal obligations.</li>
-          <li>Establish, exercise, or defend legal rights.</li>
-          <li>Send commercial communications when permitted and applicable.</li>
-          <li>Manage our business relationships.</li>
-        </ul>
-        <p>We will not use personal information for purposes incompatible with those for which it was collected, unless there is a valid legal basis or authorization when necessary.</p>
+        <h2>4. Automatically Collected Information</h2>
+        <p>Depending on the tools used, we may collect IP address, browser, device, operating system, language, pages visited, date and time, referring source, and interaction with the site.</p>
+        <p>Collection may depend on cookies and similar technologies. See our <a href="politica-cookies.html">Cookie Policy</a>.</p>
 
-        <h2>4. Legal Bases for Processing</h2>
-        <p>Depending on the applicable jurisdiction, we may rely on:</p>
-        <ul>
-          <li>Your consent.</li>
-          <li>The need to perform a contract or take steps requested before entering into a contract.</li>
-          <li>Compliance with legal obligations.</li>
-          <li>Our legitimate interests, where applicable and where they do not override your rights and freedoms.</li>
-          <li>The need to protect rights, security, or legitimate interests.</li>
-        </ul>
-        <p>When processing is based on your consent, you may withdraw it later, without affecting the lawfulness of processing carried out before its withdrawal.</p>
+        <h2>5. Purposes</h2>
+        <p>We may use information to operate the site, respond to inquiries, prepare quotes, provide services and support, improve services, analyze performance, maintain security, prevent fraud, resolve issues, comply with legal obligations, exercise rights, and manage business relationships.</p>
 
-        <h2>5. Communications</h2>
-        <p>If you provide us with your contact details, we may use them to respond to your requests or maintain communications with you related to our services. Where applicable and in accordance with applicable law, we may also send you commercial communications.</p>
-        <p>You may request to stop receiving commercial communications by following the instructions included in such communications or by contacting us directly.</p>
-        <p>Even if you opt out of commercial communications, we may still send you necessary communications related to requests, transactions, security, services, or administrative matters.</p>
+        <h2>6. Legal Bases</h2>
+        <p>Depending on the jurisdiction, we may rely on consent, contractual performance, legal obligations, applicable legitimate interests, and the protection of rights or security.</p>
 
-        <h2>6. Who May We Share Information With?</h2>
-        <p>We do not knowingly sell your personal information to third parties.</p>
-        <p>We may share personal information with certain service providers when necessary to operate our business or provide our services. These providers may include services related to:</p>
-        <ul>
-          <li>Web hosting and infrastructure.</li>
-          <li>Forms and communications.</li>
-          <li>Analytics and measurement.</li>
-          <li>Security.</li>
-          <li>Customer management.</li>
-          <li>Payment processing, where applicable.</li>
-          <li>Marketing tools.</li>
-          <li>Automation.</li>
-          <li>Technology services.</li>
-          <li>Support and maintenance.</li>
-        </ul>
-        <p>These providers should only access the information necessary to perform the corresponding services and will be subject to contractual or legal obligations where applicable.</p>
-        <p>We may also disclose information when necessary to comply with legal obligations, respond to valid requests from authorities, protect our rights, detect fraud or abuse, protect the safety of users or third parties, or in connection with a corporate transaction.</p>
+        <h2>7. Communications</h2>
+        <p>We may use contact details to respond to requests and communications related to services. Commercial communications will be subject to applicable law and the options available.</p>
 
-        <h2>7. Third-Party Services</h2>
-        <p>Our website may integrate services provided by third parties. These services may use their own information-collection technologies and may be subject to their own privacy policies.</p>
-        <p>These may include providers of analytics, advertising, forms, video, social media, hosting, security, automation, and communication.</p>
-        <p>We recommend reviewing these third parties' privacy policies where applicable.</p>
+        <h2>8. Sharing</h2>
+        <p>We do not knowingly sell personal information. We may share it with providers necessary for hosting, forms, communications, analytics, security, payments, marketing, automation, and technology services, and when necessary for legal, fraud, security, or rights-defense reasons.</p>
 
-        <h2>8. Cookies and Similar Technologies</h2>
-        <p>Our site may use cookies, pixels, local storage, and similar technologies. For detailed information about these technologies and the options available, see our <a href="politica-cookies.html">Cookie Policy</a>.</p>
+        <h2>9. Third Parties</h2>
+        <p>Third-party services may have their own policies and technologies. Review their policies where applicable.</p>
 
-        <h2>9. Retention of Information</h2>
-        <p>We will retain personal information only for as long as reasonably necessary to fulfill the purposes described in this Policy, provide the corresponding services, comply with legal obligations, resolve disputes, and enforce our agreements.</p>
-        <p>The retention period may vary depending on the nature of the information, the purpose for which it was collected, the relationship with the user, legal or regulatory requirements, and legitimate security and protection needs.</p>
-        <p>When information is no longer necessary, we may delete it, anonymize it, or apply other appropriate measures, subject to applicable legal obligations.</p>
+        <h2>10. Cookies</h2>
+        <p>The site may use cookies, pixels, local storage, and similar technologies. See our <a href="politica-cookies.html">Cookie Policy</a>.</p>
 
-        <h2>10. Security</h2>
-        <p>We implement reasonable technical, administrative, and organizational measures designed to protect personal information against loss, unauthorized access, alteration, disclosure, or destruction.</p>
-        <p>However, no storage, transmission, or electronic communication system can guarantee absolute security.</p>
+        <h2>11. Retention</h2>
+        <p>We will retain personal information for as long as reasonably necessary for the purposes described, services, legal obligations, disputes, and compliance with agreements. Once no longer necessary, we may delete or anonymize it, subject to legal obligations.</p>
 
-        <h2>11. International Transfers</h2>
-        <p>Deec Studio may use service providers located in different countries. As a result, personal information may be processed or stored in a country other than the one in which you reside.</p>
-        <p>Where an international transfer is subject to specific legal requirements, we will seek to implement the mechanisms and safeguards required by applicable law.</p>
+        <h2>12. Security</h2>
+        <p>We implement reasonable technical, administrative, and organizational measures, although no electronic system guarantees absolute security.</p>
 
-        <h2>12. Privacy Rights</h2>
-        <p>Depending on your location and applicable law, you may have rights regarding your personal information, including, where applicable:</p>
-        <ul>
-          <li>Access.</li>
-          <li>Rectification.</li>
-          <li>Deletion.</li>
-          <li>Limitation of certain processing.</li>
-          <li>Objection.</li>
-          <li>Withdrawal of consent.</li>
-          <li>Portability of certain data.</li>
-          <li>Information about certain practices related to the use of personal information.</li>
-          <li>Filing a complaint with a data protection authority.</li>
-        </ul>
-        <p>The availability and scope of these rights may vary depending on the jurisdiction. To exercise a right: <a href="mailto:customers@deecstudio-quotingtools.online">customers@deecstudio-quotingtools.online</a>. We may request information reasonably necessary to verify your identity before processing certain requests.</p>
+        <h2>13. International Transfers</h2>
+        <p>We may use providers in different countries. Where specific legal requirements exist for international transfers, we will seek to implement the required safeguards.</p>
 
-        <h2>13. Children's Privacy</h2>
-        <p>Our website is not specifically designed to deliberately collect personal information from minors. We do not knowingly request personal information from minors when such collection is not permitted by applicable law.</p>
+        <h2>14. Rights</h2>
+        <p>Depending on the jurisdiction, rights of access, rectification, deletion, limitation, objection, withdrawal of consent, portability, and complaint before authorities may exist. Contact: <a href="mailto:customers@deecstudio-quotingtools.online">customers@deecstudio-quotingtools.online</a>.</p>
 
-        <h2>14. Links to Other Sites</h2>
-        <p>Our site may contain links to third-party websites, services, or platforms. We are not responsible for the privacy practices, security, or content of those third parties.</p>
+        <h2>15. Minors</h2>
+        <p>The site is not specifically designed to deliberately collect information from minors, and we do not knowingly request such information when not permitted by law.</p>
 
-        <h2>15. Corporate Changes</h2>
-        <p>In the event of a reorganization, acquisition, merger, sale of assets, or similar transaction, personal information could be transferred as part of that transaction where permitted by applicable law.</p>
+        <h2>16. Links</h2>
+        <p>We are not responsible for the privacy practices, security, or content of linked third parties.</p>
 
-        <h2>16. Changes to This Privacy Policy</h2>
-        <p>We may update this Privacy Policy periodically to reflect changes in our services, technologies, information-processing practices, providers, or legal requirements. When we make material changes, we will update the date shown at the top of this Policy.</p>
+        <h2>17. Corporate Changes</h2>
+        <p>In reorganizations, acquisitions, mergers, or asset sales, information may be transferred where permitted.</p>
 
-        <h2>17. Contact</h2>
+        <h2>18. Changes to This Policy</h2>
+        <p>We may update this Policy to reflect changes in services, technologies, providers, or legal requirements. We will update the date when applicable.</p>
+
+        <h2>19. Contact</h2>
         <p>Deec Studio<br>Website: <a href="https://deecstudio-quotingtools.online/">https://deecstudio-quotingtools.online/</a><br>Email: <a href="mailto:customers@deecstudio-quotingtools.online">customers@deecstudio-quotingtools.online</a></p>
+
+        <h3>Reference to the Intellectual Property Policy</h3>
+        <p>The ownership, protection, and scope of the intellectual property rights related to the product and its elements are specifically governed by Deec Studio's <a href="politica-propiedad-intelectual.html">Intellectual Property Policy</a>, which forms part of the legal framework applicable to the product and must be interpreted together with these Terms.</p>
       </div>
     </div>
 
-    <div class="legal-contact">
-      <h2 data-i18n="legal.contactTitle">¿Dudas sobre este documento?</h2>
-      <p data-i18n="legal.contactBody">Escríbenos por WhatsApp y con gusto te ayudamos.</p>
-      <a class="btn btn-primary" data-whatsapp-cta href="#"><span data-i18n="legal.contactCta">Escribir por WhatsApp</span></a>
-    </div>
-
     <nav class="legal-doc-nav" aria-label="Otros documentos legales">
-      <a href="aviso-de-uso.html" data-i18n="footer.termsLink">Aviso de uso</a>
-      <a href="politica-cookies.html" data-i18n="footer.cookiesLink">Política de cookies</a>
-      <a href="aviso-uso-ia.html" data-i18n="footer.aiNoticeLink">Aviso de uso de IA</a>
+      <a href="aviso-de-uso.html" data-i18n="footer.termsLink">Aviso de Uso del Sitio</a>
+      <a href="politica-cookies.html" data-i18n="footer.cookiesLink">Política de Cookies</a>
+      <a href="aviso-uso-ia.html" data-i18n="footer.aiNoticeLink">Aviso de Uso de Inteligencia Artificial</a>
+      <a href="politica-pagos.html" data-i18n="footer.paymentsPolicyLink">Política de Pagos, Cancelaciones y Reembolsos</a>
+      <a href="terminos-condiciones-compra.html" data-i18n="footer.termsOfPurchaseLink">Términos y Condiciones de Compra</a>
+      <a href="politica-propiedad-intelectual.html" data-i18n="footer.ipPolicyLink">Política de Propiedad Intelectual</a>
     </nav>
 
     <a class="legal-back" href="index.html" data-i18n="legal.backHome">← Volver al inicio</a>
@@ -449,13 +320,40 @@
     <div class="footer-brand-row">
       <p class="footer-brand-name"><strong>DEEC Studio</strong></p>
     </div>
-    <nav class="footer-links" aria-label="Legal">
-      <a href="aviso-de-uso.html" data-i18n="footer.termsLink">Aviso de uso</a>
-      <a href="politica-privacidad.html" data-i18n="footer.privacyLink">Política de privacidad</a>
-      <a href="politica-cookies.html" data-i18n="footer.cookiesLink">Política de cookies</a>
-      <a href="aviso-uso-ia.html" data-i18n="footer.aiNoticeLink">Aviso de uso de IA</a>
-      <button type="button" data-cookie-reopen data-i18n="footer.cookiePrefsLink">Preferencias de cookies</button>
-    </nav>
+    <div class="footer-legal">
+      <div class="footer-legal-grid">
+        <details class="footer-legal-group" open>
+          <summary class="footer-legal-cat" data-i18n="footer.cat.legal">Información legal</summary>
+          <nav class="footer-links" aria-label="Información legal">
+            <a href="aviso-de-uso.html" data-i18n="footer.termsLink">Aviso de Uso del Sitio</a>
+            <a href="aviso-uso-ia.html" data-i18n="footer.aiNoticeLink">Aviso de Uso de Inteligencia Artificial</a>
+            <a href="politica-propiedad-intelectual.html" data-i18n="footer.ipPolicyLink">Política de Propiedad Intelectual</a>
+          </nav>
+        </details>
+        <details class="footer-legal-group" open>
+          <summary class="footer-legal-cat" data-i18n="footer.cat.privacy">Privacidad y cookies</summary>
+          <nav class="footer-links" aria-label="Privacidad y cookies">
+            <a href="politica-privacidad.html" data-i18n="footer.privacyLink">Política de Privacidad</a>
+            <a href="politica-cookies.html" data-i18n="footer.cookiesLink">Política de Cookies</a>
+            <button type="button" data-cookie-reopen data-i18n="footer.cookiePrefsLink">Preferencias de cookies</button>
+          </nav>
+        </details>
+        <details class="footer-legal-group" open>
+          <summary class="footer-legal-cat" data-i18n="footer.cat.purchases">Compras y pagos</summary>
+          <nav class="footer-links" aria-label="Compras y pagos">
+            <a href="terminos-condiciones-compra.html" data-i18n="footer.termsOfPurchaseLink">Términos y Condiciones de Compra</a>
+            <a href="politica-pagos.html" data-i18n="footer.paymentsPolicyLink">Política de Pagos, Cancelaciones y Reembolsos</a>
+          </nav>
+        </details>
+        <details class="footer-legal-group" open>
+          <summary class="footer-legal-cat" data-i18n="footer.cat.support">Servicio y soporte</summary>
+          <nav class="footer-links" aria-label="Servicio y soporte">
+            <a href="index.html#faq" data-i18n="footer.faqLink">Preguntas Frecuentes</a>
+            <a href="#" data-whatsapp-cta data-i18n="footer.contactLink">Contacto</a>
+          </nav>
+        </details>
+      </div>
+    </div>
     <p class="footer-copyright" data-i18n="footer.copyright">© 2026 DEEC Studio. Todos los derechos reservados.</p>
   </div>
 </footer>
@@ -497,8 +395,9 @@
   </div>
 </div>
 
-<script defer src="lib/manifest.js?v=20260928i"></script>
-<script defer src="lib/i18n.js?v=20260928i"></script>
-<script defer src="main.js?v=20260928i"></script>
+<script defer src="lib/manifest.js?v=20260929g"></script>
+<script defer src="lib/i18n.js?v=20260929g"></script>
+<script defer src="lib/legal-versions.js?v=20260929g"></script>
+<script defer src="main.js?v=20260929g"></script>
 </body>
 </html>

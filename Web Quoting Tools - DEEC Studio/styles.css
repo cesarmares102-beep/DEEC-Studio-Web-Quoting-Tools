@@ -1913,20 +1913,90 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   text-transform: uppercase;
 }
 .footer-brand-name strong { font-weight: 700; color: var(--cream); }
+/* Footer legal information — organized as four editorial groups (not
+   cards — no borders/backgrounds) so the link count doesn't read as one
+   flat list. Each group is a <details> element: on desktop it is forced
+   open and the summary is inert (always fully visible, no toggle — see
+   initFooterAccordion() in main.js which blocks the click there), giving
+   4 balanced static columns. On mobile the same markup becomes a real
+   collapsible accordion per category, so a long link list doesn't dump
+   as one tall stack. */
+.footer-legal {
+  width: 100%;
+  padding-top: 1.6rem;
+  border-top: 1px solid rgba(255,255,255,0.14);
+}
+.footer-legal-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2.2rem 1.8rem;
+  max-width: 64rem;
+  margin-inline: auto;
+  text-align: left;
+}
+.footer-legal-cat {
+  font-family: var(--mono);
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.42);
+  margin-bottom: 1rem;
+  list-style: none;
+  cursor: default;
+}
+.footer-legal-cat::-webkit-details-marker { display: none; }
+.footer-legal-cat::marker { content: ""; }
 .footer-links {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: .5rem 1.2rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .65rem;
   font-size: .82rem;
 }
 .footer-links a,
-.footer-links button { color: rgba(255,255,255,0.7); text-decoration: underline; text-underline-offset: 2px; }
+.footer-links button { color: rgba(255,255,255,0.7); text-decoration: none; text-align: left; }
 .footer-links a:hover,
-.footer-links button:hover { color: var(--cream); }
+.footer-links button:hover { color: var(--cream); text-decoration: underline; text-underline-offset: 2px; }
 .footer-copyright {
   font-size: .82rem;
   color: rgba(255,255,255,0.45);
+  margin-top: 1.6rem;
+  text-align: center;
+}
+@media (max-width: 719px) {
+  .footer-legal-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+    max-width: 26rem;
+    text-align: center;
+  }
+  .footer-legal-group {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .footer-legal-group:first-child {
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .footer-legal-cat {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    margin-bottom: 0;
+    padding: 1rem 0;
+  }
+  .footer-legal-cat::after {
+    content: "+";
+    font-size: .9rem;
+    font-weight: 400;
+    color: rgba(255,255,255,0.4);
+  }
+  .footer-legal-group[open] .footer-legal-cat::after { content: "−"; }
+  .footer-legal-group .footer-links {
+    align-items: center;
+    padding-bottom: 1.2rem;
+  }
 }
 
 /* Cookie consent modal — blocks interaction with the rest of the page
@@ -2425,6 +2495,59 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   color: var(--ink-mute);
   margin-top: .6rem;
 }
+/* Version block — current version + compact history table + PDF download,
+   sourced entirely from lib/legal-versions.js via initLegalVersioning() in
+   main.js (never hand-edited here — see that file for how to publish a
+   new version). Sits between the update date and the intro paragraph. */
+.legal-version-block {
+  margin-top: 1rem;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--paper);
+}
+.legal-version-current {
+  font-size: .92rem;
+  color: var(--ink);
+  margin-bottom: .9rem;
+}
+.legal-version-history-label {
+  font-family: var(--mono);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: .6rem;
+}
+.legal-version-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .82rem;
+  margin-bottom: 1.1rem;
+}
+.legal-version-table th,
+.legal-version-table td {
+  text-align: left;
+  padding: .4rem .6rem .4rem 0;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--ink-soft);
+}
+.legal-version-table th {
+  font-family: var(--mono);
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.legal-version-table td:first-child { font-weight: 600; color: var(--ink); white-space: nowrap; }
+.legal-version-table td:nth-child(2) { white-space: nowrap; }
+.legal-pdf-btn {
+  font-size: .85rem;
+  padding: .6rem 1.1rem;
+}
+.legal-pdf-btn[disabled] { opacity: .6; cursor: default; }
 .legal-intro {
   margin-top: 1.6rem;
   font-size: 1.05rem;
@@ -2465,14 +2588,6 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 }
 .legal-doc-nav a { text-decoration: underline; text-underline-offset: 2px; color: var(--moss); }
 .legal-doc-nav a:hover { color: var(--moss-2); }
-.legal-contact {
-  margin-top: 2.8rem;
-  padding: 1.6rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--paper);
-}
-.legal-contact h2 { margin-top: 0; }
 .legal-back {
   display: inline-block;
   margin-top: 2.4rem;

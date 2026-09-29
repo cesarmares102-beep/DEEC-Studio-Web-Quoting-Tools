@@ -9,32 +9,35 @@
 # "; preload" — that submits the domain to browsers' hardcoded preload
 # list, which is far harder to reverse than this header alone.
 #
-# script-src allowlists specific inline scripts by their SHA-256 hash
-# (the Whop + Meta Pixel base snippets in index.html's <head>) instead of
-# using 'unsafe-inline' — every OTHER inline script stays blocked, which
-# is what makes this site's XSS surface a non-issue. Edit either snippet
-# and its hash goes stale (recompute it and update here + .htaccess, or
-# it's silently blocked). main.js's Contact tracking call (fired on every
-# WhatsApp CTA click) isn't a third inline script — it's trusted via
-# script-src 'self', so it needs no hash. https://t.whop.tw is Whop's
+# script-src no longer needs any 'sha256-...' inline-script hashes: the
+# Whop + Meta Pixel base snippets used to sit inline in <head> (allowlisted
+# by hash instead of 'unsafe-inline', so every OTHER inline script stayed
+# blocked) but now live as loadAnalyticsTracking() in main.js, gated behind
+# the cookie consent modal (see initCookieConsent()) — main.js is already
+# trusted via 'self', so it needs no hash, and there's no inline script
+# left anywhere in the project to allowlist. https://t.whop.tw is Whop's
 # tracking domain (loads s.js, sends events) — unrelated to the WhatsApp
 # CTAs, kept for Whop's own analytics.
 # https://connect.facebook.net/https://www.facebook.com are Meta's (loads
 # fbevents.js, sends events, serves the <noscript> fallback pixel image).
-# facebook.com is also in frame-src/form-action: fbevents.js falls back to
-# a hidden iframe/form POST to deliver events when its primary fetch/image
-# beacon is blocked (privacy modes, some browsers) — confirmed by testing,
-# not guessed. Some other random-looking third-party domains (AWS/GCP
-# hostnames) showed up as blocked connect-src attempts during testing —
-# NOT allowlisted here on purpose, they don't look like standard Meta
+# facebook.com is also in form-action: fbevents.js falls back to a hidden
+# iframe/form POST to deliver events when its primary fetch/image beacon
+# is blocked (privacy modes, some browsers) — confirmed by testing, not
+# guessed. frame-src/payment no longer list whop.com — that was only for
+# the embedded Whop checkout iframe (Apple/Google Pay inside it), removed
+# when every CTA switched to opening WhatsApp instead; connect-src keeps
+# whop.com since the tracking script may still call back to it directly.
+# Some other random-looking third-party domains (AWS/GCP hostnames)
+# showed up as blocked connect-src attempts during testing — NOT
+# allowlisted here on purpose, they don't look like standard Meta
 # infrastructure and weren't verified as legitimate.
 
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self "https://whop.com")
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
   X-Frame-Options: SAMEORIGIN
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-Vj0ZQI6HmRlgG8PCxGgAq25M62GE2IwjbyWbU26rh4Y=' 'sha256-8MexTA4cl23iH+k1us9OYTnOJCky1DyRUzZ+Stho6v4=' https://t.whop.tw https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com; frame-src https://whop.com https://www.facebook.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://t.whop.tw https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com; frame-src https://www.facebook.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com; object-src 'none'
   Strict-Transport-Security: max-age=31536000; includeSubDomains
 
 /*.html
@@ -54,3 +57,11 @@
 
 /assets/*
   Cache-Control: public, max-age=2592000
+
+# Vendored PDF library (lib/vendor/) — pinned to one version, never edited
+# in place; a version bump ships under a new path instead of overwriting
+# this one, so it's safe to cache hard rather than revalidate like the
+# site's own /*.js (this rule is more specific than /*.js above, so it
+# wins for these two files).
+/lib/vendor/*
+  Cache-Control: public, max-age=2592000, immutable

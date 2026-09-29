@@ -274,6 +274,296 @@
   }
 
   /* -------------------------------------------------------------
+     Footer legal accordion — each category is a native <details>.
+     On mobile (<=719px) it behaves as a real collapsible accordion;
+     on desktop it must always stay fully open with no toggle at all,
+     so clicks on the summary are blocked above that breakpoint and
+     any group left closed by a mobile visit is forced back open when
+     the viewport grows past it (e.g. rotating a tablet, resizing).
+     ------------------------------------------------------------- */
+  function initFooterAccordion() {
+    var groups = $$(".footer-legal-group");
+    if (!groups.length) return;
+    var bp = 719;
+
+    document.addEventListener("click", function (e) {
+      var summary = e.target.closest ? e.target.closest(".footer-legal-group > summary") : null;
+      if (!summary) return;
+      if (window.innerWidth > bp) e.preventDefault();
+    });
+
+    function syncOpenState() {
+      if (window.innerWidth > bp) {
+        groups.forEach(function (g) { g.open = true; });
+      }
+    }
+    window.addEventListener("resize", syncOpenState);
+  }
+
+  /* -------------------------------------------------------------
+     Legal document versioning + PDF export.
+
+     Single source of truth: lib/legal-versions.js (window.__LEGAL_DOCS__).
+     A legal page's <body data-legal-doc="..."> names its entry there. This
+     module reads that same entry to (a) fill in the on-page "current
+     version" line + last-5 history table, in both language blocks, and
+     (b) build the downloadable PDF straight from the live DOM of whichever
+     language block is currently visible — the .legal-intro paragraph and
+     .legal-body markup already on the page, walked node-by-node into a
+     pdfmake content tree. Nothing here duplicates the legal text: the web
+     page IS the content source for the PDF too, so they can't drift apart.
+
+     pdfmake itself (lib/vendor/pdfmake.min.js + pdfmake.vfs_fonts.js,
+     vendored locally — the site's CSP only allows 'self' scripts, and a
+     third-party CDN would be blocked outright) is only fetched lazily,
+     the first time someone actually clicks "Descargar PDF", so it never
+     costs bytes on a page load that doesn't need it.
+     ------------------------------------------------------------- */
+  var MONTHS_ES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+  var MONTHS_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+  function formatDateLong(iso, lang) {
+    var parts = iso.split("-");
+    var y = parts[0], m = parseInt(parts[1], 10) - 1, d = parseInt(parts[2], 10);
+    if (lang === "en") return MONTHS_EN[m] + " " + d + ", " + y;
+    return d + " de " + MONTHS_ES[m] + " de " + y;
+  }
+  function formatDateShort(iso) {
+    var parts = iso.split("-");
+    return parts[2] + "/" + parts[1] + "/" + parts[0];
+  }
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function lastFiveVersions(doc) {
+    return doc.versionHistory.slice().sort(function (a, b) {
+      return a.date < b.date ? 1 : a.date > b.date ? -1 : 0;
+    }).slice(0, 5);
+  }
+
+  function renderLegalVersionBlock(docId) {
+    var doc = window.__LEGAL_DOCS__ && window.__LEGAL_DOCS__[docId];
+    if (!doc) return;
+    ["es", "en"].forEach(function (lang) {
+      var scope = $('[data-lang-content="' + lang + '"]');
+      if (!scope) return;
+      var updatedEl = $("[data-legal-updated]", scope);
+      if (updatedEl) {
+        var label = lang === "en" ? "Last updated: " : "Última actualización: ";
+        updatedEl.textContent = label + formatDateLong(doc.updatedAt, lang);
+      }
+      var versionEl = $("[data-legal-version-current]", scope);
+      if (versionEl) versionEl.textContent = "v" + doc.currentVersion;
+      var tbody = $("[data-legal-version-table] tbody", scope);
+      if (tbody) {
+        tbody.innerHTML = lastFiveVersions(doc).map(function (r) {
+          var descr = (r.description && r.description[lang]) || "";
+          return "<tr><td>v" + escapeHtml(r.version) + "</td><td>" + formatDateShort(r.date) + "</td><td>" + escapeHtml(descr) + "</td></tr>";
+        }).join("");
+      }
+    });
+  }
+
+  /* ---- HTML (.legal-intro / .legal-body) -> pdfmake content tree ---- */
+  function legalInlineRuns(el) {
+    var runs = [];
+    Array.prototype.forEach.call(el.childNodes, function (child) {
+      if (child.nodeType === 3) {
+        if (child.textContent) runs.push({ text: child.textContent });
+        return;
+      }
+      if (child.nodeType !== 1) return;
+      var tag = child.tagName.toLowerCase();
+      if (tag === "a") {
+        runs.push({ text: child.textContent, link: child.getAttribute("href") || "", color: "#3f6b3f", decoration: "underline" });
+      } else if (tag === "strong" || tag === "b") {
+        runs.push({ text: child.textContent, bold: true });
+      } else if (tag === "br") {
+        runs.push({ text: "\n" });
+      } else if (child.textContent) {
+        runs.push({ text: child.textContent });
+      }
+    });
+    return runs.length ? runs : [{ text: "" }];
+  }
+  function legalBlockToPdf(el) {
+    var tag = el.tagName.toLowerCase();
+    if (tag === "h2") return { text: el.textContent, style: "legalH2" };
+    if (tag === "h3") return { text: el.textContent, style: "legalH3" };
+    if (tag === "p") return { text: legalInlineRuns(el), style: "legalP" };
+    if (tag === "ul") {
+      return {
+        ul: Array.prototype.map.call(el.children, function (li) {
+          return { text: legalInlineRuns(li) };
+        }),
+        style: "legalP"
+      };
+    }
+    return null;
+  }
+  function legalHistoryTablePdf(doc, lang) {
+    var head = lang === "en" ? ["Version", "Date", "Description"] : ["Versión", "Fecha", "Descripción"];
+    var body = [head.map(function (h) { return { text: h, style: "legalTableHeader" }; })];
+    lastFiveVersions(doc).forEach(function (r) {
+      body.push([
+        { text: "v" + r.version, style: "legalTableCell" },
+        { text: formatDateShort(r.date), style: "legalTableCell" },
+        { text: (r.description && r.description[lang]) || "", style: "legalTableCell" }
+      ]);
+    });
+    return {
+      table: { headerRows: 1, widths: [42, 62, "*"], body: body },
+      layout: {
+        hLineWidth: function (i, node) { return (i === 0 || i === 1 || i === node.table.body.length) ? .75 : .5; },
+        vLineWidth: function () { return 0; },
+        hLineColor: function () { return "#d1d5db"; },
+        paddingTop: function () { return 4; },
+        paddingBottom: function () { return 4; }
+      },
+      margin: [0, 0, 0, 4]
+    };
+  }
+  function buildLegalPdfContent(doc, lang, scope) {
+    var content = [];
+    content.push({ text: "DEEC STUDIO", style: "legalBrand" });
+    content.push({ text: doc.title[lang], style: "legalCoverTitle" });
+    content.push({ text: (lang === "en" ? "Current version: v" : "Versión vigente: v") + doc.currentVersion, style: "legalMeta" });
+    content.push({ text: (lang === "en" ? "Last updated: " : "Fecha de actualización: ") + formatDateLong(doc.updatedAt, lang), style: "legalMeta" });
+    content.push({ text: lang === "en" ? "VERSION HISTORY" : "HISTORIAL DE VERSIONES", style: "legalHistoryHeading" });
+    content.push(legalHistoryTablePdf(doc, lang));
+    content.push({ canvas: [{ type: "line", x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: .5, lineColor: "#d1d5db" }], margin: [0, 12, 0, 14] });
+
+    var introEl = $(".legal-intro", scope);
+    if (introEl) content.push({ text: legalInlineRuns(introEl), style: "legalP" });
+
+    var bodyEl = $(".legal-body", scope);
+    if (bodyEl) {
+      var kids = Array.prototype.slice.call(bodyEl.children);
+      for (var i = 0; i < kids.length; i++) {
+        var tag = kids[i].tagName.toLowerCase();
+        var node = legalBlockToPdf(kids[i]);
+        if (!node) continue;
+        if ((tag === "h2" || tag === "h3") && kids[i + 1]) {
+          var nextNode = legalBlockToPdf(kids[i + 1]);
+          if (nextNode) {
+            content.push({ stack: [node, nextNode], unbreakable: true });
+            i++;
+            continue;
+          }
+        }
+        content.push(node);
+      }
+    }
+    return content;
+  }
+  function buildLegalDocDefinition(doc, lang, scope) {
+    return {
+      info: { title: doc.title[lang] + " v" + doc.currentVersion, author: "Deec Studio" },
+      pageMargins: [40, 82, 40, 46],
+      header: function (currentPage) {
+        return {
+          margin: [40, 18, 40, 0],
+          stack: [
+            { text: "DEEC STUDIO · " + doc.title[lang].toUpperCase(), style: "legalRunningTitle" },
+            {
+              text: (lang === "en" ? "Version v" : "Versión v") + doc.currentVersion + " · " +
+                (lang === "en" ? "Updated: " : "Actualizado: ") + formatDateShort(doc.updatedAt),
+              style: "legalRunningSub"
+            },
+            { canvas: [{ type: "line", x1: 0, y1: 2, x2: 515, y2: 2, lineWidth: .5, lineColor: "#d1d5db" }] }
+          ],
+          // Header repeats identically on every page (including page 1,
+          // where the fuller in-content version block already appears
+          // right below it) — currentPage isn't used, kept for clarity.
+          _page: currentPage
+        };
+      },
+      footer: function (currentPage, pageCount) {
+        return {
+          margin: [40, 0, 40, 18],
+          columns: [
+            { text: "Deec Studio · deecstudio-quotingtools.online", style: "legalFooterText" },
+            {
+              text: (lang === "en" ? "Page " + currentPage + " of " + pageCount : "Página " + currentPage + " de " + pageCount),
+              style: "legalFooterText",
+              alignment: "right"
+            }
+          ]
+        };
+      },
+      content: buildLegalPdfContent(doc, lang, scope),
+      styles: {
+        legalBrand: { fontSize: 9, bold: true, color: "#6b7280", margin: [0, 0, 0, 4] },
+        legalCoverTitle: { fontSize: 19, bold: true, margin: [0, 0, 0, 10] },
+        legalMeta: { fontSize: 10, margin: [0, 0, 0, 2], color: "#374151" },
+        legalHistoryHeading: { fontSize: 10, bold: true, margin: [0, 16, 0, 6], color: "#374151" },
+        legalTableHeader: { fontSize: 9, bold: true, fillColor: "#f3f4f6" },
+        legalTableCell: { fontSize: 9 },
+        legalH2: { fontSize: 13, bold: true, margin: [0, 14, 0, 6] },
+        legalH3: { fontSize: 11, bold: true, margin: [0, 10, 0, 4] },
+        legalP: { fontSize: 10, margin: [0, 0, 0, 8], lineHeight: 1.25 },
+        legalRunningTitle: { fontSize: 8, bold: true, color: "#111827" },
+        legalRunningSub: { fontSize: 7.5, color: "#6b7280", margin: [0, 1, 0, 4] },
+        legalFooterText: { fontSize: 8, color: "#9ca3af" }
+      },
+      defaultStyle: { font: "Roboto" }
+    };
+  }
+
+  var pdfVendorPromise = null;
+  function loadPdfVendor() {
+    if (window.pdfMake && window.pdfMake.createPdf) return Promise.resolve();
+    if (pdfVendorPromise) return pdfVendorPromise;
+    pdfVendorPromise = new Promise(function (resolve, reject) {
+      var s1 = document.createElement("script");
+      s1.src = "lib/vendor/pdfmake.min.js";
+      s1.onload = function () {
+        var s2 = document.createElement("script");
+        s2.src = "lib/vendor/pdfmake.vfs_fonts.js";
+        s2.onload = function () { resolve(); };
+        s2.onerror = function () { reject(new Error("pdfmake vfs_fonts failed to load")); };
+        document.body.appendChild(s2);
+      };
+      s1.onerror = function () { reject(new Error("pdfmake failed to load")); };
+      document.body.appendChild(s1);
+    });
+    return pdfVendorPromise;
+  }
+
+  function initLegalVersioning() {
+    var docId = document.body.getAttribute("data-legal-doc");
+    if (!docId) return;
+    renderLegalVersionBlock(docId);
+
+    $$("[data-legal-pdf-download]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        if (btn.disabled) return;
+        var doc = window.__LEGAL_DOCS__ && window.__LEGAL_DOCS__[docId];
+        if (!doc) return;
+        var scope = $('[data-lang-content="' + currentLang + '"]');
+        if (!scope) return;
+        var label = $("span", btn);
+        var originalText = label ? label.textContent : "";
+        btn.disabled = true;
+        if (label) label.textContent = t("legal.downloadingPdf");
+        loadPdfVendor().then(function () {
+          var docDefinition = buildLegalDocDefinition(doc, currentLang, scope);
+          var filename = doc.pdfFileBase + "_v" + doc.currentVersion + ".pdf";
+          window.pdfMake.createPdf(docDefinition).download(filename);
+        }).catch(function (err) {
+          if (window.console) console.warn("[legal-pdf]", err);
+          showToast(t("toast.pdfError"));
+        }).then(function () {
+          btn.disabled = false;
+          if (label) label.textContent = originalText;
+        });
+      });
+    });
+  }
+
+  /* -------------------------------------------------------------
      Smooth anchor scroll (native)
      ------------------------------------------------------------- */
   function initSmoothAnchors() {
@@ -998,6 +1288,8 @@
     safe(initNavHeight, "initNavHeight");
     safe(initMenuPanel, "initMenuPanel");
     safe(initSmoothAnchors, "initSmoothAnchors");
+    safe(initFooterAccordion, "initFooterAccordion");
+    safe(initLegalVersioning, "initLegalVersioning");
     safe(initReveals, "initReveals");
     safe(initTransformShowcase, "initTransformShowcase");
     safe(initPersonalizacion, "initPersonalizacion");
