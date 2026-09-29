@@ -391,7 +391,7 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   gap: 2rem;
   text-align: left;
 }
-.hero-copy { max-width: 34rem; }
+.hero-copy { max-width: 34rem; min-width: 0; }
 .hero-mockup {
   position: relative;
   width: 100%;
@@ -838,6 +838,48 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   color: var(--ink-mute);
   white-space: nowrap;
 }
+
+/* --- Industries marquee — editorial text-only strip, reuses the
+   [data-marquee] clone-and-loop mechanism above (initMarquee() in
+   main.js), just with plain uppercase labels instead of icon+copy
+   items. Full-bleed like .marquee-wrap, sits between the hero and
+   "Problema". --- */
+.industries-marquee-wrap {
+  margin-top: clamp(1.2rem, 3vw, 1.6rem);
+  padding-block: clamp(.7rem, 2vw, .9rem);
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+.industries-marquee {
+  overflow: hidden;
+  position: relative;
+  white-space: nowrap;
+}
+.industries-marquee::before, .industries-marquee::after {
+  content: "";
+  position: absolute; top: 0; bottom: 0; width: 70px; z-index: 2;
+  pointer-events: none;
+}
+.industries-marquee::before { left: 0; background: linear-gradient(90deg, var(--bg), transparent); }
+.industries-marquee::after  { right: 0; background: linear-gradient(270deg, var(--bg), transparent); }
+.industries-track {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  will-change: transform;
+  animation: marqueeScroll 40s linear infinite;
+}
+.industries-item {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: clamp(.78rem, 1.6vw, .92rem);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+  padding-inline: clamp(.9rem, 2vw, 1.4rem);
+}
+.industries-sep { color: var(--ink-faint); font-size: .8em; }
 
 /* =============================================================
    7. Problema
@@ -2510,7 +2552,7 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
    17. Reduced motion — only genuinely intrusive effects
    ============================================================= */
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track { animation-duration: 70s; }
+  .marquee-track, .industries-track { animation-duration: 70s; }
 }
 
 /* =============================================================
