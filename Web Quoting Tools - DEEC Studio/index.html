@@ -14,51 +14,20 @@
      hit this specific request. See also the css/js Cache-Control in
      _headers/.htaccess (stale-while-revalidate/stale-if-error) for the
      other half of this fix. -->
-<link rel="stylesheet" href="styles.css?v=20260928f" />
+<link rel="stylesheet" href="styles.css?v=20260928i" />
 
-<!-- Whop tracking pixel (conversion/attribution for the checkout funnel).
-     CSP script-src is 'self' only with no 'unsafe-inline' — this exact
-     inline script is allowlisted by its SHA-256 hash in _headers/.htaccess
-     instead, so it runs while arbitrary injected inline scripts still
-     don't (see the security-audit finding this was added after: script-src
-     'self' with no unsafe-inline was the reason there's no exploitable XSS
-     path). If you ever edit so much as a character of this snippet, the
-     hash in both header files must be recomputed to match or it'll be
-     silently blocked. t.whop.tw is also allowlisted in script-src (loads
-     s.js) and connect-src (sends tracking events). -->
-<script>!function(w,d,s,u,n,a,b){if(w[n])return;a=w[n]={q:[],t:+new Date,s:[],o:u,track:function(){a.q.push([+new Date].concat([].slice.call(arguments)))},setScope:function(){a.s=[].slice.call(arguments).filter(function(x){return typeof x==="string"});a.q.push([+new Date,"setScope"].concat(a.s))},scope:function(){var c=[].slice.call(arguments);return{track:function(){a.q.push([+new Date].concat([].slice.call(arguments)).concat([{__scope:c}]))}}}};b=d.createElement(s);b.async=1;b.src=u+"/s.js";d.getElementsByTagName(s)[0].parentNode.insertBefore(b,d.getElementsByTagName(s)[0])}(window,document,"script","https://t.whop.tw","whop");whop.setScope("biz_z27YXAf3J61uO9");whop.track("page");</script>
-
-<!-- Meta Pixel Code — base snippet + PageView only. Same hash-allowlist
-     approach as the Whop pixel above (no 'unsafe-inline'). The
-     conversion event for this campaign, "Contact", is NOT a second inline
-     <script> — it's called from main.js's initWhatsapp() click handler
-     instead, once per every CTA that opens a WhatsApp chat (main.js is
-     already trusted via script-src 'self', so no extra CSP entry was
-     needed for that part). Every CTA on the page now opens WhatsApp
-     instead of an embedded checkout, so there's no on-site "Purchase"
-     step left to instrument here — if one is ever needed again it would
-     come from Whop server-side (Conversions API) on a payment.succeeded
-     webhook, as before. Edit so much as a character of THIS block and
-     its hash in _headers/.htaccess needs recomputing or it's silently
-     blocked. connect.facebook.net/www.facebook.com are allowlisted in
-     script-src/img-src/connect-src/frame-src/form-action for fbevents.js
-     and its tracking beacons. -->
-<script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '1068830012634174');
-  fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=1068830012634174&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
+<!-- Whop tracking pixel + Meta Pixel: NOT loaded here anymore. Both are
+     consent-gated — they only load if the visitor accepts the "Análisis
+     y publicidad" category in the cookie modal (or already did, on a
+     past visit). See loadAnalyticsTracking() in main.js for the actual
+     bootstrap code (same official snippets, just moved into a function)
+     and initCookieConsent() for when it gets called. Because neither
+     script is inline anymore, the CSP's script-src no longer needs the
+     two 'sha256-...' hash entries that used to allowlist them — main.js
+     is already trusted via 'self'. t.whop.tw and connect.facebook.net
+     stay in script-src/connect-src/img-src/frame-src/form-action in
+     _headers/.htaccess since those two domains still get contacted once
+     tracking actually loads. -->
 
 <title>DEEC Studio — Tu cotizador web personalizado para catering</title>
 <meta name="description" content="DEEC Studio convierte tus servicios, precios y reglas de cobro en una herramienta que genera presupuestos y cotizaciones profesionales en minutos. Pago único de $49.99 USD, sin suscripciones." />
@@ -1238,25 +1207,66 @@
       <p class="footer-brand-name"><strong>DEEC Studio</strong></p>
     </div>
     <nav class="footer-links" aria-label="Legal">
+      <a href="aviso-de-uso.html" data-i18n="footer.termsLink">Aviso de uso</a>
+      <a href="politica-privacidad.html" data-i18n="footer.privacyLink">Política de privacidad</a>
       <a href="politica-cookies.html" data-i18n="footer.cookiesLink">Política de cookies</a>
+      <a href="aviso-uso-ia.html" data-i18n="footer.aiNoticeLink">Aviso de uso de IA</a>
+      <button type="button" data-cookie-reopen data-i18n="footer.cookiePrefsLink">Preferencias de cookies</button>
     </nav>
     <p class="footer-copyright" data-i18n="footer.copyright">© 2026 DEEC Studio. Todos los derechos reservados.</p>
   </div>
 </footer>
 
-<!-- Aviso de cookies — banner informativo fijo al pie, no bloquea nada
-     hasta que se acepte (no hay gating de scripts): sección 15j en
-     styles.css. Se oculta permanentemente vía localStorage al hacer
-     clic en "Entendido" (ver initCookieBanner() en main.js). -->
-<div class="cookie-banner" data-cookie-banner hidden>
-  <div class="container cookie-banner-inner">
-    <p class="cookie-banner-text" data-i18n="cookie.banner.text">Usamos cookies propias y de terceros para analizar el uso del sitio y medir el rendimiento de nuestras campañas de anuncios. Puedes conocer más en nuestra <a class="cookie-banner-link" href="politica-cookies.html">Política de cookies</a>.</p>
-    <button type="button" class="btn btn-primary" data-cookie-accept data-i18n="cookie.banner.accept">Entendido</button>
+<!-- Cookie consent modal — bloquea la interacción con el resto de la
+     página (backdrop de pantalla completa + scroll bloqueado) hasta que
+     se tome una decisión. No hay forma de cerrarlo sin elegir: no tiene
+     botón de cerrar, ni backdrop-click, ni Escape — solo "Aceptar
+     todas" o "Guardar preferencias" (dentro de Personalizar) lo
+     cierran. Ambos cargan Meta Pixel + Whop vía loadAnalyticsTracking()
+     en main.js si "Análisis y publicidad" quedó activado — antes de
+     eso, ninguno de los dos scripts se inserta en la página (gating
+     real, no solo un aviso). Ver initCookieConsent() para el resto de
+     la lógica (pasos, toggle, localStorage). Reabrible en cualquier
+     momento desde el link "Preferencias de cookies" del footer. -->
+<div class="cookie-modal-backdrop" data-cookie-banner-backdrop hidden></div>
+<div class="cookie-modal" data-cookie-banner hidden role="dialog" aria-modal="true" data-i18n-aria="a11y.cookieModal" aria-label="Preferencias de cookies">
+  <div class="cookie-modal-panel">
+    <div class="cookie-modal-head">
+      <img class="cookie-modal-logo" alt="DEEC Studio" width="110" height="24" src="assets/logo-deecstudio.svg" />
+    </div>
+
+    <p class="eyebrow" data-i18n="cookie.modal.eyebrow">Política de cookies</p>
+    <h2 class="cookie-modal-title" data-i18n="cookie.modal.title">Utilizamos cookies para mejorar tu experiencia.</h2>
+    <p class="cookie-modal-text" data-i18n="cookie.modal.text">Usamos cookies propias y de terceros para analizar el uso del sitio, medir el rendimiento de nuestras campañas y personalizar tu experiencia de navegación. Puedes elegir qué tipos de cookies permitir.</p>
+    <a class="cookie-modal-link" href="politica-cookies.html" data-i18n="cookie.modal.policyLink">Política de cookies →</a>
+
+    <div class="cookie-modal-actions" data-cookie-step="choice">
+      <button type="button" class="btn btn-outline" data-cookie-customize data-i18n="cookie.modal.customize">Personalizar</button>
+      <button type="button" class="btn btn-primary" data-cookie-accept-all data-i18n="cookie.modal.acceptAll">Aceptar todas</button>
+    </div>
+
+    <div class="cookie-modal-prefs" data-cookie-step="prefs" hidden>
+      <div class="cookie-pref-row">
+        <div class="cookie-pref-text">
+          <p class="cookie-pref-title" data-i18n="cookie.modal.necessaryTitle">Cookies necesarias</p>
+          <p class="cookie-pref-desc" data-i18n="cookie.modal.necessaryDesc">Seguridad y funcionamiento del sitio (Cloudflare). Siempre activas.</p>
+        </div>
+        <span class="cookie-pref-toggle is-on is-locked" aria-hidden="true"></span>
+      </div>
+      <div class="cookie-pref-row">
+        <div class="cookie-pref-text">
+          <p class="cookie-pref-title" data-i18n="cookie.modal.analyticsTitle">Análisis y publicidad</p>
+          <p class="cookie-pref-desc" data-i18n="cookie.modal.analyticsDesc">Meta Pixel y Whop, para medir campañas y visitas al sitio.</p>
+        </div>
+        <button type="button" class="cookie-pref-toggle" data-cookie-toggle-analytics role="switch" aria-checked="false"></button>
+      </div>
+      <button type="button" class="btn btn-primary cookie-modal-save" data-cookie-save data-i18n="cookie.modal.save">Guardar preferencias</button>
+    </div>
   </div>
 </div>
 
-<script defer src="lib/manifest.js?v=20260928f"></script>
-<script defer src="lib/i18n.js?v=20260928f"></script>
-<script defer src="main.js?v=20260928f"></script>
+<script defer src="lib/manifest.js?v=20260928i"></script>
+<script defer src="lib/i18n.js?v=20260928i"></script>
+<script defer src="main.js?v=20260928i"></script>
 </body>
 </html>

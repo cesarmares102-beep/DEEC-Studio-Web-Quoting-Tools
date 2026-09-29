@@ -222,6 +222,15 @@
     $$("[data-i18n-aria]").forEach(function (el) {
       el.setAttribute("aria-label", t(el.getAttribute("data-i18n-aria")));
     });
+    // Whole-block language switch — for long-form content (legal pages)
+    // that's written once per language directly in the HTML instead of
+    // going through the i18n dictionary above (hundreds of one-off
+    // paragraph keys would bloat lib/i18n.js for text nobody reuses).
+    // Each block just needs data-lang-content="es"/"en"; only the one
+    // matching currentLang stays visible.
+    $$("[data-lang-content]").forEach(function (el) {
+      el.hidden = el.getAttribute("data-lang-content") !== currentLang;
+    });
     $$("[data-lang]").forEach(function (btn) {
       var active = btn.getAttribute("data-lang") === currentLang;
       btn.classList.toggle("is-active", active);
@@ -656,33 +665,161 @@
   }
 
   /* -------------------------------------------------------------
-     Cookie consent banner — informational notice (no script gating:
-     every tracker on the site already loads regardless of this
-     banner's state). Shown once per browser until dismissed; the
+     Cookie consent gate — blocks interaction with the rest of the
+     page (a full-screen backdrop above nav/cta-bar/FAB stack, plus a
+     locked body scroll) until "Entendido" is clicked. On purpose,
+     there's no backdrop-click or Escape dismissal — the button is the
+     only way past it. This is still an "accept to dismiss" notice, not
+     a real opt-in/opt-out consent manager: every tracker on the site
+     (Meta Pixel, Whop) already loads regardless of this gate. The
      choice is remembered in localStorage so it doesn't reappear on
      every visit. Present on both index.html and politica-cookies.html.
      ------------------------------------------------------------- */
-  function initCookieBanner() {
-    var banner = $("[data-cookie-banner]");
-    var acceptBtn = $("[data-cookie-accept]");
-    if (!banner || !acceptBtn) return;
-    var STORAGE_KEY = "deec_cookie_consent";
-    var consented = false;
-    try { consented = window.localStorage.getItem(STORAGE_KEY) === "1"; } catch (err) {}
-    if (consented) return;
+  var COOKIE_STORAGE_KEY = "deec_cookie_consent";
+  var analyticsLoaded = false;
 
-    banner.hidden = false;
-    // Forced reflow instead of requestAnimationFrame — see the menu
-    // panel's open() above for why (throttled rAF can leave it stuck
-    // invisible instead of sliding in).
-    void banner.offsetHeight;
-    banner.classList.add("is-visible");
+  function readCookieConsent() {
+    try {
+      var raw = window.localStorage.getItem(COOKIE_STORAGE_KEY);
+      if (!raw) return null;
+      var parsed = JSON.parse(raw);
+      return (parsed && typeof parsed.analytics === "boolean") ? parsed : null;
+    } catch (err) { return null; }
+  }
+  function writeCookieConsent(analytics) {
+    try { window.localStorage.setItem(COOKIE_STORAGE_KEY, JSON.stringify({ analytics: analytics })); } catch (err) {}
+  }
 
-    acceptBtn.addEventListener("click", function () {
-      try { window.localStorage.setItem(STORAGE_KEY, "1"); } catch (err) {}
-      banner.classList.remove("is-visible");
-      setTimeout(function () { banner.hidden = true; }, 400);
-    });
+  // Official Whop + Meta Pixel bootstrap snippets — byte-identical logic
+  // to what used to sit inline in index.html/politica-cookies.html's
+  // <head>, just moved into a function so they only run once consent is
+  // actually given instead of unconditionally on every page load. Only
+  // called from initCookieConsent() below, and at most once per page
+  // view (analyticsLoaded guard) since both snippets install their own
+  // globals (window.whop / window.fbq) the moment they run.
+  function loadAnalyticsTracking() {
+    if (analyticsLoaded) return;
+    analyticsLoaded = true;
+    try {
+      (function (w, d, s, u, n, a, b) {
+        if (w[n]) return;
+        a = w[n] = {
+          q: [], t: +new Date, s: [], o: u,
+          track: function () { a.q.push([+new Date].concat([].slice.call(arguments))); },
+          setScope: function () {
+            a.s = [].slice.call(arguments).filter(function (x) { return typeof x === "string"; });
+            a.q.push([+new Date, "setScope"].concat(a.s));
+          },
+          scope: function () {
+            var c = [].slice.call(arguments);
+            return { track: function () { a.q.push([+new Date].concat([].slice.call(arguments)).concat([{ __scope: c }])); } };
+          }
+        };
+        b = d.createElement(s);
+        b.async = 1;
+        b.src = u + "/s.js";
+        d.getElementsByTagName(s)[0].parentNode.insertBefore(b, d.getElementsByTagName(s)[0]);
+      })(window, document, "script", "https://t.whop.tw", "whop");
+      window.whop.setScope("biz_z27YXAf3J61uO9");
+      window.whop.track("page");
+    } catch (err) { if (window.console) console.warn("[whop tracking]", err); }
+
+    try {
+      (function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
+        if (!f._fbq) f._fbq = n;
+        n.push = n; n.loaded = true; n.version = "2.0"; n.queue = [];
+        t = b.createElement(e); t.async = true; t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+      })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+      window.fbq("init", "1068830012634174");
+      window.fbq("track", "PageView");
+    } catch (err) { if (window.console) console.warn("[fbq init]", err); }
+  }
+
+  /* -------------------------------------------------------------
+     Cookie consent modal — blocks interaction with the rest of the
+     page (backdrop above nav/cta-bar/FAB stack + locked body scroll)
+     until a decision is made. There is NO way to dismiss it without
+     picking one of the two real choices — no close button, no
+     backdrop-click, no Escape. "Aceptar todas" and "Guardar
+     preferencias" (with the toggle on) are what actually call
+     loadAnalyticsTracking() above; leaving the toggle off and saving
+     means Meta Pixel/Whop never load this session. Once a choice
+     exists, the modal only reopens from the footer's "Preferencias de
+     cookies" (data-cookie-reopen), pre-filled with the stored choice
+     so it can be changed anytime — reopening still requires picking
+     Aceptar todas or Guardar preferencias again to close it.
+     ------------------------------------------------------------- */
+  function initCookieConsent() {
+    var modal = $("[data-cookie-banner]");
+    var backdrop = $("[data-cookie-banner-backdrop]");
+    if (!modal) return;
+    var customizeBtn = $("[data-cookie-customize]", modal);
+    var acceptAllBtn = $("[data-cookie-accept-all]", modal);
+    var saveBtn = $("[data-cookie-save]", modal);
+    var analyticsToggle = $("[data-cookie-toggle-analytics]", modal);
+    var choiceStep = $('[data-cookie-step="choice"]', modal);
+    var prefsStep = $('[data-cookie-step="prefs"]', modal);
+    var reopenBtns = $$("[data-cookie-reopen]");
+
+    var analyticsOn = false; // in-modal toggle state, separate from what's stored/loaded until Save/Accept
+
+    function setToggle(on) {
+      analyticsOn = on;
+      if (!analyticsToggle) return;
+      analyticsToggle.classList.toggle("is-on", on);
+      analyticsToggle.setAttribute("aria-checked", on ? "true" : "false");
+    }
+    function showChoiceStep() {
+      if (choiceStep) choiceStep.hidden = false;
+      if (prefsStep) prefsStep.hidden = true;
+    }
+    function showPrefsStep() {
+      if (choiceStep) choiceStep.hidden = true;
+      if (prefsStep) prefsStep.hidden = false;
+    }
+
+    function open() {
+      var stored = readCookieConsent();
+      setToggle(stored ? stored.analytics : false);
+      showChoiceStep();
+      modal.hidden = false;
+      if (backdrop) backdrop.hidden = false;
+      document.body.style.overflow = "hidden";
+      // Forced reflow instead of requestAnimationFrame — see the menu
+      // panel's open() above for why (throttled rAF can leave it stuck
+      // invisible instead of fading in).
+      void modal.offsetHeight;
+      modal.classList.add("is-visible");
+      if (backdrop) backdrop.classList.add("is-visible");
+    }
+    function close(analytics) {
+      writeCookieConsent(analytics);
+      if (analytics) loadAnalyticsTracking();
+      modal.classList.remove("is-visible");
+      if (backdrop) backdrop.classList.remove("is-visible");
+      document.body.style.overflow = "";
+      setTimeout(function () {
+        modal.hidden = true;
+        if (backdrop) backdrop.hidden = true;
+      }, 300);
+    }
+
+    if (customizeBtn) customizeBtn.addEventListener("click", showPrefsStep);
+    if (analyticsToggle) analyticsToggle.addEventListener("click", function () { setToggle(!analyticsOn); });
+    if (acceptAllBtn) acceptAllBtn.addEventListener("click", function () { close(true); });
+    if (saveBtn) saveBtn.addEventListener("click", function () { close(analyticsOn); });
+    reopenBtns.forEach(function (btn) { btn.addEventListener("click", open); });
+
+    var stored = readCookieConsent();
+    if (stored) {
+      if (stored.analytics) loadAnalyticsTracking();
+      return; // already decided on a past visit — don't show the modal on load
+    }
+    open();
   }
 
   /* -------------------------------------------------------------
@@ -872,7 +1009,7 @@
     safe(initFabTooltips, "initFabTooltips");
     safe(initCtaBarVisibility, "initCtaBarVisibility");
     safe(initCtaBarHeight, "initCtaBarHeight");
-    safe(initCookieBanner, "initCookieBanner");
+    safe(initCookieConsent, "initCookieConsent");
     safe(mountRatingStars, "mountRatingStars");
     safe(initSocialProof, "initSocialProof");
     safe(initLangToggle, "initLangToggle");

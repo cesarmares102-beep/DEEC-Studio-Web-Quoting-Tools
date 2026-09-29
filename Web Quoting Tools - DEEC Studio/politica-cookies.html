@@ -6,32 +6,14 @@
 
 <!-- Site CSS goes first, right after the mandatory charset/viewport meta —
      see index.html for the full rationale (iOS Safari unstyled-flash fix). -->
-<link rel="stylesheet" href="styles.css?v=20260928f" />
+<link rel="stylesheet" href="styles.css?v=20260928i" />
 
-<!-- Whop tracking pixel + Meta Pixel — identical snippets and CSP-hash
-     rationale as index.html (both files must stay byte-identical for
-     these two blocks, or the hash allowlist in _headers/.htaccess breaks
-     for whichever page changed). -->
-<script>!function(w,d,s,u,n,a,b){if(w[n])return;a=w[n]={q:[],t:+new Date,s:[],o:u,track:function(){a.q.push([+new Date].concat([].slice.call(arguments)))},setScope:function(){a.s=[].slice.call(arguments).filter(function(x){return typeof x==="string"});a.q.push([+new Date,"setScope"].concat(a.s))},scope:function(){var c=[].slice.call(arguments);return{track:function(){a.q.push([+new Date].concat([].slice.call(arguments)).concat([{__scope:c}]))}}}};b=d.createElement(s);b.async=1;b.src=u+"/s.js";d.getElementsByTagName(s)[0].parentNode.insertBefore(b,d.getElementsByTagName(s)[0])}(window,document,"script","https://t.whop.tw","whop");whop.setScope("biz_z27YXAf3J61uO9");whop.track("page");</script>
+<!-- Whop tracking pixel + Meta Pixel: NOT loaded here — same consent-gated
+     approach as index.html. See loadAnalyticsTracking() / initCookieConsent()
+     in main.js. -->
 
-<script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '1068830012634174');
-  fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=1068830012634174&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
 
-<title>Política de cookies — DEEC Studio</title>
+<title>Política de Cookies — DEEC Studio</title>
 <meta name="description" content="Qué cookies usa DEEC Studio, para qué sirven y cómo puedes controlarlas." />
 <meta name="theme-color" content="#F8F9FB" />
 <link rel="canonical" href="https://deecstudio-quotingtools.online/politica-cookies.html" />
@@ -39,10 +21,10 @@
 
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://deecstudio-quotingtools.online/politica-cookies.html" />
-<meta property="og:title" content="Política de cookies — DEEC Studio" />
+<meta property="og:title" content="Política de Cookies — DEEC Studio" />
 <meta property="og:description" content="Qué cookies usa DEEC Studio, para qué sirven y cómo puedes controlarlas." />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="Política de cookies — DEEC Studio" />
+<meta name="twitter:title" content="Política de Cookies — DEEC Studio" />
 <meta name="twitter:description" content="Qué cookies usa DEEC Studio, para qué sirven y cómo puedes controlarlas." />
 
 <link rel="preconnect" href="https://api.fontshare.com">
@@ -140,37 +122,237 @@
 <main id="main">
 <section class="section">
   <div class="container legal-page">
-    <p class="eyebrow" data-i18n="cookiePolicy.eyebrow">Legal</p>
-    <h1 class="legal-title" data-i18n="cookiePolicy.title">Política de cookies</h1>
-    <p class="legal-updated" data-i18n="cookiePolicy.updated">Última actualización: 28 de septiembre de 2026</p>
-    <p class="legal-intro" data-i18n="cookiePolicy.intro">Este sitio (deecstudio-quotingtools.online) utiliza cookies y tecnologías similares para funcionar correctamente y para entender cómo se usa. Aquí explicamos qué cookies usamos, para qué sirven y cómo puedes controlarlas.</p>
+    <p class="eyebrow" data-i18n="legal.eyebrow">Legal</p>
 
-    <div class="legal-body">
-      <h2 data-i18n="cookiePolicy.whatTitle">¿Qué es una cookie?</h2>
-      <p data-i18n="cookiePolicy.whatBody">Una cookie es un pequeño archivo que un sitio web guarda en tu navegador. Sirve para recordar información entre visitas, como preferencias, o para medir cómo se usa el sitio. Algunas herramientas de este sitio también usan tecnologías equivalentes, como el almacenamiento local del navegador (localStorage).</p>
+    <div data-lang-content="es">
+      <h1 class="legal-title">Política de Cookies</h1>
+      <p class="legal-updated">Última actualización: 28 de septiembre de 2026</p>
+      <p class="legal-intro">En Deec Studio utilizamos cookies y tecnologías similares en este sitio web para garantizar su funcionamiento, mejorar la experiencia de navegación, analizar el uso del sitio y, cuando corresponda y con tu autorización, ofrecer contenido o publicidad más relevante. Esta Política de Cookies explica qué son estas tecnologías, cómo las utilizamos y qué opciones tienes para administrarlas.</p>
 
-      <h2 data-i18n="cookiePolicy.typesTitle">Cookies que usamos</h2>
+      <div class="legal-body">
+        <h2>1. ¿Qué son las cookies?</h2>
+        <p>Las cookies son pequeños archivos de texto que un sitio web puede almacenar en el dispositivo desde el que accedes, como una computadora, teléfono móvil o tableta.</p>
+        <p>Además de cookies, podemos utilizar tecnologías similares, como píxeles, etiquetas, almacenamiento local, scripts u otras tecnologías que permitan almacenar o acceder a información en tu dispositivo.</p>
 
-      <h3 data-i18n="cookiePolicy.necessaryTitle">Cookies necesarias</h3>
-      <p data-i18n="cookiePolicy.necessaryBody">Puestas por Cloudflare, el proveedor que aloja y protege este sitio. Se usan para seguridad, distribución de contenido y buen funcionamiento técnico del sitio. No sirven para publicidad ni para identificarte personalmente, y no se pueden desactivar sin afectar el funcionamiento del sitio.</p>
+        <h2>2. ¿Qué tipos de cookies utilizamos?</h2>
 
-      <h3 data-i18n="cookiePolicy.analyticsTitle">Cookies de medición y publicidad</h3>
-      <p data-i18n="cookiePolicy.analyticsBody">Usamos el Meta Pixel (Facebook/Instagram) para medir el rendimiento de nuestras campañas de anuncios y entender qué visitas provienen de ellas. También usamos una herramienta de seguimiento de Whop, nuestro proveedor de pagos, para reportes internos de visitas. Ninguna de estas herramientas se usa para vender tus datos a terceros.</p>
+        <h3>Cookies estrictamente necesarias</h3>
+        <p>Son aquellas necesarias para que el sitio web pueda funcionar correctamente o para proporcionar una función que hayas solicitado. Pueden utilizarse para:</p>
+        <ul>
+          <li>Mantener la seguridad del sitio.</li>
+          <li>Permitir funciones técnicas.</li>
+          <li>Recordar determinadas preferencias necesarias para el funcionamiento.</li>
+          <li>Gestionar sesiones.</li>
+          <li>Prevenir actividades fraudulentas.</li>
+          <li>Garantizar la estabilidad y disponibilidad del sitio.</li>
+        </ul>
+        <p>Estas cookies no se utilizan para crear perfiles publicitarios.</p>
 
-      <h2 data-i18n="cookiePolicy.controlTitle">Cómo controlar las cookies</h2>
-      <p data-i18n="cookiePolicy.controlBody">Puedes bloquear o eliminar las cookies desde la configuración de tu navegador en cualquier momento — cada navegador tiene su propio proceso, normalmente dentro de "Privacidad" o "Configuración de sitios". También puedes ajustar qué anuncios ves desde tus <a class="cookie-policy-link" href="https://www.facebook.com/adpreferences/ad_settings" target="_blank" rel="noopener">preferencias de anuncios de Meta</a>. Ten en cuenta que bloquear todas las cookies puede afectar cómo funciona este u otros sitios.</p>
+        <h3>Cookies de preferencias o funcionalidad</h3>
+        <p>Permiten recordar determinadas elecciones realizadas durante la navegación, como idioma, región u otras preferencias, con el objetivo de ofrecer una experiencia más personalizada. Cuando estas cookies no sean estrictamente necesarias, podrán requerir tu consentimiento dependiendo de la legislación aplicable.</p>
 
-      <h2 data-i18n="cookiePolicy.changesTitle">Cambios a esta política</h2>
-      <p data-i18n="cookiePolicy.changesBody">Podemos actualizar esta política si cambian las herramientas que usamos en el sitio. La fecha de la última actualización siempre aparece al inicio de esta página.</p>
+        <h3>Cookies de análisis y medición</h3>
+        <p>Nos ayudan a comprender cómo los visitantes interactúan con nuestro sitio. Podemos utilizarlas para conocer:</p>
+        <ul>
+          <li>Qué páginas reciben más visitas.</li>
+          <li>Cuánto tiempo permanecen los visitantes en determinadas páginas.</li>
+          <li>Cómo llegan los usuarios al sitio.</li>
+          <li>Qué elementos son utilizados.</li>
+          <li>Cómo podemos mejorar el funcionamiento y la experiencia del sitio.</li>
+        </ul>
+        <p>Cuando corresponda, estas tecnologías se activarán únicamente después de obtener el consentimiento requerido.</p>
+
+        <h3>Cookies de publicidad y marketing</h3>
+        <p>Podemos utilizar cookies y tecnologías similares proporcionadas por terceros para medir campañas publicitarias, crear audiencias, limitar la frecuencia de determinados anuncios o mostrar publicidad relevante. Estas tecnologías pueden permitir que determinados proveedores reconozcan un dispositivo o navegador en diferentes sitios web. Las cookies de publicidad y marketing no se activarán cuando la legislación aplicable requiera consentimiento previo y dicho consentimiento no haya sido proporcionado.</p>
+
+        <h2>3. Cookies de terceros</h2>
+        <p>Algunas funcionalidades de este sitio pueden depender de servicios proporcionados por terceros. Estos proveedores pueden establecer sus propias cookies o utilizar tecnologías similares de acuerdo con sus propias políticas. Entre los posibles proveedores pueden encontrarse servicios de:</p>
+        <ul>
+          <li>Análisis y medición.</li>
+          <li>Publicidad.</li>
+          <li>Alojamiento de contenido.</li>
+          <li>Reproducción de vídeo.</li>
+          <li>Redes sociales.</li>
+          <li>Formularios.</li>
+          <li>Herramientas de comunicación.</li>
+          <li>Seguridad y prevención de fraude.</li>
+        </ul>
+        <p>La disponibilidad de estos servicios puede cambiar con el tiempo.</p>
+
+        <h2>4. Consentimiento</h2>
+        <p>Cuando la legislación aplicable exige consentimiento para utilizar cookies o tecnologías similares, solicitaremos tu autorización antes de activar las tecnologías no esenciales. Puedes:</p>
+        <ul>
+          <li>Aceptar todas las cookies.</li>
+          <li>Rechazar las cookies no esenciales.</li>
+          <li>Configurar tus preferencias por categoría.</li>
+        </ul>
+        <p>Tu consentimiento debe ser una decisión informada y puede retirarse posteriormente.</p>
+
+        <h2>5. ¿Cómo puedes administrar tus preferencias?</h2>
+        <p>Puedes administrar tus preferencias en cualquier momento mediante el <button type="button" class="legal-inline-link" data-cookie-reopen>Centro de Preferencias de Cookies</button> disponible en este sitio. También puedes modificar la configuración de privacidad de tu navegador para bloquear, eliminar o limitar determinadas cookies. Bloquear determinadas cookies puede afectar algunas funciones o características del sitio.</p>
+
+        <h2>6. Retiro del consentimiento</h2>
+        <p>Cuando hayas otorgado tu consentimiento para determinadas cookies, puedes retirarlo o modificar tus preferencias en cualquier momento mediante nuestro <button type="button" class="legal-inline-link" data-cookie-reopen>Centro de Preferencias de Cookies</button>. El retiro del consentimiento no afecta la legalidad del tratamiento realizado antes de su retiro.</p>
+
+        <h2>7. Privacidad y protección de datos</h2>
+        <p>Las cookies pueden estar relacionadas con información que, dependiendo de las circunstancias, puede considerarse información personal. El tratamiento de dicha información se realizará de acuerdo con nuestra <a href="politica-privacidad.html">Política de Privacidad</a> y con las leyes de protección de datos aplicables.</p>
+
+        <h2>8. Transferencias internacionales</h2>
+        <p>Algunos de nuestros proveedores de servicios pueden encontrarse en países distintos del país desde el que accedes al sitio. Cuando esto implique una transferencia de información personal, adoptaremos las medidas y mecanismos requeridos por la legislación aplicable.</p>
+
+        <h2>9. Derechos de los usuarios</h2>
+        <p>Dependiendo de tu ubicación y de la legislación aplicable, puedes tener determinados derechos relacionados con tus datos personales, incluyendo, cuando corresponda:</p>
+        <ul>
+          <li>Acceder a tus datos.</li>
+          <li>Solicitar su corrección.</li>
+          <li>Solicitar su eliminación.</li>
+          <li>Limitar determinados tratamientos.</li>
+          <li>Oponerte a determinados usos.</li>
+          <li>Retirar tu consentimiento.</li>
+          <li>Solicitar la portabilidad de determinados datos.</li>
+          <li>Optar por no participar en determinadas actividades de tratamiento o publicidad.</li>
+        </ul>
+        <p>Los derechos disponibles pueden variar dependiendo de la legislación aplicable a tu situación. Para ejercer algún derecho relacionado con tus datos personales o con el uso de cookies: <a href="mailto:customers@deecstudio-quotingtools.online">customers@deecstudio-quotingtools.online</a>.</p>
+
+        <h2>10. Usuarios de determinadas jurisdicciones</h2>
+        <p>Reconocemos que las leyes de privacidad y protección de datos pueden variar según el país o región desde la que se acceda a este sitio. Cuando resulte aplicable, respetaremos los derechos y mecanismos de privacidad establecidos por las leyes correspondientes.</p>
+
+        <h2>11. Cambios a esta Política de Cookies</h2>
+        <p>Podemos actualizar esta Política de Cookies periódicamente para reflejar cambios en las tecnologías que utilizamos, nuestros servicios, proveedores, finalidades del tratamiento o requisitos legales. Cuando realicemos cambios importantes, actualizaremos la fecha indicada al comienzo de esta Política.</p>
+
+        <h2>12. Contacto</h2>
+        <p>Deec Studio<br>Sitio web: <a href="https://deecstudio-quotingtools.online/">https://deecstudio-quotingtools.online/</a><br>Correo electrónico: <a href="mailto:customers@deecstudio-quotingtools.online">customers@deecstudio-quotingtools.online</a></p>
+
+        <h2>Detalle técnico para este sitio</h2>
+        <p>Para que sepas exactamente qué usamos en la práctica, más allá de las categorías generales anteriores:</p>
+        <ul>
+          <li><strong>Cookies necesarias:</strong> puestas por Cloudflare, el proveedor que aloja y protege este sitio. Seguridad, distribución de contenido y buen funcionamiento técnico. No se pueden desactivar sin afectar el funcionamiento del sitio.</li>
+          <li><strong>Cookies de análisis y publicidad:</strong> el Meta Pixel (Facebook/Instagram), para medir el rendimiento de nuestras campañas de anuncios, y una herramienta de seguimiento de Whop, nuestro proveedor de pagos, para reportes internos de visitas. Ninguna de las dos se activa hasta que las aceptes en el Centro de Preferencias de Cookies, y ninguna se usa para vender tus datos a terceros.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div data-lang-content="en" hidden>
+      <h1 class="legal-title">Cookie Policy</h1>
+      <p class="legal-updated">Last updated: September 28, 2026</p>
+      <p class="legal-intro">At Deec Studio we use cookies and similar technologies on this website to ensure it works properly, improve your browsing experience, analyze site usage and, where applicable and with your authorization, show more relevant content or advertising. This Cookie Policy explains what these technologies are, how we use them, and what options you have to manage them.</p>
+
+      <div class="legal-body">
+        <h2>1. What Are Cookies?</h2>
+        <p>Cookies are small text files that a website can store on the device you use to access it, such as a computer, mobile phone, or tablet.</p>
+        <p>In addition to cookies, we may use similar technologies, such as pixels, tags, local storage, scripts, or other technologies that allow information to be stored on or accessed from your device.</p>
+
+        <h2>2. What Types of Cookies Do We Use?</h2>
+
+        <h3>Strictly Necessary Cookies</h3>
+        <p>These are necessary for the website to function properly or to provide a feature you have requested. They may be used to:</p>
+        <ul>
+          <li>Maintain site security.</li>
+          <li>Enable technical functions.</li>
+          <li>Remember certain preferences necessary for the site to work.</li>
+          <li>Manage sessions.</li>
+          <li>Prevent fraudulent activity.</li>
+          <li>Ensure the site's stability and availability.</li>
+        </ul>
+        <p>These cookies are not used to build advertising profiles.</p>
+
+        <h3>Preference or Functionality Cookies</h3>
+        <p>These allow us to remember certain choices made during browsing, such as language, region, or other preferences, in order to offer a more personalized experience. When these cookies are not strictly necessary, they may require your consent depending on applicable law.</p>
+
+        <h3>Analytics and Measurement Cookies</h3>
+        <p>These help us understand how visitors interact with our site. We may use them to learn:</p>
+        <ul>
+          <li>Which pages receive the most visits.</li>
+          <li>How long visitors stay on certain pages.</li>
+          <li>How users arrive at the site.</li>
+          <li>Which elements are used.</li>
+          <li>How we can improve the site's functioning and experience.</li>
+        </ul>
+        <p>Where applicable, these technologies will only be activated after obtaining the required consent.</p>
+
+        <h3>Advertising and Marketing Cookies</h3>
+        <p>We may use cookies and similar technologies provided by third parties to measure advertising campaigns, build audiences, limit the frequency of certain ads, or show relevant advertising. These technologies may allow certain providers to recognize a device or browser across different websites. Advertising and marketing cookies will not be activated when applicable law requires prior consent and that consent has not been given.</p>
+
+        <h2>3. Third-Party Cookies</h2>
+        <p>Some features of this site may depend on services provided by third parties. These providers may set their own cookies or use similar technologies in accordance with their own policies. Possible providers may include services related to:</p>
+        <ul>
+          <li>Analytics and measurement.</li>
+          <li>Advertising.</li>
+          <li>Content hosting.</li>
+          <li>Video playback.</li>
+          <li>Social networks.</li>
+          <li>Forms.</li>
+          <li>Communication tools.</li>
+          <li>Security and fraud prevention.</li>
+        </ul>
+        <p>The availability of these services may change over time.</p>
+
+        <h2>4. Consent</h2>
+        <p>When applicable law requires consent to use cookies or similar technologies, we will request your authorization before activating non-essential technologies. You can:</p>
+        <ul>
+          <li>Accept all cookies.</li>
+          <li>Reject non-essential cookies.</li>
+          <li>Configure your preferences by category.</li>
+        </ul>
+        <p>Your consent must be an informed decision and may be withdrawn later.</p>
+
+        <h2>5. How Can You Manage Your Preferences?</h2>
+        <p>You can manage your preferences at any time through the <button type="button" class="legal-inline-link" data-cookie-reopen>Cookie Preferences Center</button> available on this site. You can also change your browser's privacy settings to block, delete, or limit certain cookies. Blocking certain cookies may affect some features or functions of the site.</p>
+
+        <h2>6. Withdrawing Consent</h2>
+        <p>When you have given your consent for certain cookies, you can withdraw it or change your preferences at any time through our <button type="button" class="legal-inline-link" data-cookie-reopen>Cookie Preferences Center</button>. Withdrawing consent does not affect the lawfulness of processing carried out before its withdrawal.</p>
+
+        <h2>7. Privacy and Data Protection</h2>
+        <p>Cookies may relate to information that, depending on the circumstances, may be considered personal information. Such information will be processed in accordance with our <a href="politica-privacidad.html">Privacy Policy</a> and applicable data protection laws.</p>
+
+        <h2>8. International Transfers</h2>
+        <p>Some of our service providers may be located in countries other than the one from which you access the site. Where this involves a transfer of personal information, we will adopt the measures and mechanisms required by applicable law.</p>
+
+        <h2>9. User Rights</h2>
+        <p>Depending on your location and applicable law, you may have certain rights regarding your personal data, including, where applicable:</p>
+        <ul>
+          <li>Accessing your data.</li>
+          <li>Requesting its correction.</li>
+          <li>Requesting its deletion.</li>
+          <li>Limiting certain processing.</li>
+          <li>Objecting to certain uses.</li>
+          <li>Withdrawing your consent.</li>
+          <li>Requesting the portability of certain data.</li>
+          <li>Opting out of certain processing or advertising activities.</li>
+        </ul>
+        <p>Available rights may vary depending on the law applicable to your situation. To exercise a right related to your personal data or the use of cookies: <a href="mailto:customers@deecstudio-quotingtools.online">customers@deecstudio-quotingtools.online</a>.</p>
+
+        <h2>10. Users in Certain Jurisdictions</h2>
+        <p>We recognize that privacy and data protection laws may vary depending on the country or region from which this site is accessed. Where applicable, we will respect the privacy rights and mechanisms established by the corresponding laws.</p>
+
+        <h2>11. Changes to This Cookie Policy</h2>
+        <p>We may update this Cookie Policy periodically to reflect changes in the technologies we use, our services, providers, processing purposes, or legal requirements. When we make material changes, we will update the date shown at the top of this Policy.</p>
+
+        <h2>12. Contact</h2>
+        <p>Deec Studio<br>Website: <a href="https://deecstudio-quotingtools.online/">https://deecstudio-quotingtools.online/</a><br>Email: <a href="mailto:customers@deecstudio-quotingtools.online">customers@deecstudio-quotingtools.online</a></p>
+
+        <h2>Technical Detail for This Site</h2>
+        <p>So you know exactly what we use in practice, beyond the general categories above:</p>
+        <ul>
+          <li><strong>Necessary cookies:</strong> set by Cloudflare, the provider that hosts and protects this site. Security, content delivery, and technical functioning. They can't be disabled without affecting how the site works.</li>
+          <li><strong>Analytics and advertising cookies:</strong> the Meta Pixel (Facebook/Instagram), to measure the performance of our ad campaigns, and a tracking tool from Whop, our payment provider, for internal visit reports. Neither loads until you accept it in the Cookie Preferences Center, and neither is used to sell your data to third parties.</li>
+        </ul>
+      </div>
     </div>
 
     <div class="legal-contact">
-      <h2 data-i18n="cookiePolicy.contactTitle">¿Dudas sobre esta política?</h2>
-      <p data-i18n="cookiePolicy.contactBody">Escríbenos por WhatsApp y con gusto te ayudamos.</p>
-      <a class="btn btn-primary" data-whatsapp-cta href="#"><span data-i18n="cookiePolicy.contactCta">Escribir por WhatsApp</span></a>
+      <h2 data-i18n="legal.contactTitle">¿Dudas sobre este documento?</h2>
+      <p data-i18n="legal.contactBody">Escríbenos por WhatsApp y con gusto te ayudamos.</p>
+      <a class="btn btn-primary" data-whatsapp-cta href="#"><span data-i18n="legal.contactCta">Escribir por WhatsApp</span></a>
     </div>
 
-    <a class="legal-back" href="index.html" data-i18n="cookiePolicy.backHome">← Volver al inicio</a>
+    <nav class="legal-doc-nav" aria-label="Otros documentos legales">
+      <a href="aviso-de-uso.html" data-i18n="footer.termsLink">Aviso de uso</a>
+      <a href="politica-privacidad.html" data-i18n="footer.privacyLink">Política de privacidad</a>
+      <a href="aviso-uso-ia.html" data-i18n="footer.aiNoticeLink">Aviso de uso de IA</a>
+    </nav>
+
+    <a class="legal-back" href="index.html" data-i18n="legal.backHome">← Volver al inicio</a>
   </div>
 </section>
 </main>
@@ -184,22 +366,57 @@
       <p class="footer-brand-name"><strong>DEEC Studio</strong></p>
     </div>
     <nav class="footer-links" aria-label="Legal">
+      <a href="aviso-de-uso.html" data-i18n="footer.termsLink">Aviso de uso</a>
+      <a href="politica-privacidad.html" data-i18n="footer.privacyLink">Política de privacidad</a>
       <a href="politica-cookies.html" data-i18n="footer.cookiesLink">Política de cookies</a>
+      <a href="aviso-uso-ia.html" data-i18n="footer.aiNoticeLink">Aviso de uso de IA</a>
+      <button type="button" data-cookie-reopen data-i18n="footer.cookiePrefsLink">Preferencias de cookies</button>
     </nav>
     <p class="footer-copyright" data-i18n="footer.copyright">© 2026 DEEC Studio. Todos los derechos reservados.</p>
   </div>
 </footer>
 
-<!-- Aviso de cookies — mismo componente que index.html (ver initCookieBanner() en main.js) -->
-<div class="cookie-banner" data-cookie-banner hidden>
-  <div class="container cookie-banner-inner">
-    <p class="cookie-banner-text" data-i18n="cookie.banner.text">Usamos cookies propias y de terceros para analizar el uso del sitio y medir el rendimiento de nuestras campañas de anuncios. Puedes conocer más en nuestra <a class="cookie-banner-link" href="politica-cookies.html">Política de cookies</a>.</p>
-    <button type="button" class="btn btn-primary" data-cookie-accept data-i18n="cookie.banner.accept">Entendido</button>
+<!-- Cookie consent modal — mismo componente que index.html, ver el
+     comentario completo ahí (bloqueo real de scripts + backdrop). -->
+<div class="cookie-modal-backdrop" data-cookie-banner-backdrop hidden></div>
+<div class="cookie-modal" data-cookie-banner hidden role="dialog" aria-modal="true" data-i18n-aria="a11y.cookieModal" aria-label="Preferencias de cookies">
+  <div class="cookie-modal-panel">
+    <div class="cookie-modal-head">
+      <img class="cookie-modal-logo" alt="DEEC Studio" width="110" height="24" src="assets/logo-deecstudio.svg" />
+    </div>
+
+    <p class="eyebrow" data-i18n="cookie.modal.eyebrow">Política de cookies</p>
+    <h2 class="cookie-modal-title" data-i18n="cookie.modal.title">Utilizamos cookies para mejorar tu experiencia.</h2>
+    <p class="cookie-modal-text" data-i18n="cookie.modal.text">Usamos cookies propias y de terceros para analizar el uso del sitio, medir el rendimiento de nuestras campañas y personalizar tu experiencia de navegación. Puedes elegir qué tipos de cookies permitir.</p>
+    <a class="cookie-modal-link" href="politica-cookies.html" data-i18n="cookie.modal.policyLink">Política de cookies →</a>
+
+    <div class="cookie-modal-actions" data-cookie-step="choice">
+      <button type="button" class="btn btn-outline" data-cookie-customize data-i18n="cookie.modal.customize">Personalizar</button>
+      <button type="button" class="btn btn-primary" data-cookie-accept-all data-i18n="cookie.modal.acceptAll">Aceptar todas</button>
+    </div>
+
+    <div class="cookie-modal-prefs" data-cookie-step="prefs" hidden>
+      <div class="cookie-pref-row">
+        <div class="cookie-pref-text">
+          <p class="cookie-pref-title" data-i18n="cookie.modal.necessaryTitle">Cookies necesarias</p>
+          <p class="cookie-pref-desc" data-i18n="cookie.modal.necessaryDesc">Seguridad y funcionamiento del sitio (Cloudflare). Siempre activas.</p>
+        </div>
+        <span class="cookie-pref-toggle is-on is-locked" aria-hidden="true"></span>
+      </div>
+      <div class="cookie-pref-row">
+        <div class="cookie-pref-text">
+          <p class="cookie-pref-title" data-i18n="cookie.modal.analyticsTitle">Análisis y publicidad</p>
+          <p class="cookie-pref-desc" data-i18n="cookie.modal.analyticsDesc">Meta Pixel y Whop, para medir campañas y visitas al sitio.</p>
+        </div>
+        <button type="button" class="cookie-pref-toggle" data-cookie-toggle-analytics role="switch" aria-checked="false"></button>
+      </div>
+      <button type="button" class="btn btn-primary cookie-modal-save" data-cookie-save data-i18n="cookie.modal.save">Guardar preferencias</button>
+    </div>
   </div>
 </div>
 
-<script defer src="lib/manifest.js?v=20260928f"></script>
-<script defer src="lib/i18n.js?v=20260928f"></script>
-<script defer src="main.js?v=20260928f"></script>
+<script defer src="lib/manifest.js?v=20260928i"></script>
+<script defer src="lib/i18n.js?v=20260928i"></script>
+<script defer src="main.js?v=20260928i"></script>
 </body>
 </html>
