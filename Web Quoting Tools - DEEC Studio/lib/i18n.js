@@ -75,6 +75,14 @@
       "marquee.4.title": "Hecha para tu negocio",
       "marquee.4.desc": "Personalizada con tus servicios y precios.",
 
+      "industries.landscaping": "Jardinería",
+      "industries.cleaning": "Limpieza",
+      "industries.pressureWashing": "Lavado a presión",
+      "industries.autoDetailing": "Detallado automotriz",
+      "industries.plumbing": "Plomería",
+      "industries.electrical": "Electricidad",
+      "industries.andMore": "Entre otras",
+
       "problema.eyebrow": "El problema",
       "problema.headline": "Cotizar no debería quitarte tiempo.",
       "problema.cycle1": "Cada nueva solicitud puede convertirse en el mismo proceso:",
@@ -416,6 +424,14 @@
       "marquee.3.desc": "Spend less time doing the math.",
       "marquee.4.title": "Built for your business",
       "marquee.4.desc": "Customized with your services and prices.",
+
+      "industries.landscaping": "Landscaping",
+      "industries.cleaning": "Cleaning",
+      "industries.pressureWashing": "Pressure Washing",
+      "industries.autoDetailing": "Auto Detailing",
+      "industries.plumbing": "Plumbing",
+      "industries.electrical": "Electrical",
+      "industries.andMore": "And More",
 
       "problema.eyebrow": "The problem",
       "problema.headline": "Quoting shouldn't take up your time.",
