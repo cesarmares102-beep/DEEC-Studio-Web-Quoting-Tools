@@ -24,6 +24,25 @@
       number: WHATSAPP_NUMBER
     },
 
+    // Lista blanca de valores válidos para el parámetro ?v= en la URL del
+    // anuncio. Solo estos valores se insertan en el mensaje de WhatsApp —
+    // cualquier otro valor en la URL se ignora (no se interpola texto libre
+    // del query string sin validar).
+    verticalLabels: {
+      es: {
+        landscaping: "landscaping / jardinería",
+        cleaning: "limpieza",
+        pressurewashing: "lavado a presión",
+        autodetailing: "detallado automotriz"
+      },
+      en: {
+        landscaping: "landscaping",
+        cleaning: "cleaning",
+        pressurewashing: "pressure washing",
+        autodetailing: "auto detailing"
+      }
+    },
+
     /* ⚠️ DATOS DE DEMOSTRACIÓN — declarado explícitamente.
        Estos nombres/ubicaciones/contadores NO son eventos reales. Antes de publicar,
        decide: (a) dejar isDemoData:true y mantenerlos como contenido ilustrativo, o

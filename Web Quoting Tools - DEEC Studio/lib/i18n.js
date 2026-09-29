@@ -42,6 +42,8 @@
 
       "whatsapp.message":
         "Hola, estoy interesado en un cotizador web personalizado para mi negocio. Tengo algunas dudas, ¿podrían ayudarme?",
+      "whatsapp.messageVertical":
+        "Hola, vi el anuncio de cotizadores para negocios de {vertical}. Tengo algunas dudas, ¿podrían ayudarme?",
 
       "socialproof.visitors": "{count} personas están viendo esta página ahora",
       "socialproof.purchase": "{name} de {city} acaba de comprar {product}",
@@ -392,6 +394,8 @@
 
       "whatsapp.message":
         "Hi, I'm interested in a custom online quote calculator for my business. I have a few questions. Could you help me?",
+      "whatsapp.messageVertical":
+        "Hi, I saw the ad for quote builders for {vertical} businesses. I have a few questions, could you help me?",
 
       "socialproof.visitors": "{count} people are viewing this page right now",
       "socialproof.purchase": "{name} from {city} just bought {product}",
