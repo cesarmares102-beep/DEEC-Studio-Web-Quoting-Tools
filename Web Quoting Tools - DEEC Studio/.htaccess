@@ -38,34 +38,30 @@
 </IfModule>
 
 # Security headers — scoped to the resources this site actually loads
-# (self + Fontshare + Google Fonts + Whop's hosted checkout iframe +
-# Whop's tracking pixel). Don't add script-src exceptions for js.whop.com or cdn.whop.com (the checkout
-# embed loader/widget scripts); this checkout method still doesn't load
-# either of those, on purpose (see index.html). connect-src has
-# https://whop.com added only so the
-# <link rel="preconnect" href="https://whop.com"> in index.html isn't
-# silently dropped — it doesn't add any new fetch/XHR capability that
-# frame-src wasn't already granting to the checkout iframe.
+# (self + Fontshare + Google Fonts + Whop's tracking pixel + Meta Pixel).
+# There's no Whop checkout iframe anymore — every CTA opens WhatsApp
+# instead (see main.js's initWhatsapp()) — so frame-src/payment no
+# longer list whop.com; connect-src keeps it since the tracking script
+# may still call back to it directly.
 #
-# script-src also allowlists specific inline scripts by their SHA-256
-# hash (the Whop + Meta Pixel base snippets in index.html's <head>)
-# instead of using 'unsafe-inline' — that keeps every OTHER inline
-# script still blocked, which is what makes this site's XSS surface a
-# non-issue. If either snippet is ever edited, recompute its hash and
-# update it here (and in _headers) or it'll be silently blocked.
-# main.js's Contact tracking call (fired on every WhatsApp CTA click) isn't
-# a third inline script — it's trusted via script-src 'self', so it needs
-# no hash. https://t.whop.tw is Whop's tracking domain (loads s.js, sends
-# events) — unrelated to the WhatsApp CTAs, kept for Whop's own analytics.
-# https://connect.facebook.net/https://www.facebook.com are Meta's
-# (loads fbevents.js, sends events, serves the <noscript> fallback
-# pixel image).
+# script-src no longer needs any 'sha256-...' inline-script hashes: the
+# Whop + Meta Pixel base snippets used to sit inline in <head>
+# (allowlisted by hash instead of 'unsafe-inline', so every OTHER
+# inline script stayed blocked) but now live as loadAnalyticsTracking()
+# in main.js, gated behind the cookie consent modal (see
+# initCookieConsent()) — main.js is already trusted via 'self', so it
+# needs no hash, and there's no inline script left anywhere in the
+# project to allowlist. https://t.whop.tw is Whop's tracking domain
+# (loads s.js, sends events) — unrelated to the WhatsApp CTAs, kept for
+# Whop's own analytics. https://connect.facebook.net/https://www.facebook.com
+# are Meta's (loads fbevents.js, sends events, serves the <noscript>
+# fallback pixel image).
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
-  Header always set Permissions-Policy 'camera=(), microphone=(), geolocation=(), payment=(self "https://whop.com")'
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
   Header always set X-Frame-Options "SAMEORIGIN"
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-Vj0ZQI6HmRlgG8PCxGgAq25M62GE2IwjbyWbU26rh4Y=' 'sha256-8MexTA4cl23iH+k1us9OYTnOJCky1DyRUzZ+Stho6v4=' https://t.whop.tw https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com; frame-src https://whop.com https://www.facebook.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com; object-src 'none'"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' https://t.whop.tw https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com; frame-src https://www.facebook.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com; object-src 'none'"
   # Forces HTTPS for a year on every future visit, including subdomains.
   # Browsers ignore this header entirely when it arrives over plain HTTP
   # (per spec), so it's safe to send unconditionally here rather than
