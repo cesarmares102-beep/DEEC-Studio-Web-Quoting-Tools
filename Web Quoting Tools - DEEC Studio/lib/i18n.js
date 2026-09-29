@@ -53,8 +53,9 @@
       "hero.rating":
         "Más de 214 negocios han confiado en nosotros para crear sus cotizadores.",
 
-      "hero.priceNow": "$49.99 USD",
-      "offer.badge": "Ahorra 25%",
+      "hero.priceNow": "$149.99 USD",
+      "hero.priceLegend": "Personalización y entrega en 24 horas.",
+      "offer.badge": "Ahorra 20%",
 
       "trust.paid": "Pago único",
       "trust.access": "Acceso permanente",
@@ -342,7 +343,7 @@
       "footer.contactLink": "Contacto",
       "footer.tagline": "Cotizadores web personalizados para negocios de servicios.",
       "footer.cat.purchases.title": "Compras y pagos",
-      "footer.cat.purchases.desc": "Métodos de pago, facturación, reembolsos y condiciones de compra.",
+      "footer.cat.purchases.desc": "Métodos de pago, reembolsos y condiciones de compra.",
       "footer.cat.legal.title": "Información legal",
       "footer.cat.legal.desc": "Términos de servicio, avisos legales y otros documentos.",
       "footer.cat.privacy.title": "Privacidad y cookies",
@@ -394,8 +395,9 @@
       "hero.rating":
         "Trusted by more than 214 businesses to build their quoters.",
 
-      "hero.priceNow": "$49.99 USD",
-      "offer.badge": "Save 25%",
+      "hero.priceNow": "$149.99 USD",
+      "hero.priceLegend": "Personalization and delivery in 24 hours.",
+      "offer.badge": "Save 20%",
 
       "trust.paid": "One-time payment",
       "trust.access": "Lifetime access",
@@ -676,7 +678,7 @@
       "footer.contactLink": "Contact",
       "footer.tagline": "Custom web quoting tools for service businesses.",
       "footer.cat.purchases.title": "Purchases & Payments",
-      "footer.cat.purchases.desc": "Payment methods, billing, refunds, and purchase conditions.",
+      "footer.cat.purchases.desc": "Payment methods, refunds, and purchase conditions.",
       "footer.cat.legal.title": "Legal Information",
       "footer.cat.legal.desc": "Terms of service, legal notices, and other documents.",
       "footer.cat.privacy.title": "Privacy & Cookies",
