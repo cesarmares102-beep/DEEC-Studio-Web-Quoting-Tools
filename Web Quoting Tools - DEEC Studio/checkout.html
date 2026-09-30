@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- Site CSS goes first, right after the mandatory charset/viewport meta —
+     see index.html for the full rationale (iOS Safari unstyled-flash fix). -->
+<link rel="stylesheet" href="styles.css?v=20260930a" />
+
+<!-- Whop tracking pixel + Meta Pixel: NOT loaded here — same consent-gated
+     approach as every other page. See loadAnalyticsTracking() in main.js.
+     The Whop CHECKOUT script (cdn.whop.com/elements/amber/elements.js) is
+     a separate, unrelated script — loaded lazily by lib/checkout.js only
+     once the visitor clicks "Continuar al pago", not here. -->
+
+<title>Checkout — DEEC Studio</title>
+<meta name="description" content="Completa tu compra del cotizador web personalizado de DEEC Studio. Pago único de $149.99 USD, entrega en 24 horas." />
+<meta name="theme-color" content="#F8F9FB" />
+<link rel="canonical" href="https://deecstudio-quotingtools.online/checkout.html" />
+<meta name="robots" content="noindex, nofollow" />
+
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link rel="stylesheet" media="print" data-font-stylesheet href="https://api.fontshare.com/v2/css?f[]=satoshi@700,800,900,400,500&f[]=switzer@400,500,600,700,800,900&display=swap">
+<link rel="stylesheet" media="print" data-font-stylesheet href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap">
+<link rel="stylesheet" media="print" data-font-stylesheet href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap">
+<noscript>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@700,800,900,400,500&f[]=switzer@400,500,600,700,800,900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap">
+</noscript>
+
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+</head>
+<body>
+<a class="skip-link" href="#main" data-i18n="a11y.skipLink">Saltar al contenido</a>
+
+<header class="nav" data-nav>
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html" aria-label="DEEC Studio">
+      <img class="nav-brand-logo" alt="DEEC Studio" width="141" height="30" src="assets/logo-deecstudio.svg" />
+    </a>
+    <div class="nav-actions">
+      <div class="nav-icons">
+        <a href="index.html#faq" class="nav-icon-btn" data-i18n-aria="a11y.faqLink" aria-label="Preguntas frecuentes">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 4.6-1.4c.5.8.3 1.6-.4 2.2-.8.7-1.2 1.1-1.2 2.2"/><circle cx="12" cy="16.5" r=".6" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="#" class="nav-icon-btn" data-whatsapp-cta data-i18n-aria="a11y.whatsappLink" aria-label="Escribir por WhatsApp">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.05 21.9c-1.596 0-3.16-.415-4.53-1.2l-.326-.194-3.37.884.9-3.286-.213-.337a9.86 9.86 0 0 1-1.51-5.25c0-5.45 4.44-9.885 9.9-9.885 2.643 0 5.126 1.03 6.994 2.898a9.82 9.82 0 0 1 2.9 6.994c-.003 5.45-4.444 9.876-9.744 9.876zm8.413-18.28A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.327.157 11.874a11.84 11.84 0 0 0 1.596 5.96L0 24l6.335-1.652a11.9 11.9 0 0 0 5.71 1.452h.005c6.554 0 11.89-5.328 11.893-11.876a11.8 11.8 0 0 0-3.48-8.304z"/></svg>
+        </a>
+      </div>
+      <div class="lang-toggle" data-lang-toggle role="group" data-i18n-aria="a11y.langGroup" aria-label="Idioma">
+        <button type="button" class="lang-btn is-active" data-lang="es" aria-pressed="true" aria-label="Español">
+          <svg class="flag" viewBox="0 0 20 14"><rect width="20" height="14" fill="#AA151B"/><rect y="3.5" width="20" height="7" fill="#F1BF00"/></svg>
+        </button>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false" aria-label="English">
+          <svg class="flag" viewBox="0 0 20 14">
+            <rect width="20" height="14" fill="#B22234"/>
+            <rect y="1.08" width="20" height="1.08" fill="#fff"/><rect y="3.23" width="20" height="1.08" fill="#fff"/><rect y="5.38" width="20" height="1.08" fill="#fff"/><rect y="7.54" width="20" height="1.08" fill="#fff"/><rect y="9.69" width="20" height="1.08" fill="#fff"/><rect y="11.85" width="20" height="1.08" fill="#fff"/>
+            <rect width="8.6" height="7.54" fill="#3C3B6E"/>
+          </svg>
+        </button>
+      </div>
+      <button class="menu-toggle" data-menu-toggle aria-expanded="false" aria-controls="menu-panel" aria-label="Abrir menú">
+        <span class="menu-toggle-bar"></span>
+        <span class="menu-toggle-bar"></span>
+        <span class="menu-toggle-bar"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="menu-backdrop" data-menu-backdrop hidden></div>
+<nav id="menu-panel" class="menu-panel" data-menu-panel data-i18n-aria="a11y.mobileNav" aria-label="Menú de navegación" hidden>
+  <ul class="menu-list">
+    <li><a href="index.html#top" data-i18n="nav.item.home">Inicio</a></li>
+    <li><a href="index.html#problema" data-i18n="nav.item.problem">El problema</a></li>
+    <li><a href="index.html#como-funciona" data-i18n="nav.item.how">Cómo funciona</a></li>
+    <li><a href="index.html#oferta" data-i18n="nav.item.pricing">Precio</a></li>
+    <li><a href="index.html#faq" data-i18n="nav.item.faq">Preguntas frecuentes</a></li>
+    <li><a href="#" class="menu-link-cta" data-whatsapp-cta data-i18n="nav.item.cta">Comprar ahora</a></li>
+  </ul>
+</nav>
+
+<div class="fab-stack" data-fab-stack>
+  <a href="index.html#faq" class="fab-item" data-fab-item data-i18n-aria="a11y.faqLink" aria-label="Preguntas frecuentes">
+    <span class="fab-bubble">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 4.6-1.4c.5.8.3 1.6-.4 2.2-.8.7-1.2 1.1-1.2 2.2"/><circle cx="12" cy="16.5" r=".6" fill="currentColor" stroke="none"/></svg>
+    </span>
+    <span class="fab-tooltip" data-i18n="fab.faq.title">Preguntas frecuentes</span>
+  </a>
+  <a href="#" class="fab-item" data-fab-item data-whatsapp-cta data-i18n-aria="a11y.whatsappLink" aria-label="Escribir por WhatsApp">
+    <span class="fab-bubble fab-bubble-accent">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.05 21.9c-1.596 0-3.16-.415-4.53-1.2l-.326-.194-3.37.884.9-3.286-.213-.337a9.86 9.86 0 0 1-1.51-5.25c0-5.45 4.44-9.885 9.9-9.885 2.643 0 5.126 1.03 6.994 2.898a9.82 9.82 0 0 1 2.9 6.994c-.003 5.45-4.444 9.876-9.744 9.876zm8.413-18.28A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.327.157 11.874a11.84 11.84 0 0 0 1.596 5.96L0 24l6.335-1.652a11.9 11.9 0 0 0 5.71 1.452h.005c6.554 0 11.89-5.328 11.893-11.876a11.8 11.8 0 0 0-3.48-8.304z"/></svg>
+    </span>
+    <span class="fab-tooltip" data-i18n="fab.whatsapp.title">¿Tienes dudas o preguntas? Contáctanos</span>
+  </a>
+</div>
+
+<div class="sp-stack" data-sp-stack aria-live="polite" aria-atomic="true"></div>
+<div class="toast" data-toast role="status" aria-live="polite"></div>
+
+<main id="main">
+<section class="section checkout-page" id="checkout-top">
+  <div class="container checkout-container">
+
+    <div data-checkout-form>
+      <p class="eyebrow" data-i18n="checkout.eyebrow">Compras y pagos</p>
+      <h1 class="checkout-title" data-i18n="checkout.title">Completa tu compra.</h1>
+      <p class="checkout-sub" data-i18n="checkout.sub">Prepara tu información, revisa qué incluye y confirma antes de pagar.</p>
+
+      <div class="checkout-grid">
+        <div class="checkout-main">
+
+          <div class="checkout-panel">
+            <div class="checkout-panel-head">
+              <span class="checkout-panel-num" data-i18n="checkout.step1.num">1</span>
+              <div>
+                <h2 class="checkout-panel-title" data-i18n="checkout.step1.title">Tu información</h2>
+                <p class="checkout-panel-sub" data-i18n="checkout.step1.sub">Necesitamos estos datos para preparar y entregar tu cotizador.</p>
+              </div>
+            </div>
+            <div class="checkout-fields">
+              <label class="checkout-field">
+                <span class="checkout-field-label"><span data-i18n="checkout.field.name">Nombre completo</span> <span class="checkout-field-req" data-i18n="checkout.field.required">Requerido</span></span>
+                <input class="checkout-input" type="text" name="customer_name" data-field="name" autocomplete="name" required />
+              </label>
+              <label class="checkout-field">
+                <span class="checkout-field-label"><span data-i18n="checkout.field.email">Correo electrónico</span> <span class="checkout-field-req" data-i18n="checkout.field.required">Requerido</span></span>
+                <input class="checkout-input" type="email" name="customer_email" data-field="email" autocomplete="email" required />
+              </label>
+              <label class="checkout-field">
+                <span class="checkout-field-label"><span data-i18n="checkout.field.phone">Número de teléfono</span> <span class="checkout-field-req" data-i18n="checkout.field.optional">Opcional</span></span>
+                <input class="checkout-input" type="tel" name="customer_phone" data-field="phone" autocomplete="tel" />
+              </label>
+              <label class="checkout-field">
+                <span class="checkout-field-label"><span data-i18n="checkout.field.business">Nombre del negocio</span> <span class="checkout-field-req" data-i18n="checkout.field.optional">Opcional</span></span>
+                <input class="checkout-input" type="text" name="business_name" data-field="business" autocomplete="organization" />
+              </label>
+              <label class="checkout-field checkout-field-wide">
+                <span class="checkout-field-label"><span data-i18n="checkout.field.country">País</span> <span class="checkout-field-req" data-i18n="checkout.field.optional">Opcional</span></span>
+                <input class="checkout-input" type="text" name="country" data-field="country" autocomplete="country-name" />
+              </label>
+            </div>
+          </div>
+
+          <div class="checkout-panel">
+            <div class="checkout-panel-head">
+              <span class="checkout-panel-num" data-i18n="checkout.step2.num">2</span>
+              <div>
+                <h2 class="checkout-panel-title" data-i18n="checkout.step2.title">Qué incluye</h2>
+                <p class="checkout-panel-sub" data-i18n="checkout.step2.sub">Todo lo que recibes con tu compra.</p>
+              </div>
+            </div>
+            <ul class="checkout-includes-list">
+              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.1">Cotizador web personalizado</span></li>
+              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.2">Configuración de servicios y precios</span></li>
+              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.3">Configuración de paquetes y extras</span></li>
+              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.4">Información de tu negocio</span></li>
+              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.5">Diseño adaptado a tu identidad</span></li>
+              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.6">Experiencia responsive</span></li>
+              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.7">Generación de presupuestos</span></li>
+              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.8">Entrega en 24 horas</span></li>
+            </ul>
+          </div>
+
+          <div class="checkout-panel">
+            <div class="checkout-panel-head">
+              <span class="checkout-panel-num" data-i18n="checkout.step3.num">3</span>
+              <div>
+                <h2 class="checkout-panel-title" data-i18n="checkout.step3.title">Términos y condiciones</h2>
+              </div>
+            </div>
+            <label class="checkout-checkbox-row">
+              <input type="checkbox" class="checkout-checkbox" data-field="terms" />
+              <span class="checkout-checkbox-label" data-i18n="checkout.terms.checkboxLabel">Acepto los <a href="terminos-condiciones-compra.html" target="_blank" rel="noopener">Términos y Condiciones de QuotingTools</a>, la <a href="politica-privacidad.html" target="_blank" rel="noopener">Política de Privacidad</a> y la <a href="politica-pagos.html" target="_blank" rel="noopener">Política de Pagos, Cancelaciones y Reembolsos</a>.</span>
+            </label>
+            <p class="checkout-panel-sub" data-i18n="checkout.step3.sub">Al continuar, confirmas que has leído y aceptas los Términos y Condiciones aplicables a esta compra.</p>
+          </div>
+
+        </div>
+
+        <div class="checkout-side">
+          <div class="checkout-panel checkout-summary-panel">
+            <div class="checkout-panel-head">
+              <span class="checkout-panel-num" data-i18n="checkout.step4.num">4</span>
+              <div>
+                <h2 class="checkout-panel-title" data-i18n="checkout.step4.title">Resumen de tu compra</h2>
+              </div>
+            </div>
+
+            <dl class="checkout-summary-list">
+              <div class="checkout-summary-row">
+                <dt data-i18n="checkout.summary.product">Producto</dt>
+                <dd data-i18n="checkout.summary.productValue">Cotizador Web Personalizado</dd>
+              </div>
+              <div class="checkout-summary-row checkout-summary-row-wide">
+                <dt data-i18n="checkout.summary.titleLabel">Título</dt>
+                <dd data-i18n="checkout.summary.titleValue">COTIZADOR WEB · PERSONALIZADO PARA TU NEGOCIO</dd>
+              </div>
+              <div class="checkout-summary-row">
+                <dt data-i18n="checkout.summary.paymentLabel">Pago</dt>
+                <dd data-i18n="checkout.summary.paymentValue">Pago único</dd>
+              </div>
+              <div class="checkout-summary-row">
+                <dt data-i18n="checkout.summary.deliveryLabel">Entrega</dt>
+                <dd data-i18n="checkout.summary.deliveryValue">24 horas</dd>
+              </div>
+            </dl>
+
+            <div class="checkout-price-row">
+              <span class="checkout-price-label" data-i18n="checkout.summary.priceLabel">Precio</span>
+              <span class="checkout-price-value" data-checkout-price>$149.99 USD</span>
+            </div>
+
+            <p class="checkout-state-msg" data-checkout-state-msg role="status" aria-live="polite"></p>
+
+            <button type="button" class="btn btn-primary btn-lg checkout-continue-btn" data-checkout-continue>
+              <span data-checkout-continue-label data-i18n="checkout.cta.continue">Continuar al pago</span>
+            </button>
+
+            <div id="whop-checkout-mount" class="checkout-whop-mount" data-whop-mount hidden></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="checkout-result" data-checkout-result hidden>
+      <div class="checkout-result-panel">
+        <h1 class="checkout-result-title" data-checkout-result-title></h1>
+        <p class="checkout-result-body" data-checkout-result-body></p>
+        <a class="btn btn-outline checkout-result-retry" href="checkout.html" data-checkout-result-retry hidden data-i18n="checkout.result.retry">Volver al checkout</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="container footer-minimal">
+    <div class="footer-identity">
+      <img class="footer-logo" src="assets/logo-deecstudio-wordmark.svg" alt="DEEC Studio" width="174" height="34" />
+      <p class="footer-tagline" data-i18n="footer.tagline">Cotizadores web personalizados para negocios de servicios.</p>
+    </div>
+    <div class="footer-categories">
+      <details class="footer-cat">
+        <summary class="footer-cat-summary">
+          <span class="footer-cat-summary-row">
+            <span class="footer-cat-heading">
+              <svg class="footer-cat-glyph" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+              <span class="footer-cat-title" data-i18n="footer.cat.purchases.title">Compras y pagos</span>
+            </span>
+            <svg class="footer-cat-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+          <span class="footer-cat-desc" data-i18n="footer.cat.purchases.desc">Métodos de pago, reembolsos y condiciones de compra.</span>
+        </summary>
+        <nav class="footer-links" aria-label="Compras y pagos">
+          <a href="checkout.html" data-i18n="footer.checkoutLink">Checkout</a>
+          <a href="terminos-condiciones-compra.html" data-i18n="footer.termsOfPurchaseLink">Términos y Condiciones de Compra</a>
+          <a href="politica-pagos.html" data-i18n="footer.paymentsPolicyLink">Política de Pagos, Cancelaciones y Reembolsos</a>
+        </nav>
+      </details>
+      <details class="footer-cat">
+        <summary class="footer-cat-summary">
+          <span class="footer-cat-summary-row">
+            <span class="footer-cat-heading">
+              <svg class="footer-cat-glyph" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2h9l5 5v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"/><polyline points="15 2 15 7 20 7"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+              <span class="footer-cat-title" data-i18n="footer.cat.legal.title">Información legal</span>
+            </span>
+            <svg class="footer-cat-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+          <span class="footer-cat-desc" data-i18n="footer.cat.legal.desc">Términos de servicio, avisos legales y otros documentos.</span>
+        </summary>
+        <nav class="footer-links" aria-label="Información legal">
+          <a href="aviso-de-uso.html" data-i18n="footer.termsLink">Aviso de Uso del Sitio</a>
+          <a href="aviso-uso-ia.html" data-i18n="footer.aiNoticeLink">Aviso de Uso de Inteligencia Artificial</a>
+          <a href="politica-propiedad-intelectual.html" data-i18n="footer.ipPolicyLink">Política de Propiedad Intelectual</a>
+        </nav>
+      </details>
+      <details class="footer-cat">
+        <summary class="footer-cat-summary">
+          <span class="footer-cat-summary-row">
+            <span class="footer-cat-heading">
+              <svg class="footer-cat-glyph" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z"/><polyline points="9 12 11 14 15 10"/></svg>
+              <span class="footer-cat-title" data-i18n="footer.cat.privacy.title">Privacidad y cookies</span>
+            </span>
+            <svg class="footer-cat-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+          <span class="footer-cat-desc" data-i18n="footer.cat.privacy.desc">Uso de datos, cookies y preferencias.</span>
+        </summary>
+        <nav class="footer-links" aria-label="Privacidad y cookies">
+          <a href="politica-privacidad.html" data-i18n="footer.privacyLink">Política de Privacidad</a>
+          <a href="politica-cookies.html" data-i18n="footer.cookiesLink">Política de Cookies</a>
+          <button type="button" data-cookie-reopen data-i18n="footer.cookiePrefsLink">Preferencias de cookies</button>
+        </nav>
+      </details>
+      <details class="footer-cat">
+        <summary class="footer-cat-summary">
+          <span class="footer-cat-summary-row">
+            <span class="footer-cat-heading">
+              <svg class="footer-cat-glyph" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="2" y="13" width="4" height="6" rx="1"/><rect x="18" y="13" width="4" height="6" rx="1"/></svg>
+              <span class="footer-cat-title" data-i18n="footer.cat.support.title">Servicio y soporte</span>
+            </span>
+            <svg class="footer-cat-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+          <span class="footer-cat-desc" data-i18n="footer.cat.support.desc">Preguntas frecuentes, contacto y soporte.</span>
+        </summary>
+        <nav class="footer-links" aria-label="Servicio y soporte">
+          <a href="index.html#faq" data-i18n="footer.faqLink">Preguntas Frecuentes</a>
+          <a href="#" data-whatsapp-cta data-i18n="footer.contactLink">Contacto</a>
+        </nav>
+      </details>
+    </div>
+    <p class="footer-copyright" data-i18n="footer.copyright">© 2026 DEEC Studio. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+<div class="cookie-modal-backdrop" data-cookie-banner-backdrop hidden></div>
+<div class="cookie-modal" data-cookie-banner hidden role="dialog" aria-modal="true" data-i18n-aria="a11y.cookieModal" aria-label="Preferencias de cookies">
+  <div class="cookie-modal-panel">
+    <div class="cookie-modal-head">
+      <img class="cookie-modal-logo" alt="DEEC Studio" width="110" height="24" src="assets/logo-deecstudio.svg" />
+    </div>
+
+    <p class="eyebrow" data-i18n="cookie.modal.eyebrow">Política de cookies</p>
+    <h2 class="cookie-modal-title" data-i18n="cookie.modal.title">Utilizamos cookies para mejorar tu experiencia.</h2>
+    <p class="cookie-modal-text" data-i18n="cookie.modal.text">Usamos cookies propias y de terceros para analizar el uso del sitio, medir el rendimiento de nuestras campañas y personalizar tu experiencia de navegación. Puedes elegir qué tipos de cookies permitir.</p>
+    <a class="cookie-modal-link" href="politica-cookies.html" data-i18n="cookie.modal.policyLink">Política de cookies →</a>
+
+    <div class="cookie-modal-actions" data-cookie-step="choice">
+      <button type="button" class="btn btn-outline" data-cookie-customize data-i18n="cookie.modal.customize">Personalizar</button>
+      <button type="button" class="btn btn-primary" data-cookie-accept-all data-i18n="cookie.modal.acceptAll">Aceptar todas</button>
+    </div>
+
+    <div class="cookie-modal-prefs" data-cookie-step="prefs" hidden>
+      <div class="cookie-pref-row">
+        <div class="cookie-pref-text">
+          <p class="cookie-pref-title" data-i18n="cookie.modal.necessaryTitle">Cookies necesarias</p>
+          <p class="cookie-pref-desc" data-i18n="cookie.modal.necessaryDesc">Seguridad y funcionamiento del sitio (Cloudflare). Siempre activas.</p>
+        </div>
+        <span class="cookie-pref-toggle is-on is-locked" aria-hidden="true"></span>
+      </div>
+      <div class="cookie-pref-row">
+        <div class="cookie-pref-text">
+          <p class="cookie-pref-title" data-i18n="cookie.modal.analyticsTitle">Análisis y publicidad</p>
+          <p class="cookie-pref-desc" data-i18n="cookie.modal.analyticsDesc">Meta Pixel y Whop, para medir campañas y visitas al sitio.</p>
+        </div>
+        <button type="button" class="cookie-pref-toggle" data-cookie-toggle-analytics role="switch" aria-checked="false"></button>
+      </div>
+      <button type="button" class="btn btn-primary cookie-modal-save" data-cookie-save data-i18n="cookie.modal.save">Guardar preferencias</button>
+    </div>
+  </div>
+</div>
+
+<script defer src="lib/manifest.js?v=20260930a"></script>
+<script defer src="lib/i18n.js?v=20260930a"></script>
+<script defer src="lib/legal-versions.js?v=20260930a"></script>
+<script defer src="main.js?v=20260930a"></script>
+<script defer src="lib/checkout.js?v=20260930a"></script>
+</body>
+</html>

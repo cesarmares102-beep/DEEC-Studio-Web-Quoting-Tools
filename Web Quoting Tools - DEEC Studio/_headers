@@ -65,3 +65,22 @@
 # wins for these two files).
 /lib/vendor/*
   Cache-Control: public, max-age=2592000, immutable
+
+# checkout.html only — everything from the /* block above still applies
+# (Cloudflare Pages merges by header name, and a later, more specific
+# path's value for the same header name wins for that path — so this
+# block's Permissions-Policy/CSP replace the site-wide ones only for this
+# one file; every other page keeps the plain policy above unchanged).
+# Whop's checkout-embed script (cdn.whop.com/elements/amber/elements.js,
+# loaded lazily by lib/checkout.js — see docs.whop.com/developer/guides/
+# embed-checkout) needs script-src/connect-src for cdn.whop.com, and its
+# iframe needs frame-src for whop.com plus a Permissions-Policy carve-out
+# for the Payment Request API (Apple/Google Pay inside that iframe).
+# ⚠️ https://checkout.whop.com is added defensively for the iframe's
+# likely origin but was NOT confirmed against Whop's docs the way
+# cdn.whop.com was — if the browser console shows a CSP violation for a
+# different whop.com subdomain once this is actually tested, add that
+# exact origin here instead/also.
+/checkout.html
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self "https://whop.com")
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://t.whop.tw https://connect.facebook.net https://cdn.whop.com; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com https://whop.com; frame-src https://www.facebook.com https://whop.com https://checkout.whop.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net https://cdn.whop.com https://checkout.whop.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com https://whop.com; object-src 'none'

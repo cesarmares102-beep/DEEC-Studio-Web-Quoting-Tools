@@ -9,8 +9,25 @@
   "kv_namespaces": [
     { "binding": "WHOP_PURCHASES", "id": "ab4f4e764ea24b91979a9e223c1f4e5f" }
   ],
+  // Checkout acceptance ledger (see schema.sql). database_id below is a
+  // placeholder — run `wrangler d1 create deec-studio-quoting-tools-checkout`
+  // and paste the real id it prints. See schema.sql's header for the full
+  // one-time setup.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "deec-studio-quoting-tools-checkout",
+      "database_id": "REPLACE_WITH_REAL_D1_DATABASE_ID"
+    }
+  ],
   "vars": {
-    "META_DATASET_ID": "1068830012634174"
+    "META_DATASET_ID": "1068830012634174",
+    // The Whop plan id for the $149.99 "Cotizador Web Personalizado"
+    // product (Whop dashboard → Products → that plan → copy its
+    // "plan_..." id). functions/lib/current-terms-version.js reads this —
+    // it's the sole source of truth for what checkout.html actually
+    // charges, so the price can't be tampered with from the client.
+    "WHOP_PLAN_ID": "REPLACE_WITH_REAL_WHOP_PLAN_ID"
   },
   "observability": {
     "logs": {
