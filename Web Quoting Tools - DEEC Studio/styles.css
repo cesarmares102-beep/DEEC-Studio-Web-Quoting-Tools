@@ -167,6 +167,14 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   white-space: nowrap;
   transition: transform .45s var(--ease-soft), box-shadow .45s var(--ease-soft), background-color .3s var(--ease-out);
 }
+/* .btn's own display: inline-flex outranks the UA stylesheet's
+   [hidden]{display:none} (equal specificity, .btn comes second in
+   source order) — confirmed live during checkout E2E testing: the
+   "Continuar al pago" button (lib/checkout.js's setButtonState("hidden"),
+   which sets the hidden attribute) stayed visually on top of the
+   mounted Whop iframe instead of disappearing. Same fix already applied
+   per-component elsewhere in this file (.cookie-modal[hidden], etc.). */
+.btn[hidden] { display: none; }
 .btn-primary {
   background: var(--moss);
   color: var(--cream);
