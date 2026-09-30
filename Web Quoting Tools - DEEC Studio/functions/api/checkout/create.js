@@ -35,7 +35,13 @@
    repeat INSERT is rejected, and this handler looks up and returns the
    ORIGINAL row instead of creating a duplicate acceptance.
    ========================================================================== */
-import { CURRENT_TERMS_VERSION, TERMS_DOCUMENT_NAME, TERMS_URL_PATH, resolveProduct } from "../../lib/current-terms-version.js";
+import {
+  CURRENT_TERMS_VERSION, TERMS_DOCUMENT_NAME, TERMS_URL_PATH, TERMS_CONTENT_HASH,
+  CURRENT_PRIVACY_VERSION, PRIVACY_DOCUMENT_NAME, PRIVACY_URL_PATH, PRIVACY_CONTENT_HASH,
+  CURRENT_PURCHASE_POLICY_VERSION, PURCHASE_POLICY_DOCUMENT_NAME, PURCHASE_POLICY_URL_PATH, PURCHASE_POLICY_CONTENT_HASH,
+  ACCEPTANCE_METHOD,
+  resolveProduct
+} from "../../lib/current-terms-version.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -99,13 +105,24 @@ export async function onRequestPost(context) {
         id, idempotency_key, customer_name, customer_email, customer_phone,
         business_name, country, product_id, terms_document, terms_version,
         terms_url, accepted_at, timezone, ip_address, user_agent,
-        checkout_reference, payment_reference, status, created_at, updated_at
-      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,'pending_payment',?,?)`
+        checkout_reference, payment_reference, status, created_at, updated_at,
+        acceptance_method, terms_hash,
+        privacy_document, privacy_version, privacy_url, privacy_hash,
+        purchase_policy_document, purchase_policy_version, purchase_policy_url, purchase_policy_hash
+      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,'pending_payment',?,?,?,?,?,?,?,?,?,?,?,?)`
     ).bind(
       acceptanceId, idempotencyKey, customerName, customerEmail, customerPhone || null,
       businessName || null, country || null, productId, TERMS_DOCUMENT_NAME, termsVersion,
       origin + TERMS_URL_PATH, nowIso, timezone || null, ip || null, userAgent || null,
-      checkoutReference, nowIso, nowIso
+      checkoutReference, nowIso, nowIso,
+      // Everything below is 100% server-determined — the client never
+      // sends a method, version, url or hash for any of these three
+      // documents, so there is nothing here a tampered request could
+      // override (spec: "el frontend NO debe poder decidir... versión
+      // legal, hash legal").
+      ACCEPTANCE_METHOD, TERMS_CONTENT_HASH,
+      PRIVACY_DOCUMENT_NAME, CURRENT_PRIVACY_VERSION, origin + PRIVACY_URL_PATH, PRIVACY_CONTENT_HASH,
+      PURCHASE_POLICY_DOCUMENT_NAME, CURRENT_PURCHASE_POLICY_VERSION, origin + PURCHASE_POLICY_URL_PATH, PURCHASE_POLICY_CONTENT_HASH
     ).run();
   } catch (err) {
     // A UNIQUE-constraint race (two near-simultaneous requests with the
