@@ -19,6 +19,33 @@
 export const CURRENT_TERMS_VERSION = "1.0";
 export const TERMS_DOCUMENT_NAME = "QuotingTools Terms & Conditions"; // internal label stored on each acceptance row
 export const TERMS_URL_PATH = "/terminos-condiciones-compra.html";
+export const TERMS_CONTENT_HASH = "3ac7af15042b878d117343f887857421d759ccea9f2fe96c7d6f0c4a1dfc2d4a";
+
+/* -------------------------------------------------------------
+   The checkout's single checkbox ("Acepto los Términos... la Política de
+   Privacidad y la Política de Pagos, Cancelaciones y Reembolsos") legally
+   covers three documents at once, but only terms_* was ever recorded on
+   the acceptance row. These two mirror the same pattern as the terms_*
+   constants above, entirely server-side — the client never sends a
+   privacy/purchase-policy version or hash, so there is nothing here for a
+   tampered request to override. Hashes computed by hash-legal-docs.js (see
+   that file's header) over each document's actual body text; re-run it and
+   update these + migration/legal_documents whenever a document's content
+   changes and a new version is published.
+   ------------------------------------------------------------- */
+export const CURRENT_PRIVACY_VERSION = "1.0";
+export const PRIVACY_DOCUMENT_NAME = "QuotingTools Privacy Policy";
+export const PRIVACY_URL_PATH = "/politica-privacidad.html";
+export const PRIVACY_CONTENT_HASH = "ed89b1eb2d081d9b94e04ad8784532e874e793908ff6776b5a57bd9706010c4d";
+
+export const CURRENT_PURCHASE_POLICY_VERSION = "1.0";
+export const PURCHASE_POLICY_DOCUMENT_NAME = "QuotingTools Payment, Cancellation and Refund Policy";
+export const PURCHASE_POLICY_URL_PATH = "/politica-pagos.html";
+export const PURCHASE_POLICY_CONTENT_HASH = "052ce2f15cc24969089e06e9923faeef7c9f09156738f648cb001c5f8ae2b5c0";
+
+// Describes the actual affirmative action that produced the acceptance —
+// never recorded just because a page loaded or a checkout was opened.
+export const ACCEPTANCE_METHOD = "checkout_checkbox";
 
 /* -------------------------------------------------------------
    Product / plan catalog — the ONLY server-side source of truth for
