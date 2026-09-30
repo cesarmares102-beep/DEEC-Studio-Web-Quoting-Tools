@@ -18,7 +18,7 @@
    Price/product protection (spec section 17): the client sends product_id
    only. The real plan id and price come from
    functions/lib/current-terms-version.js's PRODUCTS map + the
-   WHOP_PLAN_ID env var — never from the request body. Whop enforces the
+   WHOP_PLAN_ID_ES/WHOP_PLAN_ID_EN env vars — never from the request body. Whop enforces the
    actual charge amount for that plan id server-side on its own end, so a
    tampered request body cannot change what gets charged.
 
@@ -54,12 +54,14 @@ export async function onRequestPost(context) {
   if (!idempotencyKey) return jsonError(400, "missing_idempotency_key", "idempotency_key is required.");
   if (!env.DB) return jsonError(500, "db_not_configured", "D1 database is not bound to this Worker (see wrangler.jsonc).");
 
+  const lang = cleanString(body.lang, 5) === "en" ? "en" : "es";
+
   // Idempotency check FIRST — a retry with an already-used key returns the
   // existing row untouched instead of re-validating/re-inserting anything.
   const existingRow = await findByIdempotencyKey(env.DB, idempotencyKey);
   if (existingRow) {
-    const product = resolveProduct(existingRow.product_id, env);
-    if (!product) return jsonError(500, "product_misconfigured", "Product is not configured server-side (missing WHOP_PLAN_ID?).");
+    const product = resolveProduct(existingRow.product_id, env, lang);
+    if (!product) return jsonError(500, "product_misconfigured", "Product is not configured server-side (missing WHOP_PLAN_ID_ES/WHOP_PLAN_ID_EN?).");
     return jsonOk(buildCreateResponse(origin, existingRow.id, existingRow.checkout_reference, product));
   }
 
@@ -82,8 +84,8 @@ export async function onRequestPost(context) {
     return jsonError(409, "terms_version_mismatch", "The terms version has changed. Reload the page and accept again.");
   }
 
-  const product = resolveProduct(productId, env);
-  if (!product) return jsonError(400, "unknown_product", "Unrecognized product_id, or WHOP_PLAN_ID is not configured yet.");
+  const product = resolveProduct(productId, env, lang);
+  if (!product) return jsonError(400, "unknown_product", "Unrecognized product_id, or WHOP_PLAN_ID_ES/WHOP_PLAN_ID_EN is not configured yet.");
 
   const acceptanceId = "acc_" + crypto.randomUUID();
   const checkoutReference = "chk_" + crypto.randomUUID();
@@ -113,7 +115,7 @@ export async function onRequestPost(context) {
     // "already handled".
     const raced = await findByIdempotencyKey(env.DB, idempotencyKey);
     if (raced) {
-      const racedProduct = resolveProduct(raced.product_id, env);
+      const racedProduct = resolveProduct(raced.product_id, env, lang);
       if (racedProduct) return jsonOk(buildCreateResponse(origin, raced.id, raced.checkout_reference, racedProduct));
     }
     console.error("[checkout-create] insert failed: " + err.message);
