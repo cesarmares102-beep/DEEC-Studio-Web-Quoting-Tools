@@ -19,7 +19,7 @@
 export const CURRENT_TERMS_VERSION = "1.0";
 export const TERMS_DOCUMENT_NAME = "QuotingTools Terms & Conditions"; // internal label stored on each acceptance row
 export const TERMS_URL_PATH = "/terminos-condiciones-compra.html";
-export const TERMS_CONTENT_HASH = "3ac7af15042b878d117343f887857421d759ccea9f2fe96c7d6f0c4a1dfc2d4a";
+export const TERMS_CONTENT_HASH = "b2ab6dd2151c6a8b186f8bbde28a4fb40700e2e9fcbbda8d16ba8f642304cc07";
 
 /* -------------------------------------------------------------
    The checkout's single checkbox ("Acepto los Términos... la Política de
@@ -36,12 +36,12 @@ export const TERMS_CONTENT_HASH = "3ac7af15042b878d117343f887857421d759ccea9f2fe
 export const CURRENT_PRIVACY_VERSION = "1.0";
 export const PRIVACY_DOCUMENT_NAME = "QuotingTools Privacy Policy";
 export const PRIVACY_URL_PATH = "/politica-privacidad.html";
-export const PRIVACY_CONTENT_HASH = "ed89b1eb2d081d9b94e04ad8784532e874e793908ff6776b5a57bd9706010c4d";
+export const PRIVACY_CONTENT_HASH = "3aaac81717d2c27c9eddf32eb901694544f058331995d9712e489556c61859a4";
 
 export const CURRENT_PURCHASE_POLICY_VERSION = "1.0";
 export const PURCHASE_POLICY_DOCUMENT_NAME = "QuotingTools Payment, Cancellation and Refund Policy";
 export const PURCHASE_POLICY_URL_PATH = "/politica-pagos.html";
-export const PURCHASE_POLICY_CONTENT_HASH = "052ce2f15cc24969089e06e9923faeef7c9f09156738f648cb001c5f8ae2b5c0";
+export const PURCHASE_POLICY_CONTENT_HASH = "68be13c9981e93579f7a89429d88298fef58eda1b7261d19a1cf9e58f7c6dc74";
 
 // Describes the actual affirmative action that produced the acceptance —
 // never recorded just because a page loaded or a checkout was opened.
