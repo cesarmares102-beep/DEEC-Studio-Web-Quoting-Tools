@@ -105,14 +105,21 @@
 # cdn.whop.com) stayed active alongside this one and kept blocking the
 # Whop script even after cdn.whop.com was added here. "!" deletes the
 # inherited header for this path before the line below sets the real one.
+# frame-src includes https://cdn.whop.com — confirmed live via a real CSP
+# violation during E2E testing ("Framing 'https://cdn.whop.com/' violates
+# ... frame-src"): the embedded checkout iframe itself is actually served
+# from cdn.whop.com, not checkout.whop.com as originally guessed.
+# checkout.whop.com is kept alongside it since it was the original,
+# doc-based guess and removing an unconfirmed-but-harmless entry isn't
+# worth another round of live testing.
 /checkout.html
   ! Permissions-Policy
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self "https://whop.com")
   ! Content-Security-Policy
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://t.whop.tw https://connect.facebook.net https://cdn.whop.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com https://whop.com; frame-src https://www.facebook.com https://whop.com https://checkout.whop.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net https://cdn.whop.com https://checkout.whop.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com https://whop.com; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://t.whop.tw https://connect.facebook.net https://cdn.whop.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com https://whop.com; frame-src https://www.facebook.com https://whop.com https://checkout.whop.com https://cdn.whop.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net https://cdn.whop.com https://checkout.whop.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com https://whop.com; object-src 'none'
 
 /checkout
   ! Permissions-Policy
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self "https://whop.com")
   ! Content-Security-Policy
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://t.whop.tw https://connect.facebook.net https://cdn.whop.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com https://whop.com; frame-src https://www.facebook.com https://whop.com https://checkout.whop.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net https://cdn.whop.com https://checkout.whop.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com https://whop.com; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://t.whop.tw https://connect.facebook.net https://cdn.whop.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com https://whop.com; frame-src https://www.facebook.com https://whop.com https://checkout.whop.com https://cdn.whop.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net https://cdn.whop.com https://checkout.whop.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com https://whop.com; object-src 'none'
