@@ -2726,9 +2726,9 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 .checkout-fields {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem 1.2rem;
+  gap: 1.8rem 2rem;
 }
-.checkout-field { display: flex; flex-direction: column; gap: .4rem; }
+.checkout-field { display: flex; flex-direction: column; gap: .55rem; }
 .checkout-field-wide { grid-column: 1 / -1; }
 .checkout-field-label {
   font-size: .82rem;
@@ -2746,21 +2746,27 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   text-transform: uppercase;
   color: var(--ink-faint);
 }
+/* Minimalist underline inputs — no box, no fill, just a bottom rule that
+   reads as an editorial form (think a printed intake sheet), not a generic
+   SaaS field. The border-bottom-width bump on :focus is compensated by an
+   equal reduction in padding-bottom so the text/line don't shift. */
 .checkout-input {
   width: 100%;
-  padding: .78rem .9rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: var(--bg);
+  padding: .35rem 0 .65rem;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
   color: var(--ink);
   font: inherit;
-  font-size: .95rem;
-  transition: border-color .2s var(--ease-out), background-color .2s var(--ease-out);
+  font-size: 1rem;
+  transition: border-color .25s var(--ease-out), border-bottom-width .25s var(--ease-out), padding-bottom .25s var(--ease-out);
 }
 .checkout-input:focus {
   outline: none;
-  border-color: var(--moss);
-  background: var(--paper);
+  border-bottom-color: var(--moss);
+  border-bottom-width: 2px;
+  padding-bottom: .6rem;
 }
 .checkout-input::placeholder { color: var(--ink-faint); }
 
@@ -2783,6 +2789,69 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   background: var(--moss);
 }
 .checkout-check svg { width: 9px; height: 9px; stroke: var(--cream); }
+
+.checkout-sublabel {
+  margin: 1.4rem 0 .7rem;
+  font-family: var(--mono);
+  font-size: .72rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ink-mute);
+}
+.checkout-sublabel:first-of-type { margin-top: 0; }
+
+.checkout-benefits-list {
+  display: grid;
+  gap: .7rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: checkout-benefit;
+}
+.checkout-benefits-list li {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  font-size: .92rem;
+  color: var(--ink-soft);
+  counter-increment: checkout-benefit;
+}
+.checkout-benefits-list li::before {
+  content: counter(checkout-benefit);
+  flex: 0 0 auto;
+  width: 1.3rem;
+  height: 1.3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--moss);
+  color: var(--cream);
+  font-size: .68rem;
+  font-weight: 700;
+}
+
+.checkout-not-included-list { display: grid; gap: .7rem; list-style: none; padding: 0; margin: 0; }
+.checkout-not-included-list li {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  font-size: .92rem;
+  color: var(--ink-mute);
+}
+.checkout-cross {
+  flex: 0 0 auto;
+  width: 1.3rem;
+  height: 1.3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--ink-mute);
+  opacity: .55;
+}
+.checkout-cross svg { width: 9px; height: 9px; stroke: var(--cream); }
 
 .checkout-checkbox-row {
   display: flex;

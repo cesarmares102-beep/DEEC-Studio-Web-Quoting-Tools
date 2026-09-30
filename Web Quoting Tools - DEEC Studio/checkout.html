@@ -6,7 +6,7 @@
 
 <!-- Site CSS goes first, right after the mandatory charset/viewport meta —
      see index.html for the full rationale (iOS Safari unstyled-flash fix). -->
-<link rel="stylesheet" href="styles.css?v=20260930a" />
+<link rel="stylesheet" href="styles.css?v=20260930d" />
 
 <!-- Whop tracking pixel + Meta Pixel: NOT loaded here — same consent-gated
      approach as every other page. See loadAnalyticsTracking() in main.js.
@@ -81,7 +81,6 @@
     <li><a href="index.html#como-funciona" data-i18n="nav.item.how">Cómo funciona</a></li>
     <li><a href="index.html#oferta" data-i18n="nav.item.pricing">Precio</a></li>
     <li><a href="index.html#faq" data-i18n="nav.item.faq">Preguntas frecuentes</a></li>
-    <li><a href="#" class="menu-link-cta" data-whatsapp-cta data-i18n="nav.item.cta">Comprar ahora</a></li>
   </ul>
 </nav>
 
@@ -133,16 +132,24 @@
                 <input class="checkout-input" type="email" name="customer_email" data-field="email" autocomplete="email" required />
               </label>
               <label class="checkout-field">
-                <span class="checkout-field-label"><span data-i18n="checkout.field.phone">Número de teléfono</span> <span class="checkout-field-req" data-i18n="checkout.field.optional">Opcional</span></span>
-                <input class="checkout-input" type="tel" name="customer_phone" data-field="phone" autocomplete="tel" />
+                <span class="checkout-field-label"><span data-i18n="checkout.field.phone">Número de teléfono</span> <span class="checkout-field-req" data-i18n="checkout.field.required">Requerido</span></span>
+                <input class="checkout-input" type="tel" name="customer_phone" data-field="phone" autocomplete="tel" required />
               </label>
               <label class="checkout-field">
-                <span class="checkout-field-label"><span data-i18n="checkout.field.business">Nombre del negocio</span> <span class="checkout-field-req" data-i18n="checkout.field.optional">Opcional</span></span>
-                <input class="checkout-input" type="text" name="business_name" data-field="business" autocomplete="organization" />
+                <span class="checkout-field-label"><span data-i18n="checkout.field.business">Nombre del negocio</span> <span class="checkout-field-req" data-i18n="checkout.field.required">Requerido</span></span>
+                <input class="checkout-input" type="text" name="business_name" data-field="business" autocomplete="organization" required />
+              </label>
+              <label class="checkout-field">
+                <span class="checkout-field-label"><span data-i18n="checkout.field.country">País</span> <span class="checkout-field-req" data-i18n="checkout.field.required">Requerido</span></span>
+                <input class="checkout-input" type="text" name="country" data-field="country" autocomplete="country-name" required />
+              </label>
+              <label class="checkout-field">
+                <span class="checkout-field-label"><span data-i18n="checkout.field.city">Ciudad</span> <span class="checkout-field-req" data-i18n="checkout.field.required">Requerido</span></span>
+                <input class="checkout-input" type="text" name="city" data-field="city" autocomplete="address-level2" required />
               </label>
               <label class="checkout-field checkout-field-wide">
-                <span class="checkout-field-label"><span data-i18n="checkout.field.country">País</span> <span class="checkout-field-req" data-i18n="checkout.field.optional">Opcional</span></span>
-                <input class="checkout-input" type="text" name="country" data-field="country" autocomplete="country-name" />
+                <span class="checkout-field-label"><span data-i18n="checkout.field.website">Sitio web</span> <span class="checkout-field-req" data-i18n="checkout.field.optional">Opcional</span></span>
+                <input class="checkout-input" type="url" name="website" data-field="website" autocomplete="url" placeholder="https://" />
               </label>
             </div>
           </div>
@@ -155,15 +162,31 @@
                 <p class="checkout-panel-sub" data-i18n="checkout.step2.sub">Todo lo que recibes con tu compra.</p>
               </div>
             </div>
+            <p class="checkout-sublabel" data-i18n="checkout.includesLabel">Tu compra incluye</p>
             <ul class="checkout-includes-list">
               <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.1">Cotizador web personalizado</span></li>
-              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.2">Configuración de servicios y precios</span></li>
-              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.3">Configuración de paquetes y extras</span></li>
-              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.4">Información de tu negocio</span></li>
-              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.5">Diseño adaptado a tu identidad</span></li>
-              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.6">Experiencia responsive</span></li>
-              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.7">Generación de presupuestos</span></li>
-              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.8">Entrega en 24 horas</span></li>
+              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.2">Branding e información de tu negocio</span></li>
+              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.3">Tus servicios o productos configurados</span></li>
+              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.4">Tus precios configurados</span></li>
+              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.5">Tus reglas de cobro configuradas</span></li>
+              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.6">Entrega en hasta 24 horas</span></li>
+              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.7">Entrega digital o instalación opcional</span></li>
+              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.8">Acompañamiento de implementación</span></li>
+            </ul>
+
+            <p class="checkout-sublabel" data-i18n="checkout.benefitsLabel">Beneficios de compra</p>
+            <ol class="checkout-benefits-list">
+              <li><span data-i18n="checkout.benefits.1">Pago único</span></li>
+              <li><span data-i18n="checkout.benefits.2">Sin suscripciones ni pagos recurrentes</span></li>
+              <li><span data-i18n="checkout.benefits.3">Sin renovación ni mantenimiento recurrente</span></li>
+              <li><span data-i18n="checkout.benefits.4">Acceso permanente a tu cotizador web</span></li>
+            </ol>
+
+            <p class="checkout-sublabel" data-i18n="checkout.notIncludedLabel">No incluye</p>
+            <ul class="checkout-not-included-list">
+              <li><span class="checkout-cross" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span><span data-i18n="checkout.notIncluded.1">Hosting ni dominio</span></li>
+              <li><span class="checkout-cross" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span><span data-i18n="checkout.notIncluded.2">Licencias o herramientas de terceros</span></li>
+              <li><span class="checkout-cross" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span><span data-i18n="checkout.notIncluded.3">Nuevas funciones o cambios de lógica dentro del cotizador</span></li>
             </ul>
           </div>
 
@@ -356,10 +379,10 @@
   </div>
 </div>
 
-<script defer src="lib/manifest.js?v=20260930a"></script>
-<script defer src="lib/i18n.js?v=20260930a"></script>
-<script defer src="lib/legal-versions.js?v=20260930a"></script>
-<script defer src="main.js?v=20260930a"></script>
-<script defer src="lib/checkout.js?v=20260930a"></script>
+<script defer src="lib/manifest.js?v=20260930d"></script>
+<script defer src="lib/i18n.js?v=20260930d"></script>
+<script defer src="lib/legal-versions.js?v=20260930d"></script>
+<script defer src="main.js?v=20260930d"></script>
+<script defer src="lib/checkout.js?v=20260930d"></script>
 </body>
 </html>
