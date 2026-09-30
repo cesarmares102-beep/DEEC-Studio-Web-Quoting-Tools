@@ -71,6 +71,8 @@
     els.phone = $('[data-field="phone"]');
     els.business = $('[data-field="business"]');
     els.country = $('[data-field="country"]');
+    els.city = $('[data-field="city"]');
+    els.website = $('[data-field="website"]');
     els.terms = $('[data-field="terms"]');
     els.stateMsg = $("[data-checkout-state-msg]");
     els.continueBtn = $("[data-checkout-continue]");
@@ -103,6 +105,10 @@
     var errors = [];
     if (!els.name || !els.name.value.trim()) errors.push("incomplete");
     if (!els.email || !EMAIL_RE.test(els.email.value.trim())) errors.push("invalidEmail");
+    if (!els.phone || !els.phone.value.trim()) errors.push("incomplete");
+    if (!els.business || !els.business.value.trim()) errors.push("incomplete");
+    if (!els.country || !els.country.value.trim()) errors.push("incomplete");
+    if (!els.city || !els.city.value.trim()) errors.push("incomplete");
     if (!els.terms || !els.terms.checked) errors.push("termsRequired");
     return errors;
   }
@@ -234,6 +240,8 @@
       customer_phone: els.phone ? els.phone.value.trim() : "",
       business_name: els.business ? els.business.value.trim() : "",
       country: els.country ? els.country.value.trim() : "",
+      city: els.city ? els.city.value.trim() : "",
+      website: els.website ? els.website.value.trim() : "",
       product_id: PRODUCT_ID,
       // Which Whop plan gets charged — Whop has a separate plan per
       // language for this product (see functions/lib/current-terms-
@@ -370,7 +378,7 @@
     // Clear the current error message as soon as the visitor starts
     // fixing whatever it was complaining about — don't make them
     // re-click to find out the message is gone.
-    [els.name, els.email, els.terms].forEach(function (el) {
+    [els.name, els.email, els.phone, els.business, els.country, els.city, els.terms].forEach(function (el) {
       if (!el) return;
       el.addEventListener("input", function () { setStateMsg(null); });
       el.addEventListener("change", function () { setStateMsg(null); });
