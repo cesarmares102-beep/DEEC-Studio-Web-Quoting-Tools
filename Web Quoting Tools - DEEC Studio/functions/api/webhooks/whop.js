@@ -104,7 +104,31 @@ export async function onRequestPost(context) {
   // the Purchase would never make it to Meta at all.
   await env.WHOP_PURCHASES.put(dedupeKey, "1", { expirationTtl: DEDUPE_TTL_SECONDS });
 
+  // Best-effort, additive only: if this payment came from the
+  // checkout.html flow, its metadata carries acceptance_id (set in
+  // functions/api/checkout/create.js, round-tripped through Whop's
+  // `metadata` — confirmed against docs.whop.com/developer/guides/
+  // embed-checkout, not assumed). Not every payment has this — e.g. a
+  // bare Whop link shared manually in a WhatsApp chat, with no
+  // checkout.html step involved — so its absence is normal, not an
+  // error. A D1 failure here must never undo the Meta CAPI success above
+  // or make Whop retry a webhook that already did its critical job,
+  // which is why it's a separate try/catch after the point of no return.
+  await updateAcceptanceIfPresent(payment, env);
+
   return new Response("ok", { status: 200 });
+}
+
+async function updateAcceptanceIfPresent(payment, env) {
+  try {
+    const acceptanceId = payment.metadata && payment.metadata.acceptance_id;
+    if (!acceptanceId || !env.DB) return;
+    await env.DB.prepare(
+      "UPDATE checkout_acceptances SET status = 'paid', payment_reference = ?, updated_at = ? WHERE id = ?"
+    ).bind(payment.id, new Date().toISOString(), acceptanceId).run();
+  } catch (err) {
+    console.error("[whop-webhook] D1 acceptance update failed (non-fatal): " + err.message);
+  }
 }
 
 // Anything other than a signed POST shouldn't do anything — e.g. someone
