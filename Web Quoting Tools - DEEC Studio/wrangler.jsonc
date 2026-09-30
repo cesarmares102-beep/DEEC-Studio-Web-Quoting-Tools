@@ -22,12 +22,14 @@
   ],
   "vars": {
     "META_DATASET_ID": "1068830012634174",
-    // The Whop plan id for the $149.99 "Cotizador Web Personalizado"
-    // product (Whop dashboard → Products → that plan → copy its
-    // "plan_..." id). functions/lib/current-terms-version.js reads this —
-    // it's the sole source of truth for what checkout.html actually
-    // charges, so the price can't be tampered with from the client.
-    "WHOP_PLAN_ID": "REPLACE_WITH_REAL_WHOP_PLAN_ID"
+    // Whop has a separate plan per language for the same $149.99
+    // product — functions/lib/current-terms-version.js picks between
+    // these two based on the language the buyer is checking out in
+    // (checkout.html's <html lang>, sent as `lang` in the create request).
+    // These are the sole source of truth for what checkout.html actually
+    // charges, so the price/plan can't be tampered with from the client.
+    "WHOP_PLAN_ID_ES": "plan_arIZ7TA4dFciG",
+    "WHOP_PLAN_ID_EN": "plan_I1QRqcdWTnKPf"
   },
   "observability": {
     "logs": {
