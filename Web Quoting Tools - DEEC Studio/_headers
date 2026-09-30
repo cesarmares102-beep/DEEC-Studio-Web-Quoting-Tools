@@ -81,6 +81,25 @@
 # cdn.whop.com was — if the browser console shows a CSP violation for a
 # different whop.com subdomain once this is actually tested, add that
 # exact origin here instead/also.
+# worker-src 'self' blob: — Whop Elements spins up a Web Worker from a
+# blob: URL internally (confirmed via a live CSP violation during E2E
+# testing: "Creating a worker from 'blob:...' violates ... script-src",
+# since with no worker-src directive the browser falls back to
+# script-src, and 'self' does not cover blob: URLs). Scoped to this path
+# only, same as everything else in this block.
+#
+# BOTH of the two path patterns below are needed for the SAME policy:
+# Cloudflare Pages serves this file at the clean URL /checkout (the
+# footer link points at checkout.html, but Pages 301s that to the
+# extension-less URL and _headers rules match the FINAL served path) —
+# confirmed live: a real browser hitting /checkout got the site-wide
+# default CSP instead of this override, which is what blocked
+# cdn.whop.com in the first place. /checkout.html is kept too in case
+# anything ever links straight to the .html path pre-redirect.
 /checkout.html
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self "https://whop.com")
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://t.whop.tw https://connect.facebook.net https://cdn.whop.com; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com https://whop.com; frame-src https://www.facebook.com https://whop.com https://checkout.whop.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net https://cdn.whop.com https://checkout.whop.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com https://whop.com; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://t.whop.tw https://connect.facebook.net https://cdn.whop.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com https://whop.com; frame-src https://www.facebook.com https://whop.com https://checkout.whop.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net https://cdn.whop.com https://checkout.whop.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com https://whop.com; object-src 'none'
+
+/checkout
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self "https://whop.com")
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://t.whop.tw https://connect.facebook.net https://cdn.whop.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com https://whop.com; frame-src https://www.facebook.com https://whop.com https://checkout.whop.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net https://cdn.whop.com https://checkout.whop.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com https://whop.com; object-src 'none'
