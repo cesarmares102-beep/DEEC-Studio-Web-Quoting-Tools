@@ -67,10 +67,9 @@
   Cache-Control: public, max-age=2592000, immutable
 
 # checkout.html only — everything from the /* block above still applies
-# (Cloudflare Pages merges by header name, and a later, more specific
-# path's value for the same header name wins for that path — so this
-# block's Permissions-Policy/CSP replace the site-wide ones only for this
-# one file; every other page keeps the plain policy above unchanged).
+# EXCEPT Permissions-Policy/Content-Security-Policy, which this block
+# explicitly deletes (via "! Header-Name", see below) before setting its
+# own values — every other page keeps the plain policy above unchanged.
 # Whop's checkout-embed script (cdn.whop.com/elements/amber/elements.js,
 # loaded lazily by lib/checkout.js — see docs.whop.com/developer/guides/
 # embed-checkout) needs script-src/connect-src for cdn.whop.com, and its
@@ -96,10 +95,24 @@
 # default CSP instead of this override, which is what blocked
 # cdn.whop.com in the first place. /checkout.html is kept too in case
 # anything ever links straight to the .html path pre-redirect.
+#
+# The "! Header-Name" line before each real header is load-bearing, not
+# decoration: Cloudflare Pages does NOT have the general /* block's
+# Content-Security-Policy/Permissions-Policy get replaced by this more
+# specific block's values — confirmed live, it sends BOTH as separate
+# header lines on the same response, and the browser enforces their
+# INTERSECTION. Without the "!" removal, the /* block's CSP (no
+# cdn.whop.com) stayed active alongside this one and kept blocking the
+# Whop script even after cdn.whop.com was added here. "!" deletes the
+# inherited header for this path before the line below sets the real one.
 /checkout.html
+  ! Permissions-Policy
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self "https://whop.com")
+  ! Content-Security-Policy
   Content-Security-Policy: default-src 'self'; script-src 'self' https://t.whop.tw https://connect.facebook.net https://cdn.whop.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com https://whop.com; frame-src https://www.facebook.com https://whop.com https://checkout.whop.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net https://cdn.whop.com https://checkout.whop.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com https://whop.com; object-src 'none'
 
 /checkout
+  ! Permissions-Policy
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self "https://whop.com")
+  ! Content-Security-Policy
   Content-Security-Policy: default-src 'self'; script-src 'self' https://t.whop.tw https://connect.facebook.net https://cdn.whop.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com https://whop.com; frame-src https://www.facebook.com https://whop.com https://checkout.whop.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net https://cdn.whop.com https://checkout.whop.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com https://whop.com; object-src 'none'
