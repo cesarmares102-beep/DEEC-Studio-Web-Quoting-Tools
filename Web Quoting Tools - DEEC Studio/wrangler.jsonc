@@ -17,7 +17,7 @@
     {
       "binding": "DB",
       "database_name": "deec-studio-quoting-tools-checkout",
-      "database_id": "REPLACE_WITH_REAL_D1_DATABASE_ID"
+      "database_id": "03f674db-f227-442f-81b8-b6e12636f0d0"
     }
   ],
   "vars": {
