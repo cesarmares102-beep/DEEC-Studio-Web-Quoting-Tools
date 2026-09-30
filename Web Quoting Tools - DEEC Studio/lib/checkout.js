@@ -248,6 +248,11 @@
       business_name: els.business ? els.business.value.trim() : "",
       country: els.country ? els.country.value.trim() : "",
       product_id: PRODUCT_ID,
+      // Which Whop plan gets charged — Whop has a separate plan per
+      // language for this product (see functions/lib/current-terms-
+      // version.js), so this has to match whichever language the buyer
+      // is actually looking at right now.
+      lang: document.documentElement.getAttribute("lang") === "en" ? "en" : "es",
       terms_version: currentTermsVersion(),
       terms_accepted: !!(els.terms && els.terms.checked),
       timezone: currentTimezone()
