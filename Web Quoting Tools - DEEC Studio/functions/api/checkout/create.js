@@ -76,6 +76,8 @@ export async function onRequestPost(context) {
   const customerPhone = cleanString(body.customer_phone, 40);
   const businessName = cleanString(body.business_name, 200);
   const country = cleanString(body.country, 100);
+  const city = cleanString(body.city, 100);
+  const website = cleanString(body.website, 200);
   const productId = cleanString(body.product_id, 60);
   const termsVersion = cleanString(body.terms_version, 20);
   const timezone = cleanString(body.timezone, 60);
@@ -83,6 +85,10 @@ export async function onRequestPost(context) {
 
   if (!customerName) return jsonError(400, "missing_name", "customer_name is required.");
   if (!customerEmail || !EMAIL_RE.test(customerEmail)) return jsonError(400, "invalid_email", "A valid customer_email is required.");
+  if (!customerPhone) return jsonError(400, "missing_phone", "customer_phone is required.");
+  if (!businessName) return jsonError(400, "missing_business_name", "business_name is required.");
+  if (!country) return jsonError(400, "missing_country", "country is required.");
+  if (!city) return jsonError(400, "missing_city", "city is required.");
   if (!termsAccepted) return jsonError(400, "terms_not_accepted", "terms_accepted must be true.");
   // The server is the sole source of truth for which version is current —
   // this is what stops a client from sending a stale or invented version.
@@ -103,16 +109,16 @@ export async function onRequestPost(context) {
     await env.DB.prepare(
       `INSERT INTO checkout_acceptances (
         id, idempotency_key, customer_name, customer_email, customer_phone,
-        business_name, country, product_id, terms_document, terms_version,
+        business_name, country, city, website, product_id, terms_document, terms_version,
         terms_url, accepted_at, timezone, ip_address, user_agent,
         checkout_reference, payment_reference, status, created_at, updated_at,
         acceptance_method, terms_hash,
         privacy_document, privacy_version, privacy_url, privacy_hash,
         purchase_policy_document, purchase_policy_version, purchase_policy_url, purchase_policy_hash
-      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,'pending_payment',?,?,?,?,?,?,?,?,?,?,?,?)`
+      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,'pending_payment',?,?,?,?,?,?,?,?,?,?,?,?)`
     ).bind(
       acceptanceId, idempotencyKey, customerName, customerEmail, customerPhone || null,
-      businessName || null, country || null, productId, TERMS_DOCUMENT_NAME, termsVersion,
+      businessName || null, country || null, city || null, website || null, productId, TERMS_DOCUMENT_NAME, termsVersion,
       origin + TERMS_URL_PATH, nowIso, timezone || null, ip || null, userAgent || null,
       checkoutReference, nowIso, nowIso,
       // Everything below is 100% server-determined — the client never
