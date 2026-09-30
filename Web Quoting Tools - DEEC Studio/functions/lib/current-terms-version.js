@@ -34,23 +34,39 @@ const PRODUCTS = {
     name: "Cotizador Web Personalizado",
     priceDisplay: "$149.99 USD",
     priceUsd: 149.99
-    // planId intentionally omitted here — comes from env.WHOP_PLAN_ID
-    // (Cloudflare Workers var, see wrangler.jsonc), the same pattern this
-    // project already uses for META_DATASET_ID/META_ACCESS_TOKEN: real
-    // ids live in Cloudflare's dashboard config, not in source control.
+    // planId intentionally omitted here — comes from env.WHOP_PLAN_ID_ES /
+    // env.WHOP_PLAN_ID_EN (Cloudflare Workers vars, see wrangler.jsonc),
+    // the same pattern this project already uses for
+    // META_DATASET_ID/META_ACCESS_TOKEN: real ids live in Cloudflare's
+    // dashboard config, not in source control.
+    //
+    // Two separate Whop plans exist for this one product — Whop's own
+    // checkout UI is per-plan, so each language gets its own plan_id even
+    // though the underlying product/price is identical:
+    //   es → "Cotizador Web Personalizado"
+    //   en → "Custom Web Quoter"
   }
 };
 
 /**
  * Resolves a product_id to its full config, including the real Whop plan
- * id pulled from the environment. Returns null if the product_id is not
- * recognized, OR if the plan id hasn't been configured yet — either way,
- * the caller must refuse to create a checkout rather than guess.
+ * id for the requested language, pulled from the environment. Returns
+ * null if the product_id is not recognized, OR if the plan id for that
+ * language hasn't been configured yet — either way, the caller must
+ * refuse to create a checkout rather than guess or silently fall back to
+ * the other language's plan.
+ *
+ * @param {string} productId
+ * @param {object} env
+ * @param {string} [lang] - "es" or "en"; anything else (including
+ *   omitted) defaults to "es", matching main.js's own detectInitialLang()
+ *   default in the frontend.
  */
-export function resolveProduct(productId, env) {
+export function resolveProduct(productId, env, lang) {
   const product = PRODUCTS[productId];
   if (!product) return null;
-  const planId = env && env.WHOP_PLAN_ID;
+  var normalizedLang = lang === "en" ? "en" : "es";
+  var planId = env && (normalizedLang === "en" ? env.WHOP_PLAN_ID_EN : env.WHOP_PLAN_ID_ES);
   if (!planId) return null;
-  return Object.assign({}, product, { planId: planId });
+  return Object.assign({}, product, { planId: planId, lang: normalizedLang });
 }
