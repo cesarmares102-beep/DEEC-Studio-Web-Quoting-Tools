@@ -9,6 +9,15 @@
   "kv_namespaces": [
     { "binding": "WHOP_PURCHASES", "id": "ab4f4e764ea24b91979a9e223c1f4e5f" }
   ],
+  // Official legal-document PDFs — one file per <document>-<version>-<lang>
+  // (see generate-legal-pdfs.js). Same file served to: the legal page's
+  // download button, and the post-payment confirmation email. Never
+  // written to from the public site — only via the ADMIN_UPLOAD_SECRET-
+  // gated functions/api/admin/upload-legal-pdf.js, run by hand whenever a
+  // new version is generated.
+  "r2_buckets": [
+    { "binding": "LEGAL_DOCS", "bucket_name": "deec-studio-legal-documents" }
+  ],
   // Checkout acceptance ledger (see schema.sql). database_id below is a
   // placeholder — run `wrangler d1 create deec-studio-quoting-tools-checkout`
   // and paste the real id it prints. See schema.sql's header for the full
