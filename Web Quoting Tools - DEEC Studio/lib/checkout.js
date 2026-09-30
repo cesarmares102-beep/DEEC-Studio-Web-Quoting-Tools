@@ -87,6 +87,8 @@
      ------------------------------------------------------------- */
   function makeIdempotencyKey() {
     if (window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID();
+    // Fallback for older browsers without crypto.randomUUID — collision
+    // odds are astronomically low for a single-session key like this.
     return "idem-" + Date.now() + "-" + Math.random().toString(16).slice(2);
   }
 
@@ -169,18 +171,19 @@
   }
 
   /**
-   * Mounts Whop's embedded checkout element. Verified directly against
-   * the account-specific "Embed checkout" snippet from the Whop
-   * dashboard for both of this product's plans (es/en) — not just the
-   * generic docs — so the two-step `.create(id).mount(selector)` chain
-   * below is confirmed correct for this account, not a guess:
+   * Mounts Whop's embedded checkout element.
    *
-   *   const checkout = window.WhopElements().checkout.create({ plan });
-   *   checkout.create("checkout").mount("#checkout");
-   *
-   * (config here also passes metadata/returnUrl/onComplete alongside
-   * plan — same `.checkout.create({...})` call shape the generic docs
-   * show, only the mount step needed confirming against the real snippet.)
+   * The first argument to the inner `.create(...)` is NOT the mount div's
+   * id — it's a fixed element-type keyword, always the literal string
+   * "checkout" — confirmed against docs.whop.com/developer/guides/
+   * embed-checkout's own code sample, which uses `<div id="checkout">`
+   * and `checkout.create("checkout").mount("#checkout")` (mount id and
+   * type keyword happen to be the same string there, which is what made
+   * this easy to misread the first time around). Passing our own mount
+   * id ("whop-checkout-mount") as the type was a real, confirmed-live
+   * bug: the iframe still loaded (at .../checkout/whop-checkout-mount/
+   * instead of .../checkout/checkout/) but never received a valid
+   * element to render, so it stayed stuck at opacity:0/height:0 forever.
    */
   function mountWhopCheckout(mountElId, config) {
     if (!window.WhopElements) throw new Error("WhopElements script not loaded");
@@ -200,7 +203,7 @@
         }
       }
     });
-    checkout.create(mountElId).mount("#" + mountElId);
+    checkout.create("checkout").mount("#" + mountElId);
     return checkout;
   }
 
@@ -212,6 +215,8 @@
 
     var errors = validate();
     if (errors.length) {
+      // Show the most specific problem first (terms, then email, then
+      // "fill everything in") rather than stacking every message at once.
       if (errors.indexOf("termsRequired") !== -1) setStateMsg("termsRequired");
       else if (errors.indexOf("invalidEmail") !== -1) setStateMsg("invalidEmail");
       else setStateMsg("incomplete");
@@ -298,7 +303,7 @@
 
   function pollStatus(acceptanceId) {
     var attempts = 0;
-    var MAX_ATTEMPTS = 15;
+    var MAX_ATTEMPTS = 15; // ~30s at 2s apart — long enough for the webhook to land, short enough not to hang forever
     var INTERVAL_MS = 2000;
 
     function tick() {
@@ -315,6 +320,10 @@
             return;
           }
           if (attempts >= MAX_ATTEMPTS) {
+            // Still not confirmed after ~30s — don't claim success we
+            // haven't verified. Leave it as "confirming" rather than
+            // guessing; the webhook may just be slow, and a refresh will
+            // pick up the real status once it lands.
             return;
           }
           setTimeout(tick, INTERVAL_MS);
@@ -330,13 +339,19 @@
     var params = new URLSearchParams(window.location.search);
     var acceptance = params.get("acceptance");
     var paymentStatus = params.get("status");
-    if (!acceptance) return false;
+    if (!acceptance) return false; // normal first visit, not a return from Whop
 
+    // "failed"/"canceled" from Whop's own redirect is safe to show
+    // immediately — it isn't a claim of success that needs server
+    // verification, only a claim of non-success, which carries no risk
+    // of granting anything the visitor didn't earn.
     if (paymentStatus === "failed" || paymentStatus === "canceled") {
       showResult("failed");
       return true;
     }
 
+    // Anything else ("succeeded", "processing", or missing) still goes
+    // through the server poll — the URL alone never confirms "paid".
     showResult("pending");
     pollStatus(acceptance);
     return true;
@@ -344,14 +359,17 @@
 
   function boot() {
     cacheEls();
-    if (!els.form) return;
+    if (!els.form) return; // not on checkout.html
 
     idempotencyKey = makeIdempotencyKey();
 
-    if (initReturnFlow()) return;
+    if (initReturnFlow()) return; // return-from-Whop state takes over the whole page
 
     if (els.continueBtn) els.continueBtn.addEventListener("click", handleContinue);
 
+    // Clear the current error message as soon as the visitor starts
+    // fixing whatever it was complaining about — don't make them
+    // re-click to find out the message is gone.
     [els.name, els.email, els.terms].forEach(function (el) {
       if (!el) return;
       el.addEventListener("input", function () { setStateMsg(null); });
