@@ -553,14 +553,34 @@
     return pdfVendorPromise;
   }
 
+  // The 3 documents referenced by the checkout's terms checkbox (see
+  // functions/api/checkout/create.js) have an OFFICIAL, pre-generated PDF
+  // in R2 — the same file this button downloads, the same file the
+  // post-payment confirmation email links to (see
+  // functions/api/webhooks/whop.js). Every other legal doc keeps
+  // generating its PDF live from the page, as before.
+  var OFFICIAL_PDF_TYPE_BY_DOC_ID = {
+    "terms-and-conditions": "terms",
+    "privacy-policy": "privacy",
+    "payment-policy": "purchase_policy"
+  };
+
   function initLegalVersioning() {
     var docId = document.body.getAttribute("data-legal-doc");
     if (!docId) return;
     renderLegalVersionBlock(docId);
 
+    var officialType = OFFICIAL_PDF_TYPE_BY_DOC_ID[docId];
+
     $$("[data-legal-pdf-download]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         if (btn.disabled) return;
+
+        if (officialType) {
+          window.location.href = "/api/legal-pdf/" + officialType + "-" + currentLang + ".pdf";
+          return;
+        }
+
         var doc = window.__LEGAL_DOCS__ && window.__LEGAL_DOCS__[docId];
         if (!doc) return;
         var scope = $('[data-lang-content="' + currentLang + '"]');
