@@ -428,7 +428,6 @@
 
       "thankyou.title": "Gracias.",
       "thankyou.subtitle": "Tu compra está confirmada.",
-      "thankyou.body": "Recibimos tu pago y tu compra quedó confirmada.<br>Recibirás un correo con el resumen de tu compra y los siguientes pasos.",
       "thankyou.cta": "Volver al inicio →",
 
       "thankyou.next.title": "¿Qué sigue?",
@@ -859,7 +858,6 @@
 
       "thankyou.title": "Thank you.",
       "thankyou.subtitle": "Your purchase is confirmed.",
-      "thankyou.body": "We've received your payment and your purchase is confirmed.<br>You'll receive an email with your purchase summary and next steps.",
       "thankyou.cta": "Return to home →",
 
       "thankyou.next.title": "What's next?",
