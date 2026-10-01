@@ -34,9 +34,10 @@
     "privacy-policy": {
       pdfFileBase: "Deec_Studio_Politica_de_Privacidad",
       title: { es: "Política de Privacidad", en: "Privacy Policy" },
-      currentVersion: "1.0",
-      updatedAt: "2026-09-29",
+      currentVersion: "1.1",
+      updatedAt: "2026-09-30",
       versionHistory: [
+        { version: "1.1", date: "2026-09-30", description: { es: "Reescritura integral: marco internacional, categorías de información detalladas, registros de transacciones, proveedores tecnológicos (Cloudflare, Whop, Resend, Meta) y medición de conversiones vía Meta Conversions API", en: "Comprehensive rewrite: international framework, detailed information categories, transaction records, technology providers (Cloudflare, Whop, Resend, Meta), and conversion measurement via Meta Conversions API" } },
         { version: "1.0", date: "2026-09-29", description: { es: "Publicación inicial", en: "Initial publication" } }
       ]
     },
