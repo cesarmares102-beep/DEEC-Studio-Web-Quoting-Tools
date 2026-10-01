@@ -31,6 +31,10 @@
   ],
   "vars": {
     "META_DATASET_ID": "1068830012634174",
+    // "From" address for the post-payment confirmation email (see
+    // functions/api/webhooks/whop.js). Must be on a domain verified in
+    // Resend — not sensitive, so it lives here rather than as a secret.
+    "RESEND_FROM_EMAIL": "DEEC Studio <customers@deecstudio-quotingtools.online>",
     // Whop has a separate plan per language for the same $149.99
     // product — functions/lib/current-terms-version.js picks between
     // these two based on the language the buyer is checking out in
