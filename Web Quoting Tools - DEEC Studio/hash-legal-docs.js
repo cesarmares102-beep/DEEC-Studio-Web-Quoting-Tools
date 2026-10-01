@@ -17,7 +17,7 @@ const fs = require("fs");
 
 const DOCS = [
   { type: "terms", file: "terminos-condiciones-compra.html", version: "1.0" },
-  { type: "privacy", file: "politica-privacidad.html", version: "1.0" },
+  { type: "privacy", file: "politica-privacidad.html", version: "1.1" },
   { type: "purchase_policy", file: "politica-pagos.html", version: "1.0" }
 ];
 
