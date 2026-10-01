@@ -252,6 +252,11 @@ function buildConfirmationEmailHtml(row, payment, copy, lang) {
 
   return (
     "<div style=\"font-family:Helvetica,Arial,sans-serif;max-width:560px;margin:0 auto;color:#111827;\">" +
+    // SVG renders in Gmail/Apple Mail; Outlook desktop (Word rendering
+    // engine) shows a broken image instead — no PNG asset exists yet to
+    // cover that client too. width/height attributes (not just CSS) are
+    // load-bearing in email: several clients ignore <style> entirely.
+    "<img src=\"" + origin + "/assets/logo-deecstudio.svg\" alt=\"DEEC Studio\" width=\"132\" height=\"28\" style=\"display:block;margin:0 0 20px;\" />" +
     "<h1 style=\"font-size:22px;margin:0 0 4px;\">" + copy.heading + "</h1>" +
     "<p style=\"color:#6b7280;margin:0 0 20px;\">" + copy.intro + "</p>" +
     "<table style=\"width:100%;font-size:14px;border-collapse:collapse;margin-bottom:20px;\">" +
@@ -279,6 +284,39 @@ function buildConfirmationEmailHtml(row, payment, copy, lang) {
   );
 }
 
+// Plain-text alternative, sent alongside the HTML in the same Resend call
+// (multipart). Spam filters weigh an HTML-only email, with no text/plain
+// part, as a real signal — this isn't cosmetic, it measurably affects
+// inbox placement. Content mirrors the HTML version; no new copy, just a
+// non-HTML rendering of the same facts.
+function buildConfirmationEmailText(row, payment, copy, lang) {
+  const amount = (payment.settlement_amount != null ? payment.settlement_amount.toFixed(2) : "—") + " " + (payment.currency || "").toUpperCase();
+  const purchaseDate = payment.paid_at ? new Date(payment.paid_at).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10);
+  const origin = (function () { try { return new URL(row.terms_url).origin; } catch (e) { return ""; } })();
+  const bullet = function (items) { return items.map(function (i) { return "- " + i; }).join("\n"); };
+  const legalLine = function (label, version, pdfType) {
+    return label + " (" + copy.versionLabel + " " + (version || "—") + "): " + origin + "/api/legal-pdf/" + pdfType + "-" + lang + ".pdf";
+  };
+
+  return (
+    copy.heading + "\n" + copy.intro + "\n\n" +
+    copy.fields.customer + ": " + row.customer_name + "\n" +
+    (row.business_name ? copy.fields.business + ": " + row.business_name + "\n" : "") +
+    copy.fields.product + ": Cotizador Web Personalizado\n" +
+    copy.fields.date + ": " + purchaseDate + "\n" +
+    copy.fields.amount + ": " + amount + "\n" +
+    copy.fields.status + ": " + copy.statusPaid + "\n\n" +
+    copy.includesTitle + "\n" + bullet(copy.includes) + "\n\n" +
+    copy.benefitsTitle + "\n" + bullet(copy.benefits) + "\n\n" +
+    copy.notIncludedTitle + "\n" + bullet(copy.notIncluded) + "\n\n" +
+    copy.legalTitle + "\n" +
+    legalLine(copy.legalDocs.terms, row.terms_version, "terms") + "\n" +
+    legalLine(copy.legalDocs.privacy, row.privacy_version, "privacy") + "\n" +
+    legalLine(copy.legalDocs.purchasePolicy, row.purchase_policy_version, "purchase_policy") + "\n\n" +
+    "Deec Studio · deecstudio-quotingtools.online"
+  );
+}
+
 async function sendConfirmationEmail(row, payment, env) {
   try {
     if (!env.RESEND_API_KEY) {
@@ -290,6 +328,7 @@ async function sendConfirmationEmail(row, payment, env) {
     const lang = row.lang === "en" ? "en" : "es";
     const copy = EMAIL_COPY[lang];
     const html = buildConfirmationEmailHtml(row, payment, copy, lang);
+    const text = buildConfirmationEmailText(row, payment, copy, lang);
 
     const res = await fetch(RESEND_API_URL, {
       method: "POST",
@@ -300,6 +339,7 @@ async function sendConfirmationEmail(row, payment, env) {
       body: JSON.stringify({
         from: env.RESEND_FROM_EMAIL || "DEEC Studio <onboarding@resend.dev>",
         to: [row.customer_email],
+        text: text,
         subject: copy.subject,
         html: html
       })
