@@ -109,16 +109,16 @@ export async function onRequestPost(context) {
     await env.DB.prepare(
       `INSERT INTO checkout_acceptances (
         id, idempotency_key, customer_name, customer_email, customer_phone,
-        business_name, country, city, website, product_id, terms_document, terms_version,
+        business_name, country, city, website, lang, product_id, terms_document, terms_version,
         terms_url, accepted_at, timezone, ip_address, user_agent,
         checkout_reference, payment_reference, status, created_at, updated_at,
         acceptance_method, terms_hash,
         privacy_document, privacy_version, privacy_url, privacy_hash,
         purchase_policy_document, purchase_policy_version, purchase_policy_url, purchase_policy_hash
-      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,'pending_payment',?,?,?,?,?,?,?,?,?,?,?,?)`
+      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,'pending_payment',?,?,?,?,?,?,?,?,?,?,?,?)`
     ).bind(
       acceptanceId, idempotencyKey, customerName, customerEmail, customerPhone || null,
-      businessName || null, country || null, city || null, website || null, productId, TERMS_DOCUMENT_NAME, termsVersion,
+      businessName || null, country || null, city || null, website || null, lang, productId, TERMS_DOCUMENT_NAME, termsVersion,
       origin + TERMS_URL_PATH, nowIso, timezone || null, ip || null, userAgent || null,
       checkoutReference, nowIso, nowIso,
       // Everything below is 100% server-determined — the client never
