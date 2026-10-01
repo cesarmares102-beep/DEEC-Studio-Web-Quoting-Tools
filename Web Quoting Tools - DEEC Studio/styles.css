@@ -2923,6 +2923,87 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 .checkout-result-body { margin-top: .8rem; color: var(--ink-mute); font-size: .98rem; }
 .checkout-result-retry { margin-top: 1.6rem; }
 
+/* -------------------------------------------------------------
+   Thank You page (gracias.html) — post-payment confirmation.
+   ------------------------------------------------------------- */
+.thankyou { padding-block: clamp(3.5rem, 9vw, 6.5rem); }
+.thankyou-container { max-width: 40rem; margin-inline: auto; text-align: center; }
+
+.thankyou-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 5.2rem;
+  height: 5.2rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--moss) 10%, var(--paper));
+  color: var(--moss);
+  margin-bottom: 1.8rem;
+}
+.thankyou-check svg { width: 2.1rem; height: 2.1rem; }
+
+.thankyou-title { font-size: clamp(2.4rem, 6vw, 3.4rem); margin: 0; }
+.thankyou-subtitle { font-size: clamp(1.15rem, 2.4vw, 1.4rem); color: var(--ink-mute); margin: .5rem 0 0; }
+.thankyou-body { font-size: 1rem; color: var(--ink-mute); line-height: 1.6; margin: 1.2rem 0 0; }
+
+.thankyou-steps {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: clamp(1.2rem, 4vw, 2.6rem);
+  margin: 2.8rem 0;
+}
+.thankyou-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .7rem;
+  position: relative;
+  padding-inline: clamp(.6rem, 2vw, 1.3rem);
+}
+.thankyou-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 1.3rem;
+  right: calc(clamp(1.2rem, 4vw, 2.6rem) / -2);
+  width: 1px;
+  height: 2.6rem;
+  background: var(--line);
+}
+.thankyou-step-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--ink);
+}
+.thankyou-step-icon svg { width: 1.15rem; height: 1.15rem; }
+.thankyou-step-label { font-size: .84rem; color: var(--ink-mute); line-height: 1.4; margin: 0; }
+
+.thankyou-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  background: var(--ink);
+  color: var(--cream);
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 1.1rem 2.6rem;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: transform .2s var(--ease-out), background-color .2s var(--ease-out);
+}
+.thankyou-cta:hover { background: #1a2740; transform: translateY(-2px); }
+
+@media (max-width: 640px) {
+  .thankyou-steps { gap: 1rem; }
+  .thankyou-step:not(:last-child)::after { right: -.5rem; }
+}
+
 @media (max-width: 899px) {
   .checkout-grid { grid-template-columns: 1fr; }
   .checkout-side { position: static; }
