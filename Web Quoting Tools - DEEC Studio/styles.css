@@ -2903,8 +2903,8 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
    any page needs enough top padding on its own to clear it (confirmed:
    the previous padding-block value was too small on narrow viewports and
    the nav visibly overlapped the check icon). */
-.thankyou { padding-top: clamp(7.5rem, 16vw, 10.5rem); padding-bottom: clamp(3.5rem, 9vw, 6.5rem); }
-.thankyou-container { max-width: 40rem; margin-inline: auto; text-align: center; }
+.thankyou { padding-top: clamp(7.5rem, 16vw, 10.5rem); padding-bottom: clamp(3.5rem, 9vw, 6.5rem); overflow: hidden; }
+.thankyou-container { max-width: 74rem; margin-inline: auto; text-align: center; }
 
 .thankyou-check {
   display: inline-flex;
@@ -2921,7 +2921,6 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 
 .thankyou-title { font-size: clamp(2.4rem, 6vw, 3.4rem); margin: 0; }
 .thankyou-subtitle { font-size: clamp(1.15rem, 2.4vw, 1.4rem); color: var(--ink-mute); margin: .5rem 0 0; }
-.thankyou-body { font-size: 1rem; color: var(--ink-mute); line-height: 1.6; margin: 1.2rem 0 0; }
 
 .thankyou-cta {
   display: inline-flex;
@@ -2935,63 +2934,166 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   padding: 1.1rem 2.6rem;
   border-radius: var(--radius-md);
   text-decoration: none;
+  margin-top: clamp(2.6rem, 6vw, 3.6rem);
   transition: transform .2s var(--ease-out), background-color .2s var(--ease-out);
 }
 .thankyou-cta:hover { background: #1a2740; transform: translateY(-2px); }
 
-/* --- ¿Qué sigue? — postpayment timeline ------------------------- */
-.thankyou-next { background: var(--bg-2); padding-block: clamp(3.5rem, 8vw, 5.5rem); }
-.thankyou-next-container { max-width: 42rem; margin-inline: auto; }
+/* --- ¿Qué sigue? — premium product-journey timeline (same section,
+   no background/visual break from the "Gracias" block above it) --- */
 .thankyou-next-title {
   font-family: var(--serif);
   font-size: clamp(1.7rem, 3.4vw, 2.3rem);
   text-align: center;
-  margin: 0 0 clamp(2.2rem, 5vw, 3rem);
+  margin: clamp(2.6rem, 6vw, 3.6rem) 0 clamp(2.8rem, 7vw, 4.5rem);
 }
 
-.tl-list { list-style: none; margin: 0; padding: 0; }
-.tl-item { display: flex; gap: 1.1rem; }
-.tl-marker { display: flex; flex-direction: column; align-items: center; }
-.tl-marker-icon {
-  flex: none;
-  display: inline-flex;
+.tl-wrap { position: relative; }
+
+.tl-nodes {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: flex-start;
+}
+.tl-node {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 2.6rem;
-  height: 2.6rem;
+  text-align: center;
+}
+.tl-node-marker { position: relative; display: flex; flex-direction: column; align-items: center; }
+.tl-node-circle {
+  flex: none;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: var(--moss);
   color: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 4px var(--bg-2);
+  opacity: .35;
+  transform: scale(.8);
+  transition: opacity .5s var(--ease-out), transform .5s var(--ease-out), box-shadow .5s var(--ease-out);
+  transition-delay: calc(var(--d) * 150ms + .25s);
 }
-.tl-marker-icon svg { width: 1.15rem; height: 1.15rem; }
-.tl-marker-line {
-  flex: 1 1 auto;
-  width: 2px;
-  min-height: 1.6rem;
-  margin-block: .3rem;
+.tl-wrap.is-revealed .tl-node-circle { opacity: 1; transform: scale(1); }
+.tl-node-icon { width: 20px; height: 20px; }
+
+/* connector — a plain segment between each pair of nodes (same visual
+   treatment at every breakpoint: a quiet, continuous var(--line) bar
+   that simply grows in on reveal, no color/fill distinction) */
+.tl-connector {
+  flex: 1 1 4.5rem;
+  min-width: 2rem;
+  align-self: flex-start;
+  margin-top: 26px;
+}
+.tl-connector-line {
+  display: block;
+  height: 1px;
+  width: 0;
   background: var(--line);
+  transition: width .7s var(--ease-out);
+  transition-delay: calc(var(--d) * 160ms + .2s);
 }
-.tl-content { padding-bottom: clamp(1.6rem, 4vw, 2.2rem); }
-.tl-item:last-child .tl-content { padding-bottom: 0; }
-.tl-step-num {
+.tl-wrap.is-revealed .tl-connector-line { width: 100%; }
+
+.tl-node-body { margin-top: .9rem; }
+.tl-node-num {
   display: block;
   font-family: var(--mono);
-  font-size: .74rem;
+  font-size: .7rem;
   color: var(--accent);
   letter-spacing: .08em;
+  opacity: 0;
+  transition: opacity .4s var(--ease-out);
+  transition-delay: calc(var(--d) * 150ms + .4s);
 }
-.tl-step-title {
+.tl-wrap.is-revealed .tl-node-num { opacity: 1; }
+.tl-node-title {
   font-family: var(--serif);
-  font-size: 1.1rem;
+  font-size: 1rem;
   letter-spacing: 0;
   margin: .3rem 0 0;
+  transition: font-weight .2s var(--ease-out);
 }
-.tl-step-desc { margin: .35rem 0 0; color: var(--ink-mute); font-size: .92rem; line-height: 1.5; }
+.tl-node-desc { margin: .4rem 0 0; color: var(--ink-mute); font-size: .84rem; line-height: 1.5; transition: color .2s var(--ease-out); }
 
-@media (max-width: 640px) {
-  .tl-item { gap: .85rem; }
-  .tl-marker-icon { width: 2.2rem; height: 2.2rem; }
-  .tl-marker-icon svg { width: 1rem; height: 1rem; }
+/* final node — closes the journey with a confirmation pulse */
+@keyframes tlFinalPulse {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.16); }
+  100% { transform: scale(1); }
+}
+.tl-wrap.is-revealed .tl-node--final .tl-node-circle {
+  animation: tlFinalPulse .5s var(--ease-soft) calc(var(--d) * 150ms + .7s);
+}
+
+/* hover — fine pointer only; slow, soft, loops gently while hovered */
+@keyframes tlHoverPulse {
+  0%, 100% {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 4px var(--bg-2), 0 0 0 9px color-mix(in srgb, var(--moss) 13%, transparent);
+  }
+  50% {
+    transform: scale(1.14);
+    box-shadow: 0 0 0 4px var(--bg-2), 0 0 0 14px color-mix(in srgb, var(--moss) 6%, transparent);
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .tl-node-circle { cursor: default; }
+  .tl-node:hover .tl-node-circle {
+    animation: tlHoverPulse 2.2s var(--ease-soft) infinite;
+  }
+  .tl-node:hover .tl-node-title { font-weight: 800; }
+  .tl-node:hover .tl-node-desc { color: var(--ink-soft); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tl-connector-line, .tl-vline-fill, .tl-node-circle, .tl-node-num { transition: none; animation: none; }
+  .tl-connector-line { width: 100%; }
+  .tl-vline-fill { height: 100%; }
+  .tl-node-circle { opacity: 1; transform: scale(1); }
+  .tl-node-num { opacity: 1; }
+}
+
+/* continuous vertical line (mobile only) — a single bar running behind
+   every icon, top-to-bottom, so it only ever reads as "hidden" where a
+   circle sits on top of it. Node rows vary in height (wrapped
+   descriptions), so its top/height are measured in JS (main.js,
+   initTimelineLine) rather than guessed with a CSS percentage. */
+.tl-vline { position: absolute; display: none; z-index: 0; }
+.tl-vline-fill {
+  display: block;
+  width: 2px;
+  height: 0;
+  background: var(--line);
+  transition: height .9s var(--ease-out);
+  transition-delay: .3s;
+}
+.tl-wrap.is-revealed .tl-vline-fill { height: 100%; }
+
+@media (max-width: 760px) {
+  .tl-nodes { flex-direction: column; gap: 2.75rem; }
+  .tl-node {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+    gap: .9rem;
+  }
+  .tl-node-circle { width: 44px; height: 44px; box-shadow: none; position: relative; z-index: 1; }
+  .tl-node-icon { width: 17px; height: 17px; }
+  .tl-node-body { margin-top: 0; padding-top: .3rem; }
+
+  .tl-connector { display: none; }
+  .tl-vline { display: block; left: 22px; }
 }
 
 @media (max-width: 899px) {
