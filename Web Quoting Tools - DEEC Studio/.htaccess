@@ -84,8 +84,12 @@
   # cdn.whop.com was — if the browser console shows a CSP violation for a
   # different whop.com subdomain once this is actually tested, add that
   # exact origin here instead/also.
+  # Kept byte-for-byte consistent with _headers' checkout CSP, including
+  # worker-src 'self' blob: (Whop Elements' internal Web Worker) and the
+  # Apple Pay SDK origin (applepay.cdn-apple.com) — see _headers' own
+  # comments for why each entry is there.
   <FilesMatch "^checkout\.html$">
-    Header set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(self \"https://whop.com\")"
-    Header set Content-Security-Policy "default-src 'self'; script-src 'self' https://t.whop.tw https://connect.facebook.net https://cdn.whop.com; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com https://whop.com; frame-src https://www.facebook.com https://whop.com https://checkout.whop.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net https://cdn.whop.com https://checkout.whop.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com https://whop.com; object-src 'none'"
+    Header set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(self \"https://whop.com\" \"https://cdn.whop.com\")"
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' https://t.whop.tw https://connect.facebook.net https://cdn.whop.com https://whop.com https://*.whop.com https://applepay.cdn-apple.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com https://whop.com; frame-src https://www.facebook.com https://whop.com https://checkout.whop.com https://cdn.whop.com https://*.whop.com https://applepay.cdn-apple.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net https://cdn.whop.com https://checkout.whop.com https://*.whop.com https://applepay.cdn-apple.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com https://whop.com; object-src 'none'"
   </FilesMatch>
 </IfModule>
