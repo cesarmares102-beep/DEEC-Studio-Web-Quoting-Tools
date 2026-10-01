@@ -406,7 +406,7 @@
       "checkout.step3.num": "3",
       "checkout.step3.title": "Términos y condiciones",
       "checkout.step3.sub": "Al continuar, confirmas que has leído y aceptas los Términos y Condiciones aplicables a esta compra.",
-      "checkout.terms.checkboxLabel": "Acepto los <a href=\"terminos-condiciones-compra.html\" target=\"_blank\" rel=\"noopener\">Términos y Condiciones de QuotingTools</a>, la <a href=\"politica-privacidad.html\" target=\"_blank\" rel=\"noopener\">Política de Privacidad</a> y la <a href=\"politica-pagos.html\" target=\"_blank\" rel=\"noopener\">Política de Pagos, Cancelaciones y Reembolsos</a>.",
+      "checkout.terms.checkboxLabel": "Acepto los <a href=\"terminos-condiciones-compra.html\" target=\"_blank\" rel=\"noopener\">Términos y Condiciones de Compra</a>, la <a href=\"politica-privacidad.html\" target=\"_blank\" rel=\"noopener\">Política de Privacidad</a> y la <a href=\"politica-pagos.html\" target=\"_blank\" rel=\"noopener\">Política de Pagos, Cancelaciones y Reembolsos</a>.",
 
       "checkout.step4.num": "4",
       "checkout.step4.title": "Resumen de tu compra",
@@ -438,6 +438,14 @@
       "checkout.result.failedTitle": "El pago no se completó",
       "checkout.result.failedBody": "Puedes intentar de nuevo o escribirnos por WhatsApp si tienes dudas.",
       "checkout.result.retry": "Volver al checkout",
+
+      "thankyou.title": "Gracias.",
+      "thankyou.subtitle": "Tu compra está confirmada.",
+      "thankyou.body": "Recibimos tu pago y tu compra quedó confirmada.<br>Recibirás un correo con el resumen de tu compra y los siguientes pasos.",
+      "thankyou.step1": "Confirmación<br>por correo",
+      "thankyou.step2": "Resumen<br>de tu compra",
+      "thankyou.step3": "Siguientes<br>pasos",
+      "thankyou.cta": "Volver al inicio →",
     },
     en: {
       "a11y.skipLink": "Skip to content",
@@ -829,7 +837,7 @@
       "checkout.step3.num": "3",
       "checkout.step3.title": "Terms and conditions",
       "checkout.step3.sub": "By continuing, you confirm you have read and accept the Terms and Conditions applicable to this purchase.",
-      "checkout.terms.checkboxLabel": "I accept the <a href=\"terminos-condiciones-compra.html\" target=\"_blank\" rel=\"noopener\">QuotingTools Terms and Conditions</a>, the <a href=\"politica-privacidad.html\" target=\"_blank\" rel=\"noopener\">Privacy Policy</a>, and the <a href=\"politica-pagos.html\" target=\"_blank\" rel=\"noopener\">Payment, Cancellation and Refund Policy</a>.",
+      "checkout.terms.checkboxLabel": "I accept the <a href=\"terminos-condiciones-compra.html\" target=\"_blank\" rel=\"noopener\">Terms and Conditions of Purchase</a>, the <a href=\"politica-privacidad.html\" target=\"_blank\" rel=\"noopener\">Privacy Policy</a>, and the <a href=\"politica-pagos.html\" target=\"_blank\" rel=\"noopener\">Payment, Cancellation and Refund Policy</a>.",
 
       "checkout.step4.num": "4",
       "checkout.step4.title": "Order summary",
@@ -861,6 +869,14 @@
       "checkout.result.failedTitle": "Payment wasn't completed",
       "checkout.result.failedBody": "You can try again, or message us on WhatsApp if you have questions.",
       "checkout.result.retry": "Back to checkout",
+
+      "thankyou.title": "Thank you.",
+      "thankyou.subtitle": "Your purchase is confirmed.",
+      "thankyou.body": "We've received your payment and your purchase is confirmed.<br>You'll receive an email with your purchase summary and next steps.",
+      "thankyou.step1": "Confirmation<br>by email",
+      "thankyou.step2": "Purchase<br>summary",
+      "thankyou.step3": "Next steps<br>to get started",
+      "thankyou.cta": "Return to home →",
     }
   };
 })();
