@@ -22,15 +22,24 @@
         embed-checkout, not invented.
      5. Whop's own iframe handles card entry; this page never sees card
         data. `onComplete` fires client-side but is explicitly NOT trusted
-        to mean "paid" (Whop's own docs warn a restored checkout can fire
-        it again for the same result) — it only drives an optimistic
-        "processing" message.
-     6. Whop redirects the browser to `returnUrl` (this same page, with
+        as proof of payment (Whop's own docs warn a restored checkout can
+        fire it again for the same result, and fulfillment/the Meta
+        Purchase event only ever come from the server-to-server
+        payment.succeeded webhook — see functions/api/webhooks/whop.js).
+        It exists purely for UX: a card payment with no 3DS/bank step
+        completes entirely inside the iframe, and Whop then shows its OWN
+        post-payment screen (an OTP prompt to finish setting up a Whop
+        account) instead of ever redirecting back to `returnUrl` —
+        confirmed live, a real buyer got stuck staring at that screen.
+        So `onComplete` hops to gracias.html itself; nothing sensitive is
+        gated behind that page, so doing this before server confirmation
+        carries no real risk.
+     6. For the OTHER path — a 3DS/bank redirect step — Whop DOES send the
+        browser back to `returnUrl` (this same page, with
         ?acceptance=...&payment=...&status=...). initReturnFlow() detects
         that and polls GET /api/checkout/status, which reflects only what
         the payment webhook (server-to-server, never the client) wrote to
-        D1 — that's the one and only source of truth this page shows as
-        "payment confirmed".
+        D1 — the one and only source of truth for that path.
    ========================================================================== */
 (function () {
   "use strict";
@@ -201,11 +210,20 @@
       onComplete: function (completion) {
         // Per Whop's docs: never treat this as fulfillment/confirmation —
         // a checkout restored on a later page load fires it again for
-        // the same result. It only drives the optimistic message below;
-        // the real confirmation comes from initReturnFlow()'s server poll.
+        // the same result, and it is still NOT what marks the sale as
+        // paid (that's only ever the payment.succeeded webhook, server
+        // to server — see functions/api/webhooks/whop.js). This only
+        // drives the UI: a card payment with no 3DS/bank step completes
+        // entirely inside Whop's iframe, which then shows WHOP's own
+        // post-payment screen (an OTP prompt to finish setting up a
+        // Whop account) instead of ever redirecting back to returnUrl —
+        // confirmed live, a real buyer got stuck staring at that OTP
+        // screen because this page never moved past the embed. Hopping
+        // to gracias.html here is purely cosmetic (nothing sensitive is
+        // gated behind that page); the webhook has independently already
+        // confirmed the charge by the time a human reads this screen.
         if (completion && completion.result === "payment") {
-          setStateMsg(null);
-          if (els.stateMsg) els.stateMsg.textContent = t("checkout.cta.processing");
+          window.location.replace("gracias.html");
         }
       }
     });
@@ -320,7 +338,11 @@
         .then(function (res) { return res.json(); })
         .then(function (data) {
           if (data && data.status === "paid") {
-            showResult("paid");
+            // Dedicated Thank You page (gracias.html) instead of the inline
+            // panel — it's the one and only place that ever sees "paid",
+            // so the redirect can't happen before the server (via the
+            // webhook) has actually confirmed it.
+            window.location.replace("gracias.html");
             return;
           }
           if (data && (data.status === "payment_failed" || data.status === "canceled")) {
