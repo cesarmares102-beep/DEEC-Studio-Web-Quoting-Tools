@@ -2926,7 +2926,13 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 /* -------------------------------------------------------------
    Thank You page (gracias.html) — post-payment confirmation.
    ------------------------------------------------------------- */
-.thankyou { padding-block: clamp(3.5rem, 9vw, 6.5rem); }
+/* padding-top is deliberately larger than padding-bottom, matching
+   .hero's own clearance value — .nav floats fixed above everything and
+   nothing in the page flow reserves space for it, so the first section on
+   any page needs enough top padding on its own to clear it (confirmed:
+   the previous padding-block value was too small on narrow viewports and
+   the nav visibly overlapped the check icon). */
+.thankyou { padding-top: clamp(7.5rem, 16vw, 10.5rem); padding-bottom: clamp(3.5rem, 9vw, 6.5rem); }
 .thankyou-container { max-width: 40rem; margin-inline: auto; text-align: center; }
 
 .thankyou-check {
