@@ -795,6 +795,44 @@
   }
 
   /* -------------------------------------------------------------
+     "¿Qué sigue?" timeline — mobile connecting line (gracias.html).
+     Mobile stacks the 7 steps vertically with rows of uneven height
+     (descriptions wrap differently), so a single continuous line from
+     the first icon's center to the last icon's center can't be placed
+     with a CSS percentage — it's measured here instead. The circles
+     sit above it (z-index, see styles.css) so the line reads as
+     passing behind them, hidden only where a circle covers it.
+     Desktop isn't touched: its connectors are per-segment CSS only.
+     ------------------------------------------------------------- */
+  function initTimelineLine() {
+    var wrap = $(".tl-wrap");
+    if (!wrap) return;
+    var vline = $("[data-tl-vline]", wrap);
+    if (!vline) return;
+    var circles = $$(".tl-node-circle", wrap);
+    if (circles.length < 2) return;
+    var first = circles[0];
+    var last = circles[circles.length - 1];
+
+    function layout() {
+      if (window.innerWidth > 760) return;
+      var wrapTop = wrap.getBoundingClientRect().top;
+      var firstRect = first.getBoundingClientRect();
+      var lastRect = last.getBoundingClientRect();
+      var top = (firstRect.top - wrapTop) + firstRect.height / 2;
+      var bottom = (lastRect.top - wrapTop) + lastRect.height / 2;
+      vline.style.top = top + "px";
+      vline.style.height = Math.max(0, bottom - top) + "px";
+    }
+
+    layout();
+    window.addEventListener("resize", debounce(layout, 150));
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(layout).catch(function () {});
+    }
+  }
+
+  /* -------------------------------------------------------------
      Subtle tilt on mockup / offer cards — signature micro-interaction
      ------------------------------------------------------------- */
   function initTilt() {
@@ -931,12 +969,29 @@
      FAB tooltips (FAQ + WhatsApp) — sección 3a
      Tooltip text shows only after IDLE_DELAY of no scroll;
      hides immediately on scroll. One scroll listener drives all items.
+
+     data-fab-no-idle (opt-in, e.g. gracias.html): the idle/scroll
+     auto-show is skipped — the page has content (the "¿Qué sigue?"
+     timeline) the tooltip's left-extending text can cover when it pops
+     up unprompted, so tooltips there only ever appear from a real
+     hover/focus interaction.
      ------------------------------------------------------------- */
   function initFabTooltips() {
     var stack = $("[data-fab-stack]");
     if (!stack) return;
     var items = $$("[data-fab-item]", stack);
     if (!items.length) return;
+
+    if (stack.hasAttribute("data-fab-no-idle")) {
+      items.forEach(function (i) {
+        i.addEventListener("mouseenter", function () { i.classList.add("show-tooltip"); });
+        i.addEventListener("mouseleave", function () { i.classList.remove("show-tooltip"); });
+        i.addEventListener("focus", function () { i.classList.add("show-tooltip"); });
+        i.addEventListener("blur", function () { i.classList.remove("show-tooltip"); });
+      });
+      return;
+    }
+
     var IDLE_DELAY = 1100;
     var idleTimer = null;
 
@@ -1335,6 +1390,7 @@
     safe(initTransformShowcase, "initTransformShowcase");
     safe(initPersonalizacion, "initPersonalizacion");
     safe(initMarquee, "initMarquee");
+    safe(initTimelineLine, "initTimelineLine");
     safe(initCarousels, "initCarousels");
     safe(initTilt, "initTilt");
     safe(initMockupTilt, "initMockupTilt");
