@@ -33,10 +33,10 @@ export const TERMS_CONTENT_HASH = "b2ab6dd2151c6a8b186f8bbde28a4fb40700e2e9fcbbd
    update these + migration/legal_documents whenever a document's content
    changes and a new version is published.
    ------------------------------------------------------------- */
-export const CURRENT_PRIVACY_VERSION = "1.0";
+export const CURRENT_PRIVACY_VERSION = "1.1";
 export const PRIVACY_DOCUMENT_NAME = "QuotingTools Privacy Policy";
 export const PRIVACY_URL_PATH = "/politica-privacidad.html";
-export const PRIVACY_CONTENT_HASH = "3aaac81717d2c27c9eddf32eb901694544f058331995d9712e489556c61859a4";
+export const PRIVACY_CONTENT_HASH = "d0fd59178a7eb6982354e254c5535042fb86a5ad21ef7ea48260214da49844ec";
 
 export const CURRENT_PURCHASE_POLICY_VERSION = "1.0";
 export const PURCHASE_POLICY_DOCUMENT_NAME = "QuotingTools Payment, Cancellation and Refund Policy";
