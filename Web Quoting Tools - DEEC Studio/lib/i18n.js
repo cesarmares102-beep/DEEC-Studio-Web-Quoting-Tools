@@ -64,7 +64,7 @@
 
       "hero.kicker": "Cotizadores web personalizados",
       "hero.title": "Tu cotizador.<br>Tus precios. <em>Tu forma.</em>",
-      "hero.sub": "Diseñamos y desarrollamos una herramienta de cotización personalizada con los servicios, precios y reglas de tu negocio.",
+      "hero.sub": "Diseñamos y desarrollamos un cotizador web personalizado, configurado con los servicios, precios y opciones de tu negocio.",
       "hero.ctaHero": "Quiero mi cotizador",
 
       "marquee.1.title": "Cotiza más rápido",
@@ -502,7 +502,7 @@
 
       "hero.kicker": "Custom web quoting tools",
       "hero.title": "Your quoter.<br>Your prices. <em>Your way.</em>",
-      "hero.sub": "We design and build a custom quoting tool with your business's services, prices and rules.",
+      "hero.sub": "We design and build a personalized web quoting tool, configured with your business's services, prices and options.",
       "hero.ctaHero": "I want my quoter",
 
       "marquee.1.title": "Quote faster",
