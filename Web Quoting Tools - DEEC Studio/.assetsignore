@@ -15,3 +15,13 @@ wrangler.jsonc
 
 # Local dev helper — not part of the site.
 tools/
+
+# D1 schema/migrations and one-time Node dev tooling (legal-PDF generation,
+# content hashing) — reference/build-time material, not part of the
+# deployed site. No secrets in them, but no reason to expose the D1 table
+# structure or internal tooling as public static files either (confirmed
+# servable at /schema.sql etc. in production before this fix).
+schema.sql
+migration-*.sql
+generate-legal-pdfs.js
+hash-legal-docs.js
