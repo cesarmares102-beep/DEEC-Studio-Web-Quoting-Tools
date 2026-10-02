@@ -17,6 +17,8 @@
       "a11y.openMenu": "Abrir menú",
       "a11y.closeMenu": "Cerrar menú",
       "a11y.mobileNav": "Menú de navegación",
+      "a11y.stepsPrev": "Paso anterior",
+      "a11y.stepsNext": "Paso siguiente",
 
       "nb.catering": "SERVICIOS",
       "nb.waiters": "Personal x4",
@@ -430,7 +432,8 @@
       "thankyou.subtitle": "Tu compra está confirmada.",
       "thankyou.cta": "Volver al inicio →",
 
-      "thankyou.next.title": "¿Qué sigue?",
+      "thankyou.next.eyebrow": "A continuación",
+      "thankyou.next.sub": "Esto sigue después de haber realizado tu compra.",
       "thankyou.next.step1.title": "Revisa tu correo",
       "thankyou.next.step1.desc": "Recibirás un cuestionario para comenzar.",
       "thankyou.next.step2.title": "Completa el cuestionario",
@@ -454,6 +457,8 @@
       "a11y.openMenu": "Open menu",
       "a11y.closeMenu": "Close menu",
       "a11y.mobileNav": "Navigation menu",
+      "a11y.stepsPrev": "Previous step",
+      "a11y.stepsNext": "Next step",
 
       "nb.catering": "SERVICES",
       "nb.waiters": "Staff x4",
@@ -860,7 +865,8 @@
       "thankyou.subtitle": "Your purchase is confirmed.",
       "thankyou.cta": "Return to home →",
 
-      "thankyou.next.title": "What's next?",
+      "thankyou.next.eyebrow": "Up next",
+      "thankyou.next.sub": "This is what happens after your purchase.",
       "thankyou.next.step1.title": "Check your email",
       "thankyou.next.step1.desc": "You'll receive a questionnaire to get started.",
       "thankyou.next.step2.title": "Complete the questionnaire",
