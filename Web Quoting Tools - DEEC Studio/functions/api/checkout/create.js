@@ -148,8 +148,10 @@ export async function onRequestPost(context) {
   return jsonOk(buildCreateResponse(origin, acceptanceId, checkoutReference, product));
 }
 
+// Cloudflare Pages Functions always calls onRequestPost directly for POST
+// requests when it's exported from this file — onRequest below is never
+// reached for POST, only for every other method, so it only needs to 405.
 export async function onRequest(context) {
-  if (context.request.method === "POST") return onRequestPost(context);
   return new Response("method not allowed", { status: 405 });
 }
 
