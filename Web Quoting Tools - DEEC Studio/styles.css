@@ -2255,60 +2255,6 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 }
 
 /* =============================================================
-   15c. Sticky CTA bar — sección 2
-   ============================================================= */
-.cta-bar {
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  z-index: 90;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(14px) saturate(160%);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  border-top: 1px solid var(--line);
-  transform: translateY(100%);
-  transition: transform .5s var(--ease-soft);
-}
-.cta-bar.is-visible { transform: translateY(0); }
-/* The cta-bar button reuses .btn-lg.btn-hero so it matches the hero/oferta
-   CTAs pixel-for-pixel (same font-size/weight/padding/arrow — .btn-hero
-   wins that cascade over .btn-lg since it's declared later). .btn-hero's
-   own width:100% is meant for its original single-column stack though,
-   and would fight this bar's row layout (price block + button side by
-   side) on desktop, so it's reset to auto here; the shared mobile rule
-   below (.cta-bar-inner .btn) still stretches it full-width at narrow
-   widths via flex-basis, same as before. */
-.cta-bar-inner .btn-hero { width: auto; }
-.cta-bar-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-block: .8rem;
-}
-.cta-bar-price {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.15;
-}
-.cta-bar-amount { font-family: var(--display); font-weight: 800; font-size: 1.2rem; color: var(--ink); }
-.cta-bar-label {
-  font-size: .68rem;
-  letter-spacing: .05em;
-  text-transform: uppercase;
-  color: var(--ink-mute);
-}
-.cta-bar-badges {
-  display: none;
-  align-items: center;
-  gap: .7rem;
-  justify-content: center;
-  flex-wrap: wrap;
-  padding-bottom: .6rem;
-  font-size: .72rem;
-  color: var(--ink-faint);
-}
-
-/* =============================================================
    15d. Social proof toast — sección 5b
    ============================================================= */
 .sp-stack {
@@ -2374,12 +2320,6 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   padding: .1rem .35rem;
   border-radius: 2px;
   font-size: .82em;
-}
-
-@media (max-width: 539px) {
-  .cta-bar-price { display: none; }
-  .cta-bar-inner .btn { order: 1; flex: 1 1 100%; }
-  .cta-bar-badges { display: flex; order: 2; }
 }
 
 /* =============================================================
@@ -2502,14 +2442,6 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
    ============================================================= */
 @media (min-width: 540px) {
   .hero-cta { flex-direction: row; }
-}
-
-@media (max-width: 539px) {
-  .cta-bar-inner { flex-wrap: wrap; justify-content: center; text-align: center; row-gap: .5rem; }
-}
-
-@media (min-width: 640px) {
-  .cta-bar-badges { display: flex; }
 }
 
 @media (min-width: 720px) {

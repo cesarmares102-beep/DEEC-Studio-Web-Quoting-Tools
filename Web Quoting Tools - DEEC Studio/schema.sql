@@ -10,6 +10,13 @@
 --      (it currently has a REPLACE_WITH_REAL_D1_DATABASE_ID placeholder)
 --   3. wrangler d1 execute deec-studio-quoting-tools-checkout --remote --file=schema.sql
 --      (drop --remote to apply to the local dev database instead)
+--   4. Apply migration-001-legal-evidence.sql through migration-004-fix-
+--      legal-hash-bug.sql, in that numeric order. This file is the original
+--      v1 table only — it does NOT include the city/website/lang columns
+--      or the terms_hash/privacy_*/purchase_policy_* legal-evidence columns
+--      functions/api/checkout/create.js actually inserts into today, nor
+--      the legal_documents table migration-001 creates. A fresh database
+--      needs schema.sql AND every migration to match production.
 --
 -- Every row here is written by functions/api/checkout/create.js (insert,
 -- status='pending_payment') and later updated by functions/api/webhooks/

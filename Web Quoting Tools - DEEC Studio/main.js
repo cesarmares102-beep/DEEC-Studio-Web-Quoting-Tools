@@ -1020,37 +1020,6 @@
   }
 
   /* -------------------------------------------------------------
-     CTA bar — sección 2. Hidden until Hero fully leaves viewport.
-     ------------------------------------------------------------- */
-  function initCtaBarVisibility() {
-    var bar = $("[data-cta-bar]");
-    var hero = $("#top");
-    if (!bar) return;
-    if (!hero || !("IntersectionObserver" in window)) {
-      // Caso límite: sin IntersectionObserver, mostrar siempre visible
-      bar.classList.add("is-visible");
-      return;
-    }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        bar.classList.toggle("is-visible", !entry.isIntersecting);
-      });
-    }, { threshold: 0 });
-    io.observe(hero);
-  }
-
-  function initCtaBarHeight() {
-    var bar = $("[data-cta-bar]");
-    if (!bar) return;
-    var set = function () {
-      var h = bar.getBoundingClientRect().height;
-      document.documentElement.style.setProperty("--cta-bar-h", h + "px");
-    };
-    set();
-    window.addEventListener("resize", debounce(set, 120));
-  }
-
-  /* -------------------------------------------------------------
      Cookie consent gate — blocks interaction with the rest of the
      page (a full-screen backdrop above nav/cta-bar/FAB stack, plus a
      locked body scroll) until "Entendido" is clicked. On purpose,
@@ -1396,8 +1365,6 @@
     safe(initMockupTilt, "initMockupTilt");
     safe(initAccordion, "initAccordion");
     safe(initFabTooltips, "initFabTooltips");
-    safe(initCtaBarVisibility, "initCtaBarVisibility");
-    safe(initCtaBarHeight, "initCtaBarHeight");
     safe(initCookieConsent, "initCookieConsent");
     safe(mountRatingStars, "mountRatingStars");
     safe(initSocialProof, "initSocialProof");
