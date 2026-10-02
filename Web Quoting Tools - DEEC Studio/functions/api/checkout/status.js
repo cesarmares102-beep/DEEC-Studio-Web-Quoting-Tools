@@ -37,8 +37,10 @@ export async function onRequestGet(context) {
   });
 }
 
+// Cloudflare Pages Functions always calls onRequestGet directly for GET
+// requests when it's exported from this file — onRequest below is never
+// reached for GET, only for every other method, so it only needs to 405.
 export async function onRequest(context) {
-  if (context.request.method === "GET") return onRequestGet(context);
   return new Response("method not allowed", { status: 405 });
 }
 
