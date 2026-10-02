@@ -795,34 +795,162 @@
   }
 
   /* -------------------------------------------------------------
-     "¿Qué sigue?" timeline — mobile connecting line (gracias.html).
-     Mobile stacks the 7 steps vertically with rows of uneven height
-     (descriptions wrap differently), so a single continuous line from
-     the first icon's center to the last icon's center can't be placed
-     with a CSS percentage — it's measured here instead. The circles
-     sit above it (z-index, see styles.css) so the line reads as
-     passing behind them, hidden only where a circle covers it.
-     Desktop isn't touched: its connectors are per-segment CSS only.
+     "¿Qué sigue?" step carousel (gracias.html). One centered card at
+     a time, looping infinitely (07 -> 01 -> 02... and 01 -> 07
+     backwards); native horizontal scroll + scroll-snap drives mobile
+     swipe (same technique as initCarousels() above — no custom drag
+     code). The loop is the classic "boundary clone" trick: a clone of
+     card 07 sits before card 01, and a clone of card 01 sits after
+     card 07 (both aria-hidden, data-steps-clone). Stepping onto a
+     clone animates normally; once the scroll settles there, it's
+     repositioned instantly (behavior:"auto") onto the real card it's
+     a copy of, so the jump is invisible. Edge spacers (data-steps-
+     spacer) are sized in JS so the first/last card can center too —
+     real flex items, not track padding, because a scroll container's
+     trailing padding isn't counted in its scrollWidth in every
+     browser, which silently capped how far the track could scroll.
      ------------------------------------------------------------- */
-  function initTimelineLine() {
-    var wrap = $(".tl-wrap");
-    if (!wrap) return;
-    var vline = $("[data-tl-vline]", wrap);
-    if (!vline) return;
-    var circles = $$(".tl-node-circle", wrap);
-    if (circles.length < 2) return;
-    var first = circles[0];
-    var last = circles[circles.length - 1];
+  function initStepsCarousel() {
+    var viewport = $("[data-steps-viewport]");
+    var track = $("[data-steps-track]");
+    if (!viewport || !track) return;
+    var allCards = $$("[data-steps-card]", track);
+    var realCards = $$("[data-steps-card][data-steps-real]", track);
+    var spacers = $$("[data-steps-spacer]", track);
+    if (realCards.length < 2) return;
+    var prevBtn = $("[data-steps-prev]");
+    var nextBtn = $("[data-steps-next]");
+    var segs = $$("[data-steps-seg]");
+    var currentEl = $("[data-steps-current]");
+
+    var REAL_COUNT = realCards.length;
+    var LAST_DOM = allCards.length - 1;
+    var domIndex = 1; // dom index 0 is the leading clone; real cards occupy 1..REAL_COUNT
+
+    function pad(n) { return (n < 10 ? "0" : "") + n; }
+
+    function realIndexOf(dIdx) {
+      if (dIdx <= 0) return REAL_COUNT - 1;
+      if (dIdx >= REAL_COUNT + 1) return 0;
+      return dIdx - 1;
+    }
+
+    function setSpacers() {
+      var cardW = allCards[0].getBoundingClientRect().width;
+      var side = Math.max(0, (viewport.clientWidth - cardW) / 2);
+      spacers.forEach(function (s) { s.style.width = side + "px"; });
+    }
+
+    function scrollToDom(dIdx, behavior) {
+      var card = allCards[dIdx];
+      viewport.scrollTo({ left: card.offsetLeft - (viewport.clientWidth - card.offsetWidth) / 2, behavior: behavior });
+    }
+
+    function applyActive(dIdx) {
+      var rIdx = realIndexOf(dIdx);
+      allCards.forEach(function (card, i) { card.classList.toggle("is-active", i === dIdx); });
+      segs.forEach(function (seg, i) { seg.classList.toggle("is-active", i === rIdx); });
+      if (currentEl) currentEl.textContent = pad(rIdx + 1);
+    }
+
+    function syncFromScrollPosition() {
+      var center = viewport.scrollLeft + viewport.clientWidth / 2;
+      var closest = domIndex, closestDist = Infinity;
+      allCards.forEach(function (card, i) {
+        var dist = Math.abs((card.offsetLeft + card.offsetWidth / 2) - center);
+        if (dist < closestDist) { closestDist = dist; closest = i; }
+      });
+      if (closest !== domIndex) {
+        domIndex = closest;
+        applyActive(domIndex);
+      }
+    }
+
+    // Resolve the real position only once a scroll gesture (swipe or
+    // smooth arrow-scroll) has actually finished — never mid-flight.
+    // Reading the live scroll position while a gesture is still animating
+    // and feeding it back into domIndex is what caused the previous bug:
+    // a button click's own in-flight animation would get overwritten by
+    // this same logic reacting to the not-yet-arrived scroll position,
+    // corrupting the count. Resting on a clone gets silently snapped to
+    // the real card it duplicates.
+    function onScrollSettled() {
+      syncFromScrollPosition();
+      if (domIndex === 0) {
+        domIndex = REAL_COUNT;
+        scrollToDom(domIndex, "auto");
+        applyActive(domIndex);
+      } else if (domIndex === LAST_DOM) {
+        domIndex = 1;
+        scrollToDom(domIndex, "auto");
+        applyActive(domIndex);
+      }
+    }
+
+    if ("onscrollend" in window) {
+      viewport.addEventListener("scrollend", onScrollSettled, { passive: true });
+    } else {
+      var settleTimer = null;
+      viewport.addEventListener("scroll", function () {
+        clearTimeout(settleTimer);
+        settleTimer = setTimeout(onScrollSettled, 150);
+      }, { passive: true });
+    }
+
+    function step(delta) {
+      domIndex = Math.max(0, Math.min(LAST_DOM, domIndex + delta));
+      scrollToDom(domIndex, reduced ? "auto" : "smooth");
+      applyActive(domIndex);
+    }
+    if (prevBtn) prevBtn.addEventListener("click", function () { step(-1); restartAutoplay(); });
+    if (nextBtn) nextBtn.addEventListener("click", function () { step(1); restartAutoplay(); });
+
+    // Autoplay — advances one card every 3s, same timer pattern as
+    // initPersonalizacion() above. Paused (not just not-started) while
+    // the carousel is out of view, while the user is actively
+    // touching/dragging it (so it never fights a swipe mid-gesture),
+    // and entirely skipped under prefers-reduced-motion.
+    var AUTOPLAY_MS = 3000;
+    var autoplayTimer = null;
+    function startAutoplay() {
+      if (reduced || autoplayTimer) return;
+      autoplayTimer = setInterval(function () { step(1); }, AUTOPLAY_MS);
+    }
+    function stopAutoplay() {
+      if (!autoplayTimer) return;
+      clearInterval(autoplayTimer);
+      autoplayTimer = null;
+    }
+    function restartAutoplay() {
+      if (reduced) return;
+      stopAutoplay();
+      startAutoplay();
+    }
+
+    if (!reduced) {
+      viewport.addEventListener("pointerdown", stopAutoplay, { passive: true });
+      viewport.addEventListener("pointerup", startAutoplay, { passive: true });
+      viewport.addEventListener("pointercancel", startAutoplay, { passive: true });
+      if (fineHover) {
+        viewport.addEventListener("mouseenter", stopAutoplay);
+        viewport.addEventListener("mouseleave", startAutoplay);
+      }
+      if ("IntersectionObserver" in window) {
+        var autoplayIo = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) startAutoplay(); else stopAutoplay();
+          });
+        }, { threshold: 0.4 });
+        autoplayIo.observe(viewport);
+      } else {
+        startAutoplay();
+      }
+    }
 
     function layout() {
-      if (window.innerWidth > 760) return;
-      var wrapTop = wrap.getBoundingClientRect().top;
-      var firstRect = first.getBoundingClientRect();
-      var lastRect = last.getBoundingClientRect();
-      var top = (firstRect.top - wrapTop) + firstRect.height / 2;
-      var bottom = (lastRect.top - wrapTop) + lastRect.height / 2;
-      vline.style.top = top + "px";
-      vline.style.height = Math.max(0, bottom - top) + "px";
+      setSpacers();
+      scrollToDom(domIndex, "auto");
+      applyActive(domIndex);
     }
 
     layout();
@@ -1359,7 +1487,7 @@
     safe(initTransformShowcase, "initTransformShowcase");
     safe(initPersonalizacion, "initPersonalizacion");
     safe(initMarquee, "initMarquee");
-    safe(initTimelineLine, "initTimelineLine");
+    safe(initStepsCarousel, "initStepsCarousel");
     safe(initCarousels, "initCarousels");
     safe(initTilt, "initTilt");
     safe(initMockupTilt, "initMockupTilt");

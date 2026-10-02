@@ -21,6 +21,7 @@
   --moss-soft: #DCE6F0;
   --terracotta:   #b35d3a;
   --urgent:      #c23b32;
+  --success:     #1F7A4D; /* muted forest green — reserved for actual success/confirmation states (e.g. the "Gracias" checkmark), kept separate from --moss/--accent which despite its name is navy, not green */
   --title-accent: #102A43; /* headline emphasis color (em inside h1/h2) — not the brand accent */
   --title-accent-soft: #DCE6F0; /* lighter tint for headline emphasis on dark section backgrounds */
   --cream:     #FFFFFF;
@@ -2845,8 +2846,8 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   width: 5.2rem;
   height: 5.2rem;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--moss) 10%, var(--paper));
-  color: var(--moss);
+  background: color-mix(in srgb, var(--success) 10%, var(--paper));
+  color: var(--success);
   margin-bottom: 1.8rem;
 }
 .thankyou-check svg { width: 2.1rem; height: 2.1rem; }
@@ -2871,35 +2872,78 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 }
 .thankyou-cta:hover { background: #1a2740; transform: translateY(-2px); }
 
-/* --- ¿Qué sigue? — premium product-journey timeline (same section,
-   no background/visual break from the "Gracias" block above it) --- */
-.thankyou-next-title {
-  font-family: var(--serif);
-  font-size: clamp(1.7rem, 3.4vw, 2.3rem);
-  text-align: center;
-  margin: clamp(2.6rem, 6vw, 3.6rem) 0 clamp(2.8rem, 7vw, 4.5rem);
+/* --- "A continuación" — premium product-journey timeline (same
+   section, no background/visual break from the "Gracias" block
+   above it). Deliberately a small eyebrow + a quiet sub-line, not a
+   heading — this block must stay secondary to "Gracias." --- */
+.thankyou-next-eyebrow {
+  justify-content: center;
+  margin: clamp(2.6rem, 6vw, 3.6rem) 0 0;
+}
+.thankyou-next-sub {
+  font-size: .92rem;
+  color: var(--ink-faint);
+  max-width: 30rem;
+  margin: .35rem auto clamp(2.2rem, 5.5vw, 3.4rem);
 }
 
-.tl-wrap { position: relative; }
+/* "¿Qué sigue?" step carousel — one centered card at a time, adjacent
+   cards peeking at reduced scale/opacity on both sides. Native scroll +
+   scroll-snap drives mobile swipe (same technique as .carousel-track
+   elsewhere in this file); JS only syncs the active card, progress
+   segments, counter and arrow disabled-state to the current scroll
+   position (see initStepsCarousel in main.js). */
+.steps-carousel { position: relative; }
 
-.tl-nodes {
+.steps-viewport {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 2%, #000 98%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 2%, #000 98%, transparent 100%);
+}
+.steps-viewport::-webkit-scrollbar { display: none; }
+
+.steps-track {
   position: relative;
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
-  align-items: flex-start;
+  gap: 1.1rem;
 }
-.tl-node {
-  flex: 1 1 0;
-  min-width: 0;
+/* Real flex items, not padding — a scroll container's END padding is
+   not counted in its scrollWidth in every browser, which silently
+   capped how far the track could scroll and made the last card
+   uncenterable. Width is set in JS (initStepsCarousel) to half the
+   viewport/card difference, same on both ends. */
+.steps-spacer { flex: none; }
+
+.steps-card {
+  flex: none;
+  width: min(66vw, 300px);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  padding: 2.1rem 1.5rem;
+  border-radius: 3px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  scroll-snap-align: center;
+  opacity: .45;
+  transform: scale(.86);
+  transition: opacity .4s var(--ease-out), transform .4s var(--ease-out), box-shadow .4s var(--ease-out);
 }
-.tl-node-marker { position: relative; display: flex; flex-direction: column; align-items: center; }
-.tl-node-circle {
+.steps-card.is-active {
+  opacity: 1;
+  transform: scale(1);
+  box-shadow: 0 20px 44px -22px rgba(15, 23, 33, .2);
+}
+
+.steps-card-icon {
   flex: none;
   width: 52px;
   height: 52px;
@@ -2909,123 +2953,71 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 0 4px var(--bg-2);
-  opacity: .35;
-  transform: scale(.8);
-  transition: opacity .5s var(--ease-out), transform .5s var(--ease-out), box-shadow .5s var(--ease-out);
-  transition-delay: calc(var(--d) * 150ms + .25s);
 }
-.tl-wrap.is-revealed .tl-node-circle { opacity: 1; transform: scale(1); }
-.tl-node-icon { width: 20px; height: 20px; }
+.steps-card-icon svg { width: 20px; height: 20px; }
 
-/* connector — a plain segment between each pair of nodes (same visual
-   treatment at every breakpoint: a quiet, continuous var(--line) bar
-   that simply grows in on reveal, no color/fill distinction) */
-.tl-connector {
-  flex: 1 1 4.5rem;
-  min-width: 2rem;
-  align-self: flex-start;
-  margin-top: 26px;
-}
-.tl-connector-line {
+.steps-card-num {
   display: block;
-  height: 1px;
-  width: 0;
-  background: var(--line);
-  transition: width .7s var(--ease-out);
-  transition-delay: calc(var(--d) * 160ms + .2s);
-}
-.tl-wrap.is-revealed .tl-connector-line { width: 100%; }
-
-.tl-node-body { margin-top: .9rem; }
-.tl-node-num {
-  display: block;
+  margin-top: 1rem;
   font-family: var(--mono);
   font-size: .7rem;
   color: var(--accent);
   letter-spacing: .08em;
-  opacity: 0;
-  transition: opacity .4s var(--ease-out);
-  transition-delay: calc(var(--d) * 150ms + .4s);
 }
-.tl-wrap.is-revealed .tl-node-num { opacity: 1; }
-.tl-node-title {
-  font-family: var(--serif);
-  font-size: 1rem;
-  letter-spacing: 0;
-  margin: .3rem 0 0;
-  transition: font-weight .2s var(--ease-out);
-}
-.tl-node-desc { margin: .4rem 0 0; color: var(--ink-mute); font-size: .84rem; line-height: 1.5; transition: color .2s var(--ease-out); }
+.steps-card-title { font-family: var(--serif); font-size: 1.05rem; margin: .35rem 0 0; }
+.steps-card-desc { margin: .5rem 0 0; color: var(--ink-mute); font-size: .86rem; line-height: 1.5; }
 
-/* final node — closes the journey with a confirmation pulse */
-@keyframes tlFinalPulse {
-  0% { transform: scale(1); }
-  45% { transform: scale(1.16); }
-  100% { transform: scale(1); }
+.steps-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: clamp(1.6rem, 4vw, 2.2rem);
 }
-.tl-wrap.is-revealed .tl-node--final .tl-node-circle {
-  animation: tlFinalPulse .5s var(--ease-soft) calc(var(--d) * 150ms + .7s);
+.steps-arrow {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--moss-2);
+  transition: border-color .3s var(--ease-out), color .3s var(--ease-out), opacity .3s var(--ease-out), transform .2s var(--ease-out);
 }
-
-/* hover — fine pointer only; slow, soft, loops gently while hovered */
-@keyframes tlHoverPulse {
-  0%, 100% {
-    transform: scale(1.08);
-    box-shadow: 0 0 0 4px var(--bg-2), 0 0 0 9px color-mix(in srgb, var(--moss) 13%, transparent);
-  }
-  50% {
-    transform: scale(1.14);
-    box-shadow: 0 0 0 4px var(--bg-2), 0 0 0 14px color-mix(in srgb, var(--moss) 6%, transparent);
-  }
-}
+.steps-arrow svg { width: 16px; height: 16px; }
+.steps-arrow:disabled { opacity: .3; }
 @media (hover: hover) and (pointer: fine) {
-  .tl-node-circle { cursor: default; }
-  .tl-node:hover .tl-node-circle {
-    animation: tlHoverPulse 2.2s var(--ease-soft) infinite;
-  }
-  .tl-node:hover .tl-node-title { font-weight: 800; }
-  .tl-node:hover .tl-node-desc { color: var(--ink-soft); }
+  .steps-arrow:not(:disabled):hover { border-color: var(--moss); color: var(--moss); transform: translateY(-1px); }
+}
+
+.steps-progress-track { display: flex; align-items: center; gap: .3rem; }
+.steps-progress-seg {
+  width: 14px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--line);
+  transition: background-color .3s var(--ease-out), width .3s var(--ease-out);
+}
+.steps-progress-seg.is-active { background: var(--moss); width: 22px; }
+
+.steps-progress-count {
+  margin: .6rem 0 0;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: .78rem;
+  color: var(--ink-mute);
+  letter-spacing: .04em;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tl-connector-line, .tl-vline-fill, .tl-node-circle, .tl-node-num { transition: none; animation: none; }
-  .tl-connector-line { width: 100%; }
-  .tl-vline-fill { height: 100%; }
-  .tl-node-circle { opacity: 1; transform: scale(1); }
-  .tl-node-num { opacity: 1; }
+  .steps-card, .steps-progress-seg { transition: none; }
 }
 
-/* continuous vertical line (mobile only) — a single bar running behind
-   every icon, top-to-bottom, so it only ever reads as "hidden" where a
-   circle sits on top of it. Node rows vary in height (wrapped
-   descriptions), so its top/height are measured in JS (main.js,
-   initTimelineLine) rather than guessed with a CSS percentage. */
-.tl-vline { position: absolute; display: none; z-index: 0; }
-.tl-vline-fill {
-  display: block;
-  width: 2px;
-  height: 0;
-  background: var(--line);
-  transition: height .9s var(--ease-out);
-  transition-delay: .3s;
-}
-.tl-wrap.is-revealed .tl-vline-fill { height: 100%; }
-
-@media (max-width: 760px) {
-  .tl-nodes { flex-direction: column; gap: 2.75rem; }
-  .tl-node {
-    flex-direction: row;
-    align-items: flex-start;
-    text-align: left;
-    gap: .9rem;
-  }
-  .tl-node-circle { width: 44px; height: 44px; box-shadow: none; position: relative; z-index: 1; }
-  .tl-node-icon { width: 17px; height: 17px; }
-  .tl-node-body { margin-top: 0; padding-top: .3rem; }
-
-  .tl-connector { display: none; }
-  .tl-vline { display: block; left: 22px; }
+@media (min-width: 761px) {
+  .steps-card { width: min(34vw, 340px); }
 }
 
 @media (max-width: 899px) {
