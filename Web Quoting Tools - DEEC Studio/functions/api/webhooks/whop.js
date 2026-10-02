@@ -355,9 +355,11 @@ async function sendConfirmationEmail(row, payment, env) {
 }
 
 // Anything other than a signed POST shouldn't do anything — e.g. someone
-// opening this URL in a browser.
+// opening this URL in a browser. (Cloudflare Pages Functions always calls
+// onRequestPost directly for POST requests when it's exported from this
+// file, so onRequest below is never reached for POST — only for every
+// other method, which is exactly what it 405s.)
 export async function onRequest(context) {
-  if (context.request.method === "POST") return onRequestPost(context);
   return new Response("method not allowed", { status: 405 });
 }
 
