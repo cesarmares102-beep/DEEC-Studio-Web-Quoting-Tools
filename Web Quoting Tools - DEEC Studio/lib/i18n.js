@@ -420,6 +420,10 @@
       "checkout.benefits.3.sub": "A tu cotizador web.",
       "checkout.benefits.4.title": "Soporte de implementación",
       "checkout.benefits.4.sub": "Te acompañamos en el proceso.",
+      "checkout.benefits.1": "Pago único",
+      "checkout.benefits.2": "Sin suscripciones ni pagos recurrentes",
+      "checkout.benefits.3": "Sin renovación ni mantenimiento recurrente",
+      "checkout.benefits.4": "Acceso permanente a tu cotizador web",
 
       "checkout.notIncludedLabel": "No incluye",
       "checkout.notIncluded.1": "Hosting ni dominio",
@@ -911,6 +915,10 @@
       "checkout.benefits.3.sub": "To your web quoting tool.",
       "checkout.benefits.4.title": "Implementation support",
       "checkout.benefits.4.sub": "We guide you through the process.",
+      "checkout.benefits.1": "One-time payment",
+      "checkout.benefits.2": "No subscriptions or recurring payments",
+      "checkout.benefits.3": "No renewal or recurring maintenance",
+      "checkout.benefits.4": "Permanent access to your web quoting tool",
 
       "checkout.notIncludedLabel": "Not included",
       "checkout.notIncluded.1": "Hosting or domain",
