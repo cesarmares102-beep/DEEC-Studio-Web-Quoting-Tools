@@ -64,6 +64,10 @@
 
   var WHOP_CHECKOUT_SCRIPT_SRC = "https://cdn.whop.com/elements/amber/elements.js";
   var PRODUCT_ID = "quoting-tool";
+  // How long the "Preparando tu pago" panel waits for Whop's iframe to
+  // fire its own load event before giving up and revealing the mount
+  // box anyway — a safety fallback, not the expected path.
+  var WHOP_IFRAME_LOAD_TIMEOUT_MS = 10000;
 
   var els = {};
   var idempotencyKey = null;
@@ -87,6 +91,8 @@
     els.continueBtn = $("[data-checkout-continue]");
     els.continueLabel = $("[data-checkout-continue-label]");
     els.whopMount = $("[data-whop-mount]");
+    els.paymentStage = $("[data-checkout-payment-stage]");
+    els.paymentLoading = $("[data-checkout-payment-loading]");
   }
 
   /* -------------------------------------------------------------
@@ -185,6 +191,57 @@
     return whopScriptPromise;
   }
 
+  /* -------------------------------------------------------------
+     Payment loading panel — shown the instant "Continuar al pago" is
+     pressed (covers both the create-acceptance request and the Whop
+     embed initializing) and hidden once Whop's iframe actually
+     finishes loading, so the mount box is never visibly empty.
+     ------------------------------------------------------------- */
+  function showPaymentLoading() {
+    if (els.paymentStage) els.paymentStage.hidden = false;
+    if (els.paymentLoading) els.paymentLoading.hidden = false;
+  }
+  function hidePaymentStage() {
+    if (els.paymentStage) els.paymentStage.hidden = true;
+    if (els.paymentLoading) els.paymentLoading.hidden = false; // reset for next attempt
+  }
+  function hidePaymentLoading() {
+    if (els.paymentLoading) els.paymentLoading.hidden = true;
+  }
+
+  /**
+   * Resolves once the Whop mount box's iframe fires its own `load`
+   * event (works even though the iframe is cross-origin — only its
+   * content is opaque, the load event itself still fires normally).
+   * Falls back to WHOP_IFRAME_LOAD_TIMEOUT_MS so a missed/blocked event
+   * can't leave the loading panel up forever.
+   */
+  function waitForWhopIframeLoad(mountEl, timeoutMs) {
+    return new Promise(function (resolve) {
+      var settled = false;
+      function done() {
+        if (settled) return;
+        settled = true;
+        resolve();
+      }
+      if (!mountEl) { done(); return; }
+      var existing = mountEl.querySelector("iframe");
+      if (existing) {
+        existing.addEventListener("load", done, { once: true });
+      } else {
+        var observer = new MutationObserver(function () {
+          var iframe = mountEl.querySelector("iframe");
+          if (iframe) {
+            observer.disconnect();
+            iframe.addEventListener("load", done, { once: true });
+          }
+        });
+        observer.observe(mountEl, { childList: true, subtree: true });
+      }
+      setTimeout(done, timeoutMs);
+    });
+  }
+
   /**
    * Mounts Whop's embedded checkout element.
    *
@@ -250,6 +307,7 @@
     submitting = true;
     setStateMsg(null);
     setButtonState("preparing");
+    showPaymentLoading();
 
     var payload = {
       idempotency_key: idempotencyKey,
@@ -285,17 +343,20 @@
           setStateMsg("genericError");
           submitting = false;
           setButtonState("idle");
+          hidePaymentStage();
           return;
         }
         return loadWhopScript().then(function () {
           setButtonState("whop-loading");
-          els.whopMount.hidden = false;
           mountWhopCheckout("whop-checkout-mount", {
             plan: result.data.plan,
             metadata: result.data.metadata,
             returnUrl: result.data.return_url
           });
           setButtonState("hidden");
+          return waitForWhopIframeLoad(els.whopMount, WHOP_IFRAME_LOAD_TIMEOUT_MS);
+        }).then(function () {
+          hidePaymentLoading();
         });
       })
       .catch(function (err) {
@@ -303,6 +364,7 @@
         setStateMsg("networkError");
         submitting = false;
         setButtonState("idle");
+        hidePaymentStage();
       });
   }
 

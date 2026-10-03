@@ -482,6 +482,9 @@
       "checkout.state.networkError": "No pudimos conectar con el servidor. Revisa tu conexión e intenta de nuevo.",
       "checkout.state.whopLoading": "Cargando el checkout seguro de Whop…",
 
+      "checkout.paymentLoading.title": "Preparando tu pago",
+      "checkout.paymentLoading.sub": "Estamos cargando el pago seguro. Esto puede tardar unos segundos.",
+
       "checkout.result.paidTitle": "¡Pago confirmado!",
       "checkout.result.paidBody": "Recibimos tu pago. En breve nos pondremos en contacto por correo o WhatsApp para comenzar con tu cotizador.",
       "checkout.result.pendingTitle": "Confirmando tu pago…",
@@ -976,6 +979,9 @@
       "checkout.state.genericError": "We couldn't prepare your payment. Please try again.",
       "checkout.state.networkError": "We couldn't reach the server. Check your connection and try again.",
       "checkout.state.whopLoading": "Loading Whop's secure checkout…",
+
+      "checkout.paymentLoading.title": "Preparing your payment",
+      "checkout.paymentLoading.sub": "We're loading the secure payment. This may take a few seconds.",
 
       "checkout.result.paidTitle": "Payment confirmed!",
       "checkout.result.paidBody": "We received your payment. We'll reach out by email or WhatsApp shortly to get started on your quoting tool.",
