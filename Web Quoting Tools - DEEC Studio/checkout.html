@@ -6,7 +6,7 @@
 
 <!-- Site CSS goes first, right after the mandatory charset/viewport meta —
      see index.html for the full rationale (iOS Safari unstyled-flash fix). -->
-<link rel="stylesheet" href="styles.css?v=20260930y" />
+<link rel="stylesheet" href="styles.css?v=20261003a" />
 
 <!-- Whop tracking pixel + Meta Pixel: NOT loaded here — same consent-gated
      approach as every other page. See loadAnalyticsTracking() in main.js.
@@ -33,35 +33,25 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap">
 </noscript>
 
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=20260930y">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=20261003a">
 </head>
 <body>
 <a class="skip-link" href="#main" data-i18n="a11y.skipLink">Saltar al contenido</a>
 
-<header class="nav" data-nav>
+<header class="nav nav-flat" data-nav>
   <div class="nav-inner">
     <a class="nav-brand" href="index.html" aria-label="DEEC Studio">
       <img class="nav-brand-logo" alt="DEEC Studio" width="141" height="30" src="assets/logo-deecstudio.svg" />
     </a>
     <div class="nav-actions">
-      <div class="nav-icons">
-        <a href="index.html#faq" class="nav-icon-btn" data-i18n-aria="a11y.faqLink" aria-label="Preguntas frecuentes">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 4.6-1.4c.5.8.3 1.6-.4 2.2-.8.7-1.2 1.1-1.2 2.2"/><circle cx="12" cy="16.5" r=".6" fill="currentColor" stroke="none"/></svg>
-        </a>
-        <a href="#" class="nav-icon-btn" data-whatsapp-cta data-i18n-aria="a11y.whatsappLink" aria-label="Escribir por WhatsApp">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.05 21.9c-1.596 0-3.16-.415-4.53-1.2l-.326-.194-3.37.884.9-3.286-.213-.337a9.86 9.86 0 0 1-1.51-5.25c0-5.45 4.44-9.885 9.9-9.885 2.643 0 5.126 1.03 6.994 2.898a9.82 9.82 0 0 1 2.9 6.994c-.003 5.45-4.444 9.876-9.744 9.876zm8.413-18.28A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.327.157 11.874a11.84 11.84 0 0 0 1.596 5.96L0 24l6.335-1.652a11.9 11.9 0 0 0 5.71 1.452h.005c6.554 0 11.89-5.328 11.893-11.876a11.8 11.8 0 0 0-3.48-8.304z"/></svg>
-        </a>
-      </div>
-      <div class="lang-toggle" data-lang-toggle role="group" data-i18n-aria="a11y.langGroup" aria-label="Idioma">
+      <div class="lang-toggle lang-toggle-single" data-lang-toggle data-lang-toggle-single role="group" data-i18n-aria="a11y.langGroup" aria-label="Idioma">
         <button type="button" class="lang-btn is-active" data-lang="es" aria-pressed="true" aria-label="Español">
-          <svg class="flag" viewBox="0 0 20 14"><rect width="20" height="14" fill="#AA151B"/><rect y="3.5" width="20" height="7" fill="#F1BF00"/></svg>
+          <span>ES</span>
+          <svg class="lang-btn-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <button type="button" class="lang-btn" data-lang="en" aria-pressed="false" aria-label="English">
-          <svg class="flag" viewBox="0 0 20 14">
-            <rect width="20" height="14" fill="#B22234"/>
-            <rect y="1.08" width="20" height="1.08" fill="#fff"/><rect y="3.23" width="20" height="1.08" fill="#fff"/><rect y="5.38" width="20" height="1.08" fill="#fff"/><rect y="7.54" width="20" height="1.08" fill="#fff"/><rect y="9.69" width="20" height="1.08" fill="#fff"/><rect y="11.85" width="20" height="1.08" fill="#fff"/>
-            <rect width="8.6" height="7.54" fill="#3C3B6E"/>
-          </svg>
+          <span>EN</span>
+          <svg class="lang-btn-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
       </div>
       <button class="menu-toggle" data-menu-toggle aria-expanded="false" aria-controls="menu-panel" aria-label="Abrir menú">
@@ -109,128 +99,275 @@
     <div data-checkout-form>
       <p class="eyebrow" data-i18n="checkout.eyebrow">Compras y pagos</p>
       <h1 class="checkout-title" data-i18n="checkout.title">Completa tu compra.</h1>
-      <p class="checkout-sub" data-i18n="checkout.sub">Prepara tu información, revisa qué incluye y confirma antes de pagar.</p>
+      <p class="checkout-sub" data-i18n="checkout.sub">Completa tus datos, revisa tu compra y realiza el pago.</p>
+
+      <div class="checkout-stepper" data-checkout-stepper aria-label="Progreso de compra">
+        <div class="checkout-stepper-item" data-stepper-item="1">
+          <span class="checkout-stepper-circle">
+            <svg class="checkout-stepper-num" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20v-.5a7.5 7.5 0 0 1 15 0v.5"/></svg>
+            <svg class="checkout-stepper-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          <span class="checkout-stepper-label" data-i18n="checkout.stepper.1">Tu información</span>
+        </div>
+        <div class="checkout-stepper-connector" data-stepper-connector="1" aria-hidden="true"></div>
+        <div class="checkout-stepper-item" data-stepper-item="2">
+          <span class="checkout-stepper-circle">
+            <svg class="checkout-stepper-num" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3v18l2-1.2L9 21l2-1.2L13 21l2-1.2L17 21l2-1.2V3l-2 1.2L15 3l-2 1.2L11 3 9 4.2 7 3 5 3z"/><line x1="8.5" y1="8" x2="15.5" y2="8"/><line x1="8.5" y1="12" x2="15.5" y2="12"/><line x1="8.5" y1="16" x2="13" y2="16"/></svg>
+            <svg class="checkout-stepper-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          <span class="checkout-stepper-label" data-i18n="checkout.stepper.2">Resumen</span>
+        </div>
+        <div class="checkout-stepper-connector" data-stepper-connector="2" aria-hidden="true"></div>
+        <div class="checkout-stepper-item" data-stepper-item="3">
+          <span class="checkout-stepper-circle">
+            <svg class="checkout-stepper-num" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            <svg class="checkout-stepper-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          <span class="checkout-stepper-label" data-i18n="checkout.stepper.3">Pago</span>
+        </div>
+      </div>
 
       <div class="checkout-grid">
         <div class="checkout-main">
 
-          <div class="checkout-panel">
+          <div class="checkout-panel" data-checkout-step="1">
+            <span class="checkout-step-pill" data-i18n="checkout.step1.pill">Paso 1 de 3</span>
             <div class="checkout-panel-head">
               <span class="checkout-panel-num" data-i18n="checkout.step1.num">1</span>
-              <div>
+              <div class="checkout-panel-head-text">
                 <h2 class="checkout-panel-title" data-i18n="checkout.step1.title">Tu información</h2>
-                <p class="checkout-panel-sub" data-i18n="checkout.step1.sub">Necesitamos estos datos para preparar y entregar tu cotizador.</p>
+                <p class="checkout-panel-sub" data-i18n="checkout.step1.sub">Completa tus datos para preparar tu cotizador.</p>
               </div>
             </div>
-            <div class="checkout-fields">
-              <label class="checkout-field">
-                <span class="checkout-field-label"><span data-i18n="checkout.field.name">Nombre completo</span> <span class="checkout-field-req" data-i18n="checkout.field.required">Requerido</span></span>
-                <input class="checkout-input" type="text" name="customer_name" data-field="name" autocomplete="name" required />
+            <div class="checkout-fields" data-checkout-step-body>
+              <label class="checkout-field checkout-field-wide checkout-field-boxed">
+                <span class="checkout-field-box">
+                  <svg class="checkout-field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5 20v-.3a7 7 0 0 1 14 0v.3"/></svg>
+                  <input class="checkout-input-boxed" type="text" name="customer_name" data-field="name" autocomplete="name" placeholder="John Wilson" required />
+                  <svg class="checkout-field-valid-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+                <span class="checkout-field-label-below"><span data-i18n="checkout.field.name">Nombre completo</span><span class="checkout-field-req-dot" aria-hidden="true">*</span></span>
               </label>
-              <label class="checkout-field">
-                <span class="checkout-field-label"><span data-i18n="checkout.field.email">Correo electrónico</span> <span class="checkout-field-req" data-i18n="checkout.field.required">Requerido</span></span>
-                <input class="checkout-input" type="email" name="customer_email" data-field="email" autocomplete="email" required />
+              <label class="checkout-field checkout-field-wide checkout-field-boxed">
+                <span class="checkout-field-box">
+                  <svg class="checkout-field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
+                  <input class="checkout-input-boxed" type="email" name="customer_email" data-field="email" autocomplete="email" data-i18n-placeholder="checkout.field.emailPlaceholder" placeholder="tu@correo.com" required />
+                  <svg class="checkout-field-valid-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+                <span class="checkout-field-label-below"><span data-i18n="checkout.field.email">Correo electrónico</span><span class="checkout-field-req-dot" aria-hidden="true">*</span></span>
               </label>
-              <label class="checkout-field">
-                <span class="checkout-field-label"><span data-i18n="checkout.field.phone">Número de teléfono</span> <span class="checkout-field-req" data-i18n="checkout.field.required">Requerido</span></span>
-                <input class="checkout-input" type="tel" name="customer_phone" data-field="phone" autocomplete="tel" required />
+              <label class="checkout-field checkout-field-wide checkout-field-boxed">
+                <span class="checkout-field-box checkout-phone-box">
+                  <svg class="checkout-field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 10.8a15.9 15.9 0 0 0 6.6 6.6l2.2-2.2a1.1 1.1 0 0 1 1.2-.25c1.2.45 2.5.7 3.9.7.65 0 1.2.55 1.2 1.2V21c0 .65-.55 1.2-1.2 1.2C10.7 22.2 1.8 13.3 1.8 2.2 1.8 1.55 2.35 1 3 1h3.7c.65 0 1.2.55 1.2 1.2 0 1.4.25 2.7.7 3.9.15.4.05.85-.25 1.2L6.6 10.8z"/></svg>
+                  <div class="checkout-phone-combo" data-phone-combo>
+                    <button type="button" class="checkout-phone-trigger" data-phone-trigger aria-haspopup="listbox" aria-expanded="false">
+                      <img class="checkout-phone-flag" data-phone-flag src="https://flagcdn.com/us.svg" alt="" aria-hidden="true" />
+                      <span class="checkout-phone-dial" data-phone-dial>+1</span>
+                      <svg class="checkout-combo-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="checkout-combo-panel checkout-phone-panel" data-phone-panel hidden>
+                      <input type="text" class="checkout-combo-search" data-phone-search autocomplete="off" placeholder="Buscar país..." />
+                      <ul class="checkout-combo-list" role="listbox" data-phone-list></ul>
+                    </div>
+                  </div>
+                  <span class="checkout-phone-sep" aria-hidden="true"></span>
+                  <input class="checkout-input-boxed" type="tel" name="customer_phone" data-field="phone" autocomplete="tel" data-i18n-placeholder="checkout.field.phoneNumberPlaceholder" placeholder="(555) 123-4567" required />
+                  <svg class="checkout-field-valid-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+                <span class="checkout-field-label-below"><span data-i18n="checkout.field.phone">Número de teléfono</span><span class="checkout-field-req-dot" aria-hidden="true">*</span></span>
               </label>
-              <label class="checkout-field">
-                <span class="checkout-field-label"><span data-i18n="checkout.field.business">Nombre del negocio</span> <span class="checkout-field-req" data-i18n="checkout.field.required">Requerido</span></span>
-                <input class="checkout-input" type="text" name="business_name" data-field="business" autocomplete="organization" required />
+              <label class="checkout-field checkout-field-wide checkout-field-boxed">
+                <span class="checkout-field-box">
+                  <svg class="checkout-field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="3" y1="12" x2="21" y2="12"/></svg>
+                  <input class="checkout-input-boxed" type="text" name="business_name" data-field="business" autocomplete="organization" data-i18n-placeholder="checkout.field.businessPlaceholder" placeholder="Mi Negocio" required />
+                  <svg class="checkout-field-valid-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+                <span class="checkout-field-label-below"><span data-i18n="checkout.field.business">Nombre del negocio</span><span class="checkout-field-req-dot" aria-hidden="true">*</span></span>
               </label>
-              <label class="checkout-field">
-                <span class="checkout-field-label"><span data-i18n="checkout.field.country">País</span> <span class="checkout-field-req" data-i18n="checkout.field.required">Requerido</span></span>
-                <input class="checkout-input" type="text" name="country" data-field="country" autocomplete="country-name" required />
+              <div class="checkout-field checkout-field-boxed">
+                <div class="checkout-combo" data-geo-country>
+                  <button type="button" class="checkout-combo-trigger" data-combo-trigger aria-haspopup="listbox" aria-expanded="false">
+                    <svg class="checkout-field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a13.7 13.7 0 0 1 0 18 13.7 13.7 0 0 1 0-18"/></svg>
+                    <span data-combo-trigger-label class="is-placeholder">Selecciona un país</span>
+                    <svg class="checkout-combo-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+                  </button>
+                  <div class="checkout-combo-panel" data-combo-panel hidden>
+                    <input type="text" class="checkout-combo-search" data-combo-search autocomplete="off" placeholder="Buscar país..." />
+                    <ul class="checkout-combo-list" role="listbox" data-combo-list></ul>
+                  </div>
+                </div>
+                <span class="checkout-field-label-below"><span data-i18n="checkout.field.country">País</span><span class="checkout-field-req-dot" aria-hidden="true">*</span></span>
+                <input type="hidden" name="country" data-field="country" autocomplete="country-name" />
+              </div>
+              <div class="checkout-field checkout-field-boxed">
+                <div class="checkout-combo" data-geo-city>
+                  <button type="button" class="checkout-combo-trigger" data-combo-trigger disabled aria-haspopup="listbox" aria-expanded="false">
+                    <svg class="checkout-field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-7.2 7-12a7 7 0 1 0-14 0c0 4.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.3"/></svg>
+                    <span data-combo-trigger-label class="is-placeholder">Selecciona primero tu país</span>
+                    <svg class="checkout-combo-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+                  </button>
+                  <div class="checkout-combo-panel" data-combo-panel hidden>
+                    <input type="text" class="checkout-combo-search" data-combo-search autocomplete="off" placeholder="Buscar ciudad..." />
+                    <ul class="checkout-combo-list" role="listbox" data-combo-list></ul>
+                  </div>
+                </div>
+                <span class="checkout-field-label-below"><span data-i18n="checkout.field.city">Ciudad</span><span class="checkout-field-req-dot" aria-hidden="true">*</span></span>
+                <span class="checkout-field-box checkout-field-box-fallback" data-geo-city-other-box hidden>
+                  <svg class="checkout-field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-7.2 7-12a7 7 0 1 0-14 0c0 4.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.3"/></svg>
+                  <input class="checkout-input-boxed" type="text" name="city_other" data-geo-city-other autocomplete="address-level2" placeholder="Escribe tu ciudad" />
+                </span>
+                <input type="hidden" name="city" data-field="city" autocomplete="address-level2" />
+              </div>
+              <label class="checkout-field checkout-field-wide checkout-field-boxed">
+                <span class="checkout-field-box">
+                  <svg class="checkout-field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17H7a5 5 0 0 1 0-10h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                  <input class="checkout-input-boxed" type="url" name="website" data-field="website" autocomplete="url" placeholder="https://" />
+                </span>
+                <span class="checkout-field-label-below"><span data-i18n="checkout.field.website">Sitio web</span> <span class="checkout-field-optional-text" data-i18n="checkout.field.optionalParen">(opcional)</span></span>
               </label>
-              <label class="checkout-field">
-                <span class="checkout-field-label"><span data-i18n="checkout.field.city">Ciudad</span> <span class="checkout-field-req" data-i18n="checkout.field.required">Requerido</span></span>
-                <input class="checkout-input" type="text" name="city" data-field="city" autocomplete="address-level2" required />
-              </label>
-              <label class="checkout-field checkout-field-wide">
-                <span class="checkout-field-label"><span data-i18n="checkout.field.website">Sitio web</span> <span class="checkout-field-req" data-i18n="checkout.field.optional">Opcional</span></span>
-                <input class="checkout-input" type="url" name="website" data-field="website" autocomplete="url" placeholder="https://" />
-              </label>
+              <div class="checkout-field-wide checkout-step-nav">
+                <p class="checkout-step-error" data-checkout-step1-error role="status" aria-live="polite"></p>
+                <button type="button" class="btn btn-primary checkout-step-continue-btn" data-checkout-step1-continue>
+                  <span data-i18n="checkout.step1.continue">Continuar</span>
+                  <span class="checkout-continue-arrow" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+                  </span>
+                </button>
+                <p class="checkout-trust-seal">
+                  <svg class="checkout-trust-seal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z"/><polyline points="9 12 11 14 15 10"/></svg>
+                  <strong data-i18n="checkout.trustSeal.title">Compra segura</strong>
+                  <span class="checkout-trust-seal-sub">
+                    <span data-i18n="checkout.trustSeal.sub">Procesado por</span>
+                    <img class="checkout-trust-seal-logo" src="assets/whop-logo-orange.svg?v=20261003a" alt="Whop" width="34" height="7" loading="eager" />
+                  </span>
+                </p>
+              </div>
             </div>
           </div>
 
-          <div class="checkout-panel">
+          <div class="checkout-panel" data-checkout-step="2">
+            <div class="checkout-step-pill-row">
+              <span class="checkout-step-pill" data-i18n="checkout.step2.pill">Paso 2 de 3</span>
+              <span class="checkout-delivery-inline">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <span data-i18n="checkout.deliveryInline">Entrega en 24 horas</span>
+              </span>
+            </div>
             <div class="checkout-panel-head">
               <span class="checkout-panel-num" data-i18n="checkout.step2.num">2</span>
-              <div>
-                <h2 class="checkout-panel-title" data-i18n="checkout.step2.title">Qué incluye</h2>
-                <p class="checkout-panel-sub" data-i18n="checkout.step2.sub">Todo lo que recibes con tu compra.</p>
+              <div class="checkout-panel-head-text">
+                <h2 class="checkout-panel-title" data-i18n="checkout.step2.title">Qué recibes</h2>
+                <p class="checkout-panel-sub" data-i18n="checkout.step2.sub">Revisa lo que incluye tu compra antes de continuar.</p>
               </div>
             </div>
-            <p class="checkout-sublabel" data-i18n="checkout.includesLabel">Tu compra incluye</p>
-            <ul class="checkout-includes-list">
-              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.1">Cotizador web personalizado</span></li>
-              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.2">Branding e información de tu negocio</span></li>
-              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.3">Tus servicios o productos configurados</span></li>
-              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.4">Tus precios configurados</span></li>
-              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.5">Tus reglas de cobro configuradas</span></li>
-              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.6">Entrega en hasta 24 horas</span></li>
-              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.7">Entrega digital o instalación opcional</span></li>
-              <li><span class="checkout-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span data-i18n="checkout.includes.8">Acompañamiento de implementación</span></li>
-            </ul>
 
-            <p class="checkout-sublabel" data-i18n="checkout.benefitsLabel">Beneficios de compra</p>
-            <ol class="checkout-benefits-list">
-              <li><span data-i18n="checkout.benefits.1">Pago único</span></li>
-              <li><span data-i18n="checkout.benefits.2">Sin suscripciones ni pagos recurrentes</span></li>
-              <li><span data-i18n="checkout.benefits.3">Sin renovación ni mantenimiento recurrente</span></li>
-              <li><span data-i18n="checkout.benefits.4">Acceso permanente a tu cotizador web</span></li>
-            </ol>
+            <div data-checkout-step-body>
+            <div class="checkout-receive-grid">
+              <div class="checkout-receive-col">
+                <p class="checkout-sublabel" data-i18n="checkout.includesLabel">Tu cotizador incluye</p>
+                <ul class="checkout-includes-list">
+                  <li><span class="checkout-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg></span><span><strong data-i18n="checkout.includes.1">Cotizador web personalizado</strong><small data-i18n="checkout.includes.1.sub">Adaptado a tu negocio y servicios.</small></span></li>
+                  <li><span class="checkout-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg></span><span><strong data-i18n="checkout.includes.2">Branding e información de tu negocio</strong><small data-i18n="checkout.includes.2.sub">Con tu logo, colores y datos de contacto.</small></span></li>
+                  <li><span class="checkout-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><span><strong data-i18n="checkout.includes.3">Tus servicios o productos configurados</strong><small data-i18n="checkout.includes.3.sub">Variables, opciones y categorías.</small></span></li>
+                  <li><span class="checkout-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.57 3.3L4 3a1 1 0 0 0-1 1l.3 5.57a2 2 0 0 0 .54 1.42l9.58 9.59a2 2 0 0 0 2.83 0l4.34-4.34a2 2 0 0 0 0-2.83z"/><circle cx="7.5" cy="7.5" r="1" fill="currentColor" stroke="none"/></svg></span><span><strong data-i18n="checkout.includes.4">Tus precios configurados</strong><small data-i18n="checkout.includes.4.sub">Según tus reglas y estructura de negocio.</small></span></li>
+                  <li><span class="checkout-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></span><span><strong data-i18n="checkout.includes.5">Tus reglas de cobro configuradas</strong><small data-i18n="checkout.includes.5.sub">Cálculos, impuestos y condiciones.</small></span></li>
+                  <li><span class="checkout-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><path d="M5 21h14"/></svg></span><span><strong data-i18n="checkout.includes.7">Entrega digital o instalación opcional</strong><small data-i18n="checkout.includes.7.sub">Elige la opción que prefieras.</small></span></li>
+                  <li><span class="checkout-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="2" y="13" width="4" height="6" rx="1"/><rect x="18" y="13" width="4" height="6" rx="1"/></svg></span><span><strong data-i18n="checkout.includes.8">Acompañamiento de implementación</strong><small data-i18n="checkout.includes.8.sub">Te apoyamos en el proceso de configuración.</small></span></li>
+                </ul>
+              </div>
 
-            <p class="checkout-sublabel" data-i18n="checkout.notIncludedLabel">No incluye</p>
-            <ul class="checkout-not-included-list">
-              <li><span class="checkout-cross" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span><span data-i18n="checkout.notIncluded.1">Hosting ni dominio</span></li>
-              <li><span class="checkout-cross" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span><span data-i18n="checkout.notIncluded.2">Licencias o herramientas de terceros</span></li>
-              <li><span class="checkout-cross" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span><span data-i18n="checkout.notIncluded.3">Nuevas funciones o cambios de lógica dentro del cotizador</span></li>
-            </ul>
-          </div>
-
-          <div class="checkout-panel">
-            <div class="checkout-panel-head">
-              <span class="checkout-panel-num" data-i18n="checkout.step3.num">3</span>
+              <div class="checkout-receive-col checkout-receive-col-stack">
               <div>
-                <h2 class="checkout-panel-title" data-i18n="checkout.step3.title">Términos y condiciones</h2>
+                <p class="checkout-sublabel checkout-sublabel-accent" data-i18n="checkout.benefitsLabel">Beneficios de compra</p>
+                <ul class="checkout-benefit-cards checkout-benefit-cards-accent">
+                  <li>
+                    <span class="checkout-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></span>
+                    <span><strong data-i18n="checkout.benefits.1.title">Pago único</strong><small data-i18n="checkout.benefits.1.sub">Sin suscripciones ni pagos recurrentes.</small></span>
+                  </li>
+                  <li>
+                    <span class="checkout-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="14" x2="15" y2="18"/><line x1="15" y1="14" x2="9" y2="18"/></svg></span>
+                    <span><strong data-i18n="checkout.benefits.2.title">Sin renovación</strong><small data-i18n="checkout.benefits.2.sub">Sin mantenimiento recurrente.</small></span>
+                  </li>
+                  <li>
+                    <span class="checkout-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z"/><polyline points="9 12 11 14 15 10"/></svg></span>
+                    <span><strong data-i18n="checkout.benefits.3.title">Acceso permanente</strong><small data-i18n="checkout.benefits.3.sub">A tu cotizador web.</small></span>
+                  </li>
+                  <li>
+                    <span class="checkout-benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="2" y="13" width="4" height="6" rx="1"/><rect x="18" y="13" width="4" height="6" rx="1"/></svg></span>
+                    <span><strong data-i18n="checkout.benefits.4.title">Soporte de implementación</strong><small data-i18n="checkout.benefits.4.sub">Te acompañamos en el proceso.</small></span>
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <p class="checkout-sublabel" data-i18n="checkout.notIncludedLabel">No incluye</p>
+                <ul class="checkout-not-included-list">
+                  <li><span class="checkout-cross" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span><span data-i18n="checkout.notIncluded.1">Hosting ni dominio</span></li>
+                  <li><span class="checkout-cross" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span><span data-i18n="checkout.notIncluded.2">Licencias o herramientas de terceros</span></li>
+                  <li><span class="checkout-cross" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span><span data-i18n="checkout.notIncluded.3">Nuevas funciones o cambios de lógica dentro del cotizador</span></li>
+                </ul>
+              </div>
               </div>
             </div>
-            <label class="checkout-checkbox-row">
-              <input type="checkbox" class="checkout-checkbox" data-field="terms" />
-              <span class="checkout-checkbox-label" data-i18n="checkout.terms.checkboxLabel">Acepto los <a href="terminos-condiciones-compra.html" target="_blank" rel="noopener">Términos y Condiciones de Compra</a>, la <a href="politica-privacidad.html" target="_blank" rel="noopener">Política de Privacidad</a> y la <a href="politica-pagos.html" target="_blank" rel="noopener">Política de Pagos, Cancelaciones y Reembolsos</a>.</span>
-            </label>
-            <p class="checkout-panel-sub" data-i18n="checkout.step3.sub">Al continuar, confirmas que has leído y aceptas los Términos y Condiciones aplicables a esta compra.</p>
+
+            <div class="checkout-step-nav checkout-step-nav-split">
+              <button type="button" class="btn btn-primary checkout-step-continue-btn" data-checkout-step2-continue>
+                <span data-i18n="checkout.cta.continue">Continuar al pago</span>
+                <span class="checkout-continue-arrow" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+                </span>
+              </button>
+              <button type="button" class="checkout-step-back-btn checkout-step-back-pill" data-checkout-step-back="2">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="11 18 5 12 11 6"/></svg>
+                <span data-i18n="checkout.step.back">Volver</span>
+              </button>
+            </div>
+            <p class="checkout-trust-seal">
+              <svg class="checkout-trust-seal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z"/><polyline points="9 12 11 14 15 10"/></svg>
+              <strong data-i18n="checkout.trustSeal.title">Compra segura</strong>
+              <span class="checkout-trust-seal-sub">
+                <span data-i18n="checkout.trustSeal.sub">Procesado por</span>
+                <img class="checkout-trust-seal-logo" src="assets/whop-logo-orange.svg?v=20261003a" alt="Whop" width="34" height="7" loading="eager" />
+              </span>
+            </p>
+            </div>
           </div>
 
         </div>
 
         <div class="checkout-side">
-          <div class="checkout-panel checkout-summary-panel">
+          <div class="checkout-panel checkout-summary-panel" data-checkout-step="3">
+            <span class="checkout-step-pill" data-i18n="checkout.step4.pill">Paso 3 de 3</span>
             <div class="checkout-panel-head">
-              <span class="checkout-panel-num" data-i18n="checkout.step4.num">4</span>
-              <div>
-                <h2 class="checkout-panel-title" data-i18n="checkout.step4.title">Resumen de tu compra</h2>
+              <span class="checkout-panel-num" data-i18n="checkout.step4.num">3</span>
+              <div class="checkout-panel-head-text">
+                <h2 class="checkout-panel-title" data-i18n="checkout.step4.title">Completa tu compra</h2>
+                <p class="checkout-panel-sub" data-i18n="checkout.step4.sub">Serás redirigido a Whop para completar tu pago de forma segura.</p>
+              </div>
+            </div>
+
+            <div data-checkout-step-body>
+            <div class="checkout-product-row">
+              <span class="checkout-product-thumb" aria-hidden="true">
+                <img src="assets/checkout-product-thumb.webp?v=20261003a" alt="" width="56" height="56" loading="eager" />
+              </span>
+              <div class="checkout-product-info">
+                <p class="checkout-product-name" data-i18n="checkout.summary.productValue">Cotizador Web Personalizado</p>
+                <p class="checkout-product-desc" data-i18n="checkout.summary.productDesc">Configurado para tu negocio.</p>
               </div>
             </div>
 
             <dl class="checkout-summary-list">
-              <div class="checkout-summary-row">
-                <dt data-i18n="checkout.summary.product">Producto</dt>
-                <dd data-i18n="checkout.summary.productValue">Cotizador Web Personalizado</dd>
-              </div>
-              <div class="checkout-summary-row checkout-summary-row-wide">
-                <dt data-i18n="checkout.summary.titleLabel">Título</dt>
-                <dd data-i18n="checkout.summary.titleValue">COTIZADOR WEB · PERSONALIZADO PARA TU NEGOCIO</dd>
-              </div>
               <div class="checkout-summary-row">
                 <dt data-i18n="checkout.summary.paymentLabel">Pago</dt>
                 <dd data-i18n="checkout.summary.paymentValue">Pago único</dd>
               </div>
               <div class="checkout-summary-row">
                 <dt data-i18n="checkout.summary.deliveryLabel">Entrega</dt>
-                <dd data-i18n="checkout.summary.deliveryValue">24 horas</dd>
+                <dd>
+                  <span data-i18n="checkout.summary.deliveryValue">Hasta 24 horas</span>
+                  <small class="checkout-summary-note" data-i18n="checkout.summary.deliveryNote">Después de recibir tu información completa.</small>
+                </dd>
               </div>
             </dl>
 
@@ -239,13 +376,110 @@
               <span class="checkout-price-value" data-checkout-price>$149.99 USD</span>
             </div>
 
+            <div class="checkout-step3-actions" data-checkout-step3-actions>
+            <label class="checkout-checkbox-row checkout-checkbox-row-compact">
+              <input type="checkbox" class="checkout-checkbox" data-field="terms" />
+              <span class="checkout-checkbox-label" data-i18n="checkout.terms.checkboxLabel">Acepto los <a href="terminos-condiciones-compra.html" target="_blank" rel="noopener">Términos y Condiciones de Compra</a>, la <a href="politica-privacidad.html" target="_blank" rel="noopener">Política de Privacidad</a> y la <a href="politica-pagos.html" target="_blank" rel="noopener">Política de Pagos, Cancelaciones y Reembolsos</a>.</span>
+            </label>
+
             <p class="checkout-state-msg" data-checkout-state-msg role="status" aria-live="polite"></p>
+
+            <p class="checkout-trust-seal checkout-trust-seal-above">
+              <svg class="checkout-trust-seal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z"/><polyline points="9 12 11 14 15 10"/></svg>
+              <strong data-i18n="checkout.trustSeal.title">Compra segura</strong>
+              <span class="checkout-trust-seal-sub">
+                <span data-i18n="checkout.trustSeal.sub">Procesado por</span>
+                <img class="checkout-trust-seal-logo" src="assets/whop-logo-orange.svg?v=20261003a" alt="Whop" width="34" height="7" loading="eager" />
+              </span>
+            </p>
 
             <button type="button" class="btn btn-primary btn-lg checkout-continue-btn" data-checkout-continue>
               <span data-checkout-continue-label data-i18n="checkout.cta.continue">Continuar al pago</span>
+              <span class="checkout-continue-arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+              </span>
             </button>
 
+            <p class="checkout-trust-powered">
+              <span data-i18n="checkout.summary.poweredBy">Powered by</span>
+              <a class="checkout-trust-mark" href="https://whop.com" target="_blank" rel="noopener noreferrer" aria-label="Whop">
+                <svg viewBox="0 0 72 20" width="54" height="15" role="img" aria-hidden="true">
+                  <text x="0" y="16" font-family="Satoshi, system-ui, sans-serif" font-weight="700" font-size="16" letter-spacing="-0.05em" fill="currentColor">whop</text>
+                </svg>
+              </a>
+            </p>
+            </div>
+
+            <ul class="checkout-trustbar">
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                <span><strong data-i18n="checkout.trustbar.1.title">Pago único</strong><small data-i18n="checkout.trustbar.1.sub">Sin suscripción</small></span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <span><strong data-i18n="checkout.trustbar.2.title">Compra segura</strong><small data-i18n="checkout.trustbar.2.sub">Tus datos protegidos</small></span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z"/><polyline points="9 12 11 14 15 10"/></svg>
+                <span><strong data-i18n="checkout.trustbar.3.title">Pago seguro</strong><small data-i18n="checkout.trustbar.3.sub">Procesado por Whop</small></span>
+              </li>
+            </ul>
+
             <div id="whop-checkout-mount" class="checkout-whop-mount" data-whop-mount hidden></div>
+
+            <div class="checkout-faq-block">
+              <h2 class="checkout-panel-title checkout-faq-heading">
+                <span class="checkout-faq-heading-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><circle cx="12" cy="7.5" r=".6" fill="currentColor" stroke="none"/></svg>
+                </span>
+                <span data-i18n="checkout.faq.title">¿Aún tienes dudas?</span>
+              </h2>
+              <p class="checkout-panel-sub" data-i18n="checkout.faq.sub">Aquí respondemos las preguntas más comunes que pueden surgir antes de completar tu pago.</p>
+              <div class="faq-list checkout-faq-list" data-checkout-faq-list>
+              <div class="accordion-item" data-faq-item>
+                <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="checkout-faq-q1-panel"><span data-i18n="checkout.faq.q1.q">¿Cómo se procesa mi pago?</span><span class="checkout-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button></h4>
+                <div class="faq-a" id="checkout-faq-q1-panel"><p data-i18n="checkout.faq.q1.a">Tu pago se procesa de forma segura a través de Whop, nuestro proveedor de checkout. Los datos de pago se introducen directamente en el proceso seguro de Whop y no son gestionados directamente por DEEC Studio.</p></div>
+              </div>
+              <div class="accordion-item" data-faq-item>
+                <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="checkout-faq-q2-panel"><span data-i18n="checkout.faq.q2.q">¿Es un pago único o tendré cargos después?</span><span class="checkout-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button></h4>
+                <div class="faq-a" id="checkout-faq-q2-panel"><p data-i18n="checkout.faq.q2.a">Es un pago único de $149.99 USD. No hay suscripciones, pagos mensuales ni renovaciones automáticas posteriores.</p></div>
+              </div>
+              <div class="accordion-item" data-faq-item>
+                <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="checkout-faq-q3-panel"><span data-i18n="checkout.faq.q3.q">¿Qué sucede después de realizar mi pago?</span><span class="checkout-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button></h4>
+                <div class="faq-a" id="checkout-faq-q3-panel">
+                  <p data-i18n="checkout.faq.q3.a">Una vez que tu pago sea procesado correctamente, serás dirigido a nuestra página de confirmación, donde encontrarás los siguientes pasos para comenzar tu pedido:</p>
+                  <ol class="checkout-faq-steps">
+                    <li><strong data-i18n="thankyou.next.step1.title">Revisa tu correo</strong> — <span data-i18n="thankyou.next.step1.desc">Recibirás un cuestionario para comenzar.</span></li>
+                    <li><strong data-i18n="thankyou.next.step2.title">Completa el cuestionario</strong> — <span data-i18n="thankyou.next.step2.desc">Proporciona la información de tu negocio.</span></li>
+                    <li><strong data-i18n="thankyou.next.step3.title">Envía tu información</strong> — <span data-i18n="thankyou.next.step3.desc">Al enviarlo, comenzamos a trabajar.</span></li>
+                    <li><strong data-i18n="thankyou.next.step4.title">Personalizamos tu cotizador</strong> — <span data-i18n="thankyou.next.step4.desc">Tu plazo de entrega comienza: 24 horas.</span></li>
+                    <li><strong data-i18n="thankyou.next.step5.title">Te presentamos tu cotizador</strong> — <span data-i18n="thankyou.next.step5.desc">Un miembro de nuestro equipo te contactará para mostrarte cómo funciona.</span></li>
+                    <li><strong data-i18n="thankyou.next.step6.title">Elige cómo recibirlo</strong> — <span data-i18n="thankyou.next.step6.desc">Confirma si deseas recibirlo o solicitar su instalación.</span></li>
+                    <li><strong data-i18n="thankyou.next.step7.title">¡Comienza a cotizar!</strong> — <span data-i18n="thankyou.next.step7.desc">Tu cotizador está listo para usar.</span></li>
+                  </ol>
+                </div>
+              </div>
+              <div class="accordion-item" data-faq-item>
+                <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="checkout-faq-q4-panel"><span data-i18n="checkout.faq.q4.q">¿Qué ocurre si tengo un problema con mi compra?</span><span class="checkout-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button></h4>
+                <div class="faq-a" id="checkout-faq-q4-panel">
+                  <p data-i18n="checkout.faq.q4.a">Si tienes algún problema con tu compra o con el proceso de implementación, puedes ponerte en contacto directamente con nuestro equipo.</p>
+                  <a href="#" class="checkout-faq-whatsapp" data-whatsapp-cta data-i18n="checkout.faq.q4.cta">Escríbenos por WhatsApp</a>
+                </div>
+              </div>
+              <div class="accordion-item" data-faq-item>
+                <h4 class="faq-q"><button type="button" class="faq-trigger" aria-expanded="false" aria-controls="checkout-faq-q5-panel"><span data-i18n="checkout.faq.q5.q">¿Puedo solicitar un reembolso?</span><span class="checkout-faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button></h4>
+                <div class="faq-a" id="checkout-faq-q5-panel"><p data-i18n="checkout.faq.q5.a">Sí. Puedes solicitar un reembolso siempre que se cumplan los términos y condiciones establecidos en nuestra <a href="politica-pagos.html" target="_blank" rel="noopener">Política de Pagos, Cancelaciones y Reembolsos</a>. Las solicitudes de reembolso podrán realizarse antes de que iniciemos la personalización o entrega de tu cotizador. Una vez que el cotizador haya sido entregado digitalmente o instalado, la compra quedará sujeta a las condiciones de reembolso establecidas en dicha política.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="checkout-step3-actions">
+            <button type="button" class="checkout-step-back-btn" data-checkout-step-back="3">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="11 18 5 12 11 6"/></svg>
+              <span data-i18n="checkout.step.back">Volver</span>
+            </button>
+          </div>
+          </div>
           </div>
         </div>
       </div>
@@ -379,10 +613,11 @@
   </div>
 </div>
 
-<script defer src="lib/manifest.js?v=20260930y"></script>
-<script defer src="lib/i18n.js?v=20260930y"></script>
-<script defer src="lib/legal-versions.js?v=20260930y"></script>
-<script defer src="main.js?v=20260930y"></script>
-<script defer src="lib/checkout.js?v=20260930y"></script>
+<script defer src="lib/manifest.js?v=20261003a"></script>
+<script defer src="lib/i18n.js?v=20261003a"></script>
+<script defer src="lib/legal-versions.js?v=20261003a"></script>
+<script defer src="lib/geo-data.js?v=20261003a"></script>
+<script defer src="main.js?v=20261003a"></script>
+<script defer src="lib/checkout.js?v=20261003a"></script>
 </body>
 </html>

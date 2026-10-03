@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<link rel="stylesheet" href="styles.css?v=20260930y" />
+<link rel="stylesheet" href="styles.css?v=20261003a" />
 
 <title>Gracias por tu compra — DEEC Studio</title>
 <meta name="description" content="Tu compra en DEEC Studio ha sido confirmada." />
@@ -25,7 +25,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap">
 </noscript>
 
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=20260930y">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=20261003a">
 </head>
 <body>
 <a class="skip-link" href="#main" data-i18n="a11y.skipLink">Saltar al contenido</a>
@@ -97,6 +97,29 @@
 <main id="main">
 <section class="section thankyou" id="que-sigue">
   <div class="container thankyou-container">
+    <div class="checkout-stepper thankyou-stepper" aria-label="Progreso completado">
+      <div class="checkout-stepper-item is-complete">
+        <span class="checkout-stepper-circle">
+          <svg class="checkout-stepper-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
+        <span class="checkout-stepper-label" data-i18n="checkout.stepper.1">Tu información</span>
+      </div>
+      <div class="checkout-stepper-connector is-filled" aria-hidden="true"></div>
+      <div class="checkout-stepper-item is-complete">
+        <span class="checkout-stepper-circle">
+          <svg class="checkout-stepper-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
+        <span class="checkout-stepper-label" data-i18n="checkout.stepper.2">Resumen</span>
+      </div>
+      <div class="checkout-stepper-connector is-filled" aria-hidden="true"></div>
+      <div class="checkout-stepper-item is-complete">
+        <span class="checkout-stepper-circle">
+          <svg class="checkout-stepper-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
+        <span class="checkout-stepper-label" data-i18n="checkout.stepper.3">Pago</span>
+      </div>
+    </div>
+
     <span class="thankyou-check" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
     </span>
@@ -328,8 +351,8 @@
   </div>
 </div>
 
-<script defer src="lib/manifest.js?v=20260930y"></script>
-<script defer src="lib/i18n.js?v=20260930y"></script>
-<script defer src="main.js?v=20260930y"></script>
+<script defer src="lib/manifest.js?v=20261003a"></script>
+<script defer src="lib/i18n.js?v=20261003a"></script>
+<script defer src="main.js?v=20261003a"></script>
 </body>
 </html>

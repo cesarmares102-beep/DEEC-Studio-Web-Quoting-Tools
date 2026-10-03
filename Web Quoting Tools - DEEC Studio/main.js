@@ -11,6 +11,8 @@
   var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   var refreshSocialProofToast = null; // set by initSocialProof(), called from applyLanguage()
   var refreshWhatsappLinks = null; // set by initWhatsapp(), called from applyLanguage()
+  var refreshCheckoutGeoLabels = null; // set by initCheckoutGeo(), called from applyLanguage()
+  var refreshCheckoutPhoneLabels = null; // set by initCheckoutPhone(), called from applyLanguage()
 
   function safe(fn, name) {
     try { fn(); } catch (e) { if (window.console) console.warn("[" + name + "]", e); }
@@ -241,6 +243,9 @@
     $$("[data-i18n-aria]").forEach(function (el) {
       el.setAttribute("aria-label", t(el.getAttribute("data-i18n-aria")));
     });
+    $$("[data-i18n-placeholder]").forEach(function (el) {
+      el.setAttribute("placeholder", t(el.getAttribute("data-i18n-placeholder")));
+    });
     // Whole-block language switch — for long-form content (legal pages)
     // that's written once per language directly in the HTML instead of
     // going through the i18n dictionary above (hundreds of one-off
@@ -276,6 +281,8 @@
     // its own timer cycles it out.
     if (refreshSocialProofToast) refreshSocialProofToast();
     if (refreshWhatsappLinks) refreshWhatsappLinks();
+    if (refreshCheckoutGeoLabels) refreshCheckoutGeoLabels();
+    if (refreshCheckoutPhoneLabels) refreshCheckoutPhoneLabels();
   }
 
   function initLangToggle() {
@@ -283,7 +290,13 @@
     if (!buttons.length) return;
     buttons.forEach(function (btn) {
       btn.addEventListener("click", function () {
-        var lang = btn.getAttribute("data-lang");
+        // "Single" mode (checkout's nav — only the current language's
+        // name is ever shown, no flags, no second button visible): the
+        // one visible button always means "switch to the other
+        // language", regardless of which data-lang it's labeled with.
+        var toggle = btn.closest("[data-lang-toggle]");
+        var single = toggle && toggle.hasAttribute("data-lang-toggle-single");
+        var lang = single ? (currentLang === "es" ? "en" : "es") : btn.getAttribute("data-lang");
         if (lang === currentLang) return;
         currentLang = lang;
         applyLanguage();
@@ -1094,6 +1107,607 @@
   }
 
   /* -------------------------------------------------------------
+     Checkout "¿Tienes dudas?" mini-FAQ (checkout.html) — single flat
+     level, same accordion-item/.faq-trigger/.faq-a markup and the same
+     bindExclusiveGroup() helper as the full FAQ above, just without the
+     2-level category wrapper initAccordion() expects. Pushed into the
+     same accordionGroups array so that function's resize reflow also
+     keeps this one's open panel height correct.
+     ------------------------------------------------------------- */
+  function initCheckoutFaq() {
+    var list = $("[data-checkout-faq-list]");
+    if (!list) return;
+    var items = $$("[data-faq-item]", list).map(function (root) {
+      return { root: root, trigger: $(".faq-trigger", root), panel: $(".faq-a", root) };
+    }).filter(function (i) { return i.trigger && i.panel; });
+    accordionGroups.push(bindExclusiveGroup(items, { measure: "px" }));
+
+    // initAccordion() normally owns the resize reflow for accordionGroups,
+    // but it early-returns on this page (no [data-faq-list] here), so this
+    // group needs its own copy of that same reflow registration.
+    window.addEventListener("resize", debounce(function () {
+      accordionGroups.forEach(function (group) {
+        group.items.forEach(function (item) {
+          if (item.root.classList.contains("is-open") && item.panel.style.maxHeight !== "") {
+            item.panel.style.maxHeight = item.panel.scrollHeight + "px";
+          }
+        });
+      });
+    }, 120));
+  }
+
+  /* -------------------------------------------------------------
+     Checkout país/ciudad — custom-styled, searchable comboboxes
+     (checkout.html). Built from scratch instead of native <select>
+     because a native dropdown's open list is drawn by the OS/browser
+     and can't be reliably themed with the brand's font/colors across
+     browsers (Safari in particular ignores almost all of it). Data
+     comes from lib/geo-data.js, no external API calls.
+
+     buildCombo() is the generic widget engine (trigger button + a
+     panel with a search box and a filtered listbox); initCheckoutGeo()
+     wires up one instance for country and one for city. City's dataset
+     only covers major cities per country, so its list always carries a
+     trailing "Otra ciudad / Other city" item that reveals a free-text
+     fallback input. Either way the real submitted value is mirrored
+     into hidden input[data-field="country"/"city"], since that's what
+     lib/checkout.js's validate()/payload code reads.
+     ------------------------------------------------------------- */
+  function buildCombo(root, onChange) {
+    var trigger = $("[data-combo-trigger]", root);
+    var label = $("[data-combo-trigger-label]", root);
+    var panel = $("[data-combo-panel]", root);
+    var search = $("[data-combo-search]", root);
+    var list = $("[data-combo-list]", root);
+    if (!trigger || !label || !panel || !search || !list) return null;
+
+    var items = [];
+    var filtered = [];
+    var selectedValue = "";
+    var activeIndex = -1;
+    var placeholderText = "";
+    var noResultsText = "";
+
+    function setActive(index) {
+      var opts = $$(".checkout-combo-option", list);
+      opts.forEach(function (el) { el.classList.remove("is-active"); });
+      activeIndex = index;
+      if (index >= 0 && opts[index]) {
+        opts[index].classList.add("is-active");
+        opts[index].scrollIntoView({ block: "nearest" });
+      }
+    }
+
+    function choose(it) {
+      selectedValue = it.value;
+      label.textContent = it.text;
+      label.classList.remove("is-placeholder");
+      close();
+      trigger.focus();
+      if (onChange) onChange(it);
+    }
+
+    function renderList() {
+      var q = search.value.trim().toLowerCase();
+      list.innerHTML = "";
+      filtered = items.filter(function (it) {
+        return !q || it.text.toLowerCase().indexOf(q) !== -1;
+      });
+      if (!filtered.length) {
+        var empty = document.createElement("li");
+        empty.className = "checkout-combo-empty";
+        empty.textContent = noResultsText;
+        list.appendChild(empty);
+        activeIndex = -1;
+        return;
+      }
+      filtered.forEach(function (it) {
+        var li = document.createElement("li");
+        li.className = "checkout-combo-option";
+        li.setAttribute("role", "option");
+        if (it.value === selectedValue) {
+          li.classList.add("is-selected");
+          li.setAttribute("aria-selected", "true");
+        }
+        li.textContent = it.text;
+        li.addEventListener("mousedown", function (e) {
+          e.preventDefault(); // keep focus in the search field until the click registers
+          choose(it);
+        });
+        list.appendChild(li);
+      });
+      activeIndex = -1;
+    }
+
+    function onDocClick(e) {
+      if (!root.contains(e.target)) close();
+    }
+
+    function open() {
+      if (trigger.disabled || !panel.hidden) return;
+      panel.hidden = false;
+      root.setAttribute("data-open", "true");
+      trigger.setAttribute("aria-expanded", "true");
+      search.value = "";
+      renderList();
+      search.focus();
+      document.addEventListener("click", onDocClick, true);
+    }
+
+    function close() {
+      panel.hidden = true;
+      root.removeAttribute("data-open");
+      trigger.setAttribute("aria-expanded", "false");
+      document.removeEventListener("click", onDocClick, true);
+    }
+
+    trigger.addEventListener("click", function () {
+      if (panel.hidden) open(); else close();
+    });
+    trigger.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowDown" && panel.hidden) { e.preventDefault(); open(); }
+    });
+
+    search.addEventListener("input", renderList);
+    search.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        if (filtered.length) setActive(Math.min(activeIndex + 1, filtered.length - 1));
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        if (filtered.length) setActive(Math.max(activeIndex - 1, 0));
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        var idx = activeIndex >= 0 ? activeIndex : (filtered.length === 1 ? 0 : -1);
+        if (idx >= 0 && filtered[idx]) choose(filtered[idx]);
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        close();
+        trigger.focus();
+      }
+    });
+
+    return {
+      setItems: function (newItems) { items = newItems; },
+      setSelected: function (value, text) {
+        selectedValue = value;
+        label.textContent = text;
+        label.classList.remove("is-placeholder");
+      },
+      setPlaceholder: function (text) {
+        placeholderText = text;
+        if (!selectedValue) {
+          label.textContent = placeholderText;
+          label.classList.add("is-placeholder");
+        }
+      },
+      setSearchPlaceholder: function (text) { search.placeholder = text; },
+      setNoResultsText: function (text) { noResultsText = text; },
+      setDisabled: function (flag) {
+        trigger.disabled = flag;
+        if (flag) close();
+      },
+      clear: function () { selectedValue = ""; },
+      getValue: function () { return selectedValue; },
+      close: close
+    };
+  }
+
+  function initCheckoutGeo() {
+    var countryRoot = $("[data-geo-country]");
+    var cityRoot = $("[data-geo-city]");
+    var cityOtherInput = $("[data-geo-city-other]");
+    var cityOtherBox = $("[data-geo-city-other-box]");
+    var countryHidden = $('input[type="hidden"][data-field="country"]');
+    var cityHidden = $('input[type="hidden"][data-field="city"]');
+    if (!countryRoot || !cityRoot || !cityOtherInput || !countryHidden || !cityHidden) return;
+
+    var GEO = window.__GEO__ || { countries: [], cities: {} };
+    var OTHER_VALUE = "__other__";
+    var selectedCountryCode = "";
+
+    function countryLabel(c) { return currentLang === "en" ? c.en : c.es; }
+
+    function setHiddenValue(hiddenInput, value) {
+      hiddenInput.value = value;
+      hiddenInput.dispatchEvent(new Event("input", { bubbles: true }));
+      hiddenInput.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+
+    function setCityOtherVisible(visible) {
+      cityOtherInput.hidden = !visible;
+      if (cityOtherBox) cityOtherBox.hidden = !visible;
+    }
+
+    var countryCombo = buildCombo(countryRoot, function (it) {
+      selectedCountryCode = it.code;
+      setHiddenValue(countryHidden, it.value);
+      populateCity();
+      setCityOtherVisible(false);
+      cityOtherInput.value = "";
+      setHiddenValue(cityHidden, "");
+    });
+
+    var cityCombo = buildCombo(cityRoot, function (it) {
+      if (it.value === OTHER_VALUE) {
+        setCityOtherVisible(true);
+        cityOtherInput.value = "";
+        setHiddenValue(cityHidden, "");
+        cityOtherInput.focus();
+      } else {
+        setCityOtherVisible(false);
+        cityOtherInput.value = "";
+        setHiddenValue(cityHidden, it.value);
+      }
+    });
+
+    if (!countryCombo || !cityCombo) return;
+
+    function populateCountries() {
+      var sorted = GEO.countries.slice().sort(function (a, b) {
+        return countryLabel(a).localeCompare(countryLabel(b));
+      });
+      countryCombo.setItems(sorted.map(function (c) {
+        return { value: countryLabel(c), text: countryLabel(c), code: c.code };
+      }));
+      countryCombo.setSearchPlaceholder(t("checkout.field.countrySearchPlaceholder"));
+      countryCombo.setNoResultsText(t("checkout.field.comboNoResults"));
+      if (selectedCountryCode) {
+        var match = sorted.filter(function (c) { return c.code === selectedCountryCode; })[0];
+        if (match) {
+          countryCombo.setSelected(countryLabel(match), countryLabel(match));
+          setHiddenValue(countryHidden, countryLabel(match));
+        }
+      } else {
+        countryCombo.setPlaceholder(t("checkout.field.countryPlaceholder"));
+      }
+    }
+
+    // preserveValue: a city name to keep selected (language refresh), or
+    // OTHER_VALUE to keep the "otra ciudad" branch open, or omitted/null
+    // to reset (a genuine country change).
+    function populateCity(preserveValue) {
+      var cities = (GEO.cities && GEO.cities[selectedCountryCode]) || [];
+      var items = cities.map(function (name) { return { value: name, text: name }; });
+      items.push({ value: OTHER_VALUE, text: t("checkout.field.cityOther") });
+      cityCombo.setItems(items);
+      cityCombo.setSearchPlaceholder(t("checkout.field.citySearchPlaceholder"));
+      cityCombo.setNoResultsText(t("checkout.field.comboNoResults"));
+      cityCombo.setDisabled(!selectedCountryCode);
+
+      var match = preserveValue && items.filter(function (it) { return it.value === preserveValue; })[0];
+      if (match) {
+        cityCombo.setSelected(match.value, match.text);
+        return;
+      }
+      cityCombo.clear();
+      cityCombo.setPlaceholder(selectedCountryCode ? t("checkout.field.cityPlaceholder") : t("checkout.field.cityPlaceholderLocked"));
+    }
+
+    cityOtherInput.addEventListener("input", function () {
+      setHiddenValue(cityHidden, cityOtherInput.value);
+    });
+
+    populateCountries();
+    populateCity();
+
+    refreshCheckoutGeoLabels = function () {
+      var preserveCity = cityCombo.getValue() || null;
+      populateCountries();
+      populateCity(preserveCity);
+    };
+  }
+
+  /* -------------------------------------------------------------
+     Checkout phone field's country/lada picker (checkout.html) — a
+     small flag + dial-code combobox glued to the left of the phone
+     number input. Purely cosmetic: it never writes to
+     input[data-field="phone"] — that field's value, and everything
+     lib/checkout.js does with it, is untouched. Flags are derived from
+     each ISO code via the regional-indicator emoji trick (no flag
+     image assets needed); dial codes come from lib/geo-data.js's
+     dialCodes map.
+     ------------------------------------------------------------- */
+  function initCheckoutPhone() {
+    var root = $("[data-phone-combo]");
+    if (!root) return;
+    var trigger = $("[data-phone-trigger]", root);
+    var flagEl = $("[data-phone-flag]", root);
+    var dialEl = $("[data-phone-dial]", root);
+    var panel = $("[data-phone-panel]", root);
+    var search = $("[data-phone-search]", root);
+    var list = $("[data-phone-list]", root);
+    if (!trigger || !flagEl || !dialEl || !panel || !search || !list) return;
+
+    var GEO = window.__GEO__ || { countries: [], dialCodes: {} };
+
+    // flagcdn.com — a free, key-less flag CDN (same visual idea as the
+    // nav's own ES/EN SVG flags, just not hand-drawable at this
+    // country count); renders an actual flag everywhere, unlike emoji
+    // flags which some Windows/Chromium combinations show as letters.
+    function flagUrl(code) { return "https://flagcdn.com/" + code.toLowerCase() + ".svg"; }
+
+    var items = GEO.countries
+      .filter(function (c) { return GEO.dialCodes[c.code]; })
+      .map(function (c) { return { code: c.code, country: c, dial: GEO.dialCodes[c.code], flag: flagUrl(c.code) }; });
+
+    function labelFor(it) { return currentLang === "en" ? it.country.en : it.country.es; }
+    function sorted() { return items.slice().sort(function (a, b) { return labelFor(a).localeCompare(labelFor(b)); }); }
+
+    var filtered = [];
+    var activeIndex = -1;
+
+    function setActive(index) {
+      var opts = $$(".checkout-phone-option", list);
+      opts.forEach(function (el) { el.classList.remove("is-active"); });
+      activeIndex = index;
+      if (index >= 0 && opts[index]) {
+        opts[index].classList.add("is-active");
+        opts[index].scrollIntoView({ block: "nearest" });
+      }
+    }
+
+    function choose(it) {
+      flagEl.src = it.flag;
+      dialEl.textContent = it.dial;
+      close();
+      trigger.focus();
+    }
+
+    function renderList() {
+      var q = search.value.trim().toLowerCase();
+      filtered = sorted().filter(function (it) {
+        return !q || labelFor(it).toLowerCase().indexOf(q) !== -1 || it.dial.indexOf(q) !== -1;
+      });
+      list.innerHTML = "";
+      if (!filtered.length) {
+        var empty = document.createElement("li");
+        empty.className = "checkout-combo-empty";
+        empty.textContent = t("checkout.field.comboNoResults");
+        list.appendChild(empty);
+        activeIndex = -1;
+        return;
+      }
+      filtered.forEach(function (it) {
+        var li = document.createElement("li");
+        li.className = "checkout-combo-option checkout-phone-option";
+        li.setAttribute("role", "option");
+        var flagSpan = document.createElement("img");
+        flagSpan.className = "checkout-phone-option-flag";
+        flagSpan.src = it.flag;
+        flagSpan.alt = "";
+        var nameSpan = document.createElement("span");
+        nameSpan.className = "checkout-phone-option-name";
+        nameSpan.textContent = labelFor(it);
+        var dialSpan = document.createElement("span");
+        dialSpan.className = "checkout-phone-option-dial";
+        dialSpan.textContent = it.dial;
+        li.appendChild(flagSpan);
+        li.appendChild(nameSpan);
+        li.appendChild(dialSpan);
+        li.addEventListener("mousedown", function (e) { e.preventDefault(); choose(it); });
+        list.appendChild(li);
+      });
+      activeIndex = -1;
+    }
+
+    function onDocClick(e) { if (!root.contains(e.target)) close(); }
+
+    function open() {
+      if (!panel.hidden) return;
+      panel.hidden = false;
+      root.setAttribute("data-open", "true");
+      trigger.setAttribute("aria-expanded", "true");
+      search.value = "";
+      renderList();
+      search.focus();
+      document.addEventListener("click", onDocClick, true);
+    }
+    function close() {
+      panel.hidden = true;
+      root.removeAttribute("data-open");
+      trigger.setAttribute("aria-expanded", "false");
+      document.removeEventListener("click", onDocClick, true);
+    }
+
+    trigger.addEventListener("click", function () { if (panel.hidden) open(); else close(); });
+    trigger.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowDown" && panel.hidden) { e.preventDefault(); open(); }
+    });
+
+    search.addEventListener("input", renderList);
+    search.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        if (filtered.length) setActive(Math.min(activeIndex + 1, filtered.length - 1));
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        if (filtered.length) setActive(Math.max(activeIndex - 1, 0));
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        var idx = activeIndex >= 0 ? activeIndex : (filtered.length === 1 ? 0 : -1);
+        if (idx >= 0 && filtered[idx]) choose(filtered[idx]);
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        close();
+        trigger.focus();
+      }
+    });
+
+    search.placeholder = t("checkout.field.phoneSearchPlaceholder");
+    refreshCheckoutPhoneLabels = function () {
+      search.placeholder = t("checkout.field.phoneSearchPlaceholder");
+      if (!panel.hidden) renderList();
+    };
+  }
+
+  /* -------------------------------------------------------------
+     Checkout mobile step wizard (checkout.html) — below the 899px
+     breakpoint where the two-column layout stacks into one, the three
+     panels (Tu información / Resumen de compra / Completa tu compra)
+     become a true one-at-a-time flow instead of all sitting open:
+     only the current step's panel is shown (the other two are fully
+     hidden, not just visually collapsed), with a progress stepper
+     above indicating 1 → 2 → 3, the current step highlighted,
+     finished ones checked off and dimmed ones still ahead.
+
+       - Step 1 → 2: its own "Continuar" button, gated on the same
+         required fields lib/checkout.js's validate() checks (name,
+         email, phone, business, country, city). Incomplete shows an
+         inline error instead of advancing.
+       - Step 2 → 3: its own "Continuar al pago" button (step 2 has
+         nothing to validate, it's read-only review content).
+       - Step 3: the existing "Continuar al pago" button is untouched —
+         it still runs lib/checkout.js's real validate()/submit/Whop
+         flow; this module only adds a "Volver" to step 2 next to it.
+       - "Volver" on steps 2 and 3 goes back one step. Nothing is ever
+         cleared when a step is hidden, so going back and forward keeps
+         every field's value.
+
+     Desktop (> 899px) is untouched — this only ever toggles the
+     .is-step-active class (and the stepper's state classes) the CSS
+     hides behind the max-width: 899px media query, and the
+     mediaquery listener below clears all of it if the viewport grows
+     past that breakpoint.
+     ------------------------------------------------------------- */
+  function initCheckoutSteps() {
+    var roots = $$("[data-checkout-step]");
+    if (roots.length < 3) return;
+
+    var panels = roots; // index 0/1/2 = step 1/2/3, in DOM order
+    var gridEl = $(".checkout-grid");
+    var mainEl = $(".checkout-main");
+    var sideEl = $(".checkout-side");
+    var stepper = $("[data-checkout-stepper]");
+    var stepperItems = stepper ? $$("[data-stepper-item]", stepper) : [];
+    var stepperConnectors = stepper ? $$("[data-stepper-connector]", stepper) : [];
+
+    // On mobile (single column) the main/side columns fully swap: step 3
+    // takes over the whole screen and the form/summary column hides.
+    // On desktop (two columns) the side column (step 3) stays visible as
+    // a persistent summary sidebar next to whichever main step is open —
+    // see the `.checkout-panel[data-checkout-step="3"]` override and
+    // `.checkout-step3-actions` gating in styles.css.
+    var mq = matchMedia("(max-width: 899px)");
+    function isMobile() { return mq.matches; }
+
+    var currentStep = 1;
+
+    function render() {
+      panels.forEach(function (panel, i) {
+        panel.classList.toggle("is-step-active", i === currentStep - 1);
+      });
+      if (mainEl) mainEl.style.display = currentStep === 3 ? "none" : "";
+      if (sideEl) sideEl.style.display = isMobile() && currentStep !== 3 ? "none" : "";
+      if (gridEl) gridEl.classList.toggle("checkout-grid-step3", currentStep === 3);
+      stepperItems.forEach(function (item) {
+        var n = parseInt(item.getAttribute("data-stepper-item"), 10);
+        item.classList.toggle("is-active", n === currentStep);
+        item.classList.toggle("is-complete", n < currentStep);
+      });
+      stepperConnectors.forEach(function (connector) {
+        var n = parseInt(connector.getAttribute("data-stepper-connector"), 10);
+        connector.classList.toggle("is-filled", n < currentStep);
+      });
+    }
+
+    function goToStep(n, opts) {
+      currentStep = n;
+      render();
+      if (!opts || opts.scroll !== false) {
+        (stepper || panels[n - 1]).scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+      }
+    }
+
+    render();
+    if (mq.addEventListener) mq.addEventListener("change", function () { render(); });
+    else if (mq.addListener) mq.addListener(function () { render(); });
+
+    // Completed stepper steps double as back-navigation shortcuts.
+    stepperItems.forEach(function (item) {
+      var n = parseInt(item.getAttribute("data-stepper-item"), 10);
+      item.addEventListener("click", function () {
+        if (n >= currentStep) return;
+        goToStep(n);
+      });
+    });
+
+    $$('[data-checkout-step-back]').forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        goToStep(parseInt(btn.getAttribute("data-checkout-step-back"), 10) - 1);
+      });
+    });
+
+    /* Step 1 -> 2 */
+    var REQUIRED_STEP1_FIELDS = ["name", "email", "phone", "business", "country", "city"];
+    var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    var step1Fields = REQUIRED_STEP1_FIELDS.map(function (key) {
+      return $('[data-field="' + key + '"]', panels[0]);
+    }).filter(Boolean);
+    var step1ContinueBtn = $("[data-checkout-step1-continue]", panels[0]);
+    var step1Error = $("[data-checkout-step1-error]", panels[0]);
+
+    function step1Complete() {
+      var vals = {};
+      step1Fields.forEach(function (el) { vals[el.getAttribute("data-field")] = el.value.trim(); });
+      return !!(vals.name && EMAIL_RE.test(vals.email || "") && vals.phone && vals.business && vals.country && vals.city);
+    }
+
+    if (step1ContinueBtn) {
+      step1ContinueBtn.addEventListener("click", function () {
+        if (!step1Complete()) {
+          if (step1Error) step1Error.textContent = t("checkout.step1.incomplete");
+          return;
+        }
+        if (step1Error) step1Error.textContent = "";
+        goToStep(2);
+      });
+    }
+    if (step1Error) {
+      step1Fields.forEach(function (el) {
+        el.addEventListener("input", function () { step1Error.textContent = ""; });
+        el.addEventListener("change", function () { step1Error.textContent = ""; });
+      });
+    }
+
+    // Per-field micro-feedback (name/email/phone/business only — country/
+    // city are comboboxes with their own selected-state affordance): a
+    // small check fades in once a field validates on blur, and a gentle
+    // border-color shift (no shake) flags it once the visitor has left an
+    // invalid one. Purely presentational — doesn't affect step1Complete().
+    var STEP1_CHECK_FIELDS = ["name", "email", "phone", "business"];
+    function step1FieldValid(el) {
+      var key = el.getAttribute("data-field");
+      var val = el.value.trim();
+      if (key === "email") return EMAIL_RE.test(val);
+      return !!val;
+    }
+    step1Fields
+      .filter(function (el) { return STEP1_CHECK_FIELDS.indexOf(el.getAttribute("data-field")) !== -1; })
+      .forEach(function (el) {
+        var wrap = el.closest(".checkout-field-boxed");
+        if (!wrap) return;
+        function refresh(touched) {
+          var valid = step1FieldValid(el);
+          wrap.classList.toggle("is-valid", valid);
+          if (touched) wrap.classList.toggle("is-invalid", !valid);
+        }
+        el.addEventListener("blur", function () { refresh(true); });
+        el.addEventListener("input", function () {
+          if (wrap.classList.contains("is-invalid") || wrap.classList.contains("is-valid")) refresh(true);
+        });
+      });
+
+    /* Step 2 -> 3 — nothing to validate, just advance. */
+    var step2ContinueBtn = $("[data-checkout-step2-continue]", panels[1]);
+    if (step2ContinueBtn) {
+      step2ContinueBtn.addEventListener("click", function () {
+        goToStep(3);
+      });
+    }
+  }
+
+  /* -------------------------------------------------------------
      FAB tooltips (FAQ + WhatsApp) — sección 3a
      Tooltip text shows only after IDLE_DELAY of no scroll;
      hides immediately on scroll. One scroll listener drives all items.
@@ -1492,6 +2106,10 @@
     safe(initTilt, "initTilt");
     safe(initMockupTilt, "initMockupTilt");
     safe(initAccordion, "initAccordion");
+    safe(initCheckoutFaq, "initCheckoutFaq");
+    safe(initCheckoutGeo, "initCheckoutGeo");
+    safe(initCheckoutPhone, "initCheckoutPhone");
+    safe(initCheckoutSteps, "initCheckoutSteps");
     safe(initFabTooltips, "initFabTooltips");
     safe(initCookieConsent, "initCookieConsent");
     safe(mountRatingStars, "mountRatingStars");

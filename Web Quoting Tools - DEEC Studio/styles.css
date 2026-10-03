@@ -270,6 +270,43 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 .lang-btn.is-active { opacity: 1; transform: scale(1); }
 .lang-btn .flag { width: 20px; height: 14px; display: block; border-radius: 1px; }
 
+/* "Single" language toggle (checkout's nav) — no flags, and only the
+   current language's own name is ever visible; the hidden button is
+   still in the DOM so main.js's existing [data-lang] wiring (and the
+   single-mode click handler in initLangToggle) keep working untouched. */
+.lang-toggle-single .lang-btn {
+  display: none;
+  padding: .45rem .8rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: .8rem;
+  font-weight: 600;
+  opacity: 1;
+  transform: none;
+  transition: border-color .3s var(--ease-out), color .3s var(--ease-out);
+}
+.lang-toggle-single .lang-btn.is-active { display: inline-flex; }
+.lang-toggle-single .lang-btn:hover { border-color: var(--moss); color: var(--moss); }
+
+/* "Flat" nav (checkout) — the hamburger and language buttons lose their
+   circular bordered "bubble" background and read as plain, quiet
+   controls instead; the language button keeps the abbreviated code
+   (ES/EN) plus a chevron as the only affordance that it opens options. */
+.nav-flat .menu-toggle { border: none; background: none; border-radius: 0; }
+.nav-flat .lang-toggle-single .lang-btn {
+  border: none;
+  background: none;
+  border-radius: 0;
+  padding: .3rem .1rem;
+  gap: .3rem;
+  align-items: center;
+}
+.nav-flat .lang-toggle-single .lang-btn:hover { border-color: transparent; }
+.lang-btn-chevron { width: .7rem; height: .7rem; flex: none; color: var(--ink-faint); transition: color .3s var(--ease-out); }
+.nav-flat .lang-toggle-single .lang-btn:hover .lang-btn-chevron { color: var(--moss); }
+
 .menu-toggle {
   position: relative;
   width: 38px; height: 38px;
@@ -2466,6 +2503,23 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
    chrome (nav/footer/cookie-banner are the exact same markup+CSS
    as index.html, so nothing extra was needed for those).
    ============================================================= */
+/* The legal pages' <section class="section"> and checkout.html's
+   <section class="section checkout-page"> are each the FIRST (only)
+   section on their page, sitting directly under the fixed .nav pill —
+   unlike every other .section on the site, which comes after a hero
+   that already pushes it well clear. .section's own generic
+   padding-top (clamp(4rem, 9vw, 8rem)) isn't enough room for that: on
+   narrow viewports it landed at ~64px while the nav pill itself
+   occupies down to ~70-76px, so the eyebrow rendered touching/under the
+   nav instead of below it. This is deliberately a smaller clamp than
+   .hero/.thankyou's — those are full hero-style openers that want a
+   lot of air; these are just a one-line eyebrow + title, so a modest
+   clearance past the nav pill reads better than matching hero's much
+   larger gap. */
+.legal-top,
+.checkout-page {
+  padding-top: clamp(5.5rem, 10vw, 7rem);
+}
 .legal-page { max-width: 46rem; }
 .legal-title { font-size: clamp(1.9rem, 4vw, 2.6rem); margin-top: .6rem; }
 .legal-updated {
@@ -2584,8 +2638,37 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
    same markup+CSS as every other page, nothing extra needed for those.
    ============================================================= */
 .checkout-container { max-width: 64rem; }
+[data-checkout-form] { animation: checkoutPageIn .45s var(--ease-soft) both; }
+@keyframes checkoutPageIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 .checkout-title { font-size: clamp(1.9rem, 4vw, 2.6rem); margin-top: .6rem; }
 .checkout-sub { margin-top: .7rem; font-size: 1.05rem; color: var(--ink-mute); max-width: 34rem; }
+
+/* Trust seal — one reusable caption, reused identically right under
+   each step's own CTA (Continuar / Continuar al pago / Volver), so it
+   never competes with the title or the button for space — it's the
+   quiet line underneath, same spot in all 3 steps. Security-themed, so
+   it borrows the green accent rather than navy. */
+.checkout-trust-seal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: .35rem;
+  margin-top: .8rem;
+  font-size: .76rem;
+  color: var(--ink-mute);
+}
+.checkout-trust-seal-icon { flex: none; width: 1rem; height: 1rem; color: var(--success); }
+.checkout-trust-seal strong { font-weight: 700; color: var(--ink); }
+.checkout-trust-seal-sub { display: inline-flex; align-items: center; gap: .28rem; }
+.checkout-trust-seal-logo { height: .56rem; width: auto; display: block; }
+/* Step 3's seal sits above the pay button instead of below it, next to
+   the state-msg — swap the margin to the bottom edge accordingly. */
+.checkout-trust-seal-above { margin-top: 0; margin-bottom: .55rem; }
+.checkout-trust-seal-above + .checkout-continue-btn { margin-top: 0; }
 
 .checkout-grid {
   display: grid;
@@ -2603,13 +2686,14 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   border-radius: var(--radius-lg);
   padding: 1.5rem;
 }
-.checkout-summary-panel { padding: 1.5rem; }
+.checkout-summary-panel { padding: 1.75rem; }
 .checkout-panel-head {
   display: flex;
   align-items: flex-start;
   gap: .9rem;
   margin-bottom: 1.2rem;
 }
+.checkout-summary-panel > .checkout-panel-head { margin-bottom: 1.9rem; }
 .checkout-panel-num {
   flex: 0 0 auto;
   width: 1.9rem;
@@ -2627,73 +2711,283 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 .checkout-panel-title { font-size: 1.15rem; margin: 0; }
 .checkout-panel-sub { margin-top: .3rem; font-size: .88rem; color: var(--ink-mute); }
 
-.checkout-fields {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.8rem 2rem;
-}
-.checkout-field { display: flex; flex-direction: column; gap: .55rem; }
-.checkout-field-wide { grid-column: 1 / -1; }
-.checkout-field-label {
-  font-size: .82rem;
-  font-weight: 600;
-  color: var(--ink);
-  display: flex;
-  align-items: baseline;
-  gap: .4rem;
-}
-.checkout-field-req {
+/* 3-step wizard chrome (stepper, "Paso X de 3" pill, per-step
+   Continuar/Volver nav) — all hidden by default here; the unconditional
+   override further down (driven by initCheckoutSteps() in main.js)
+   turns it on at every width, since the progressive one-step-at-a-time
+   flow now applies to both mobile and desktop. */
+.checkout-stepper { display: none; }
+.checkout-step-pill { display: none; }
+.checkout-step-nav { display: none; }
+.checkout-step-back-btn { display: none; }
+
+.checkout-panel-head-text { flex: 1 1 auto; min-width: 0; }
+
+/* Step 2's "Paso 2 de 3" pill row — carries a small inline delivery
+   note ("Entrega en 24 horas") next to it instead of the larger
+   standalone badge this used to be. */
+.checkout-step-pill-row { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; margin-bottom: .6rem; }
+.checkout-step-pill-row .checkout-step-pill { margin-bottom: 0; }
+.checkout-delivery-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
   font-family: var(--mono);
-  font-size: .66rem;
-  font-weight: 600;
+  font-size: .7rem;
+  font-weight: 700;
   letter-spacing: .04em;
   text-transform: uppercase;
-  color: var(--ink-faint);
+  color: var(--success);
 }
-/* Minimalist underline inputs — no box, no fill, just a bottom rule that
-   reads as an editorial form (think a printed intake sheet), not a generic
-   SaaS field. The border-bottom-width bump on :focus is compensated by an
-   equal reduction in padding-bottom so the text/line don't shift. */
-.checkout-input {
-  width: 100%;
-  padding: .35rem 0 .65rem;
-  border: none;
-  border-bottom: 1px solid var(--line);
-  border-radius: 0;
-  background: transparent;
-  color: var(--ink);
-  font: inherit;
-  font-size: 1rem;
-  transition: border-color .25s var(--ease-out), border-bottom-width .25s var(--ease-out), padding-bottom .25s var(--ease-out);
-}
-.checkout-input:focus {
-  outline: none;
-  border-bottom-color: var(--moss);
-  border-bottom-width: 2px;
-  padding-bottom: .6rem;
-}
-.checkout-input::placeholder { color: var(--ink-faint); }
+.checkout-delivery-inline svg { width: .8rem; height: .8rem; }
 
-.checkout-includes-list { display: grid; gap: .7rem; }
-.checkout-includes-list li {
-  display: flex;
-  align-items: center;
-  gap: .7rem;
-  font-size: .92rem;
-  color: var(--ink-soft);
+/* "Tu cotizador incluye" / "Beneficios de compra" / "No incluye" as
+   three editorial columns — reflows to fewer columns on its own as the
+   panel narrows (sidebar stacking below it on mobile, form column width
+   on desktop), no extra breakpoints needed. */
+.checkout-receive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.8rem 1.6rem;
+  margin-top: 1.5rem;
 }
-.checkout-check {
-  flex: 0 0 auto;
-  width: 1.3rem;
-  height: 1.3rem;
+/* Beneficios + No incluye share the grid's 2nd column, stacked, so the
+   section reads as "Incluye" | "Beneficios / No incluye" instead of 3
+   evenly-forced columns. */
+.checkout-receive-col-stack { display: flex; flex-direction: column; gap: 1.8rem; }
+.checkout-benefit-cards { display: grid; gap: .9rem; list-style: none; padding: 0; margin: 0; }
+.checkout-benefit-cards li { display: flex; align-items: flex-start; gap: .7rem; }
+.checkout-benefit-icon {
+  flex: none;
+  width: 2rem;
+  height: 2rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: var(--moss);
+  background: var(--bg-2);
+  color: var(--ink-mute);
 }
-.checkout-check svg { width: 9px; height: 9px; stroke: var(--cream); }
+/* Beneficios de compra gets the stronger, solid version of the accent
+   (vs. the soft tint everywhere else) so it reads as the highlighted
+   block — icons only, not the whole card. */
+.checkout-benefit-cards-accent .checkout-benefit-icon {
+  background: color-mix(in srgb, var(--success) 10%, var(--paper));
+  color: var(--success);
+  animation: checkoutIconPop .35s var(--ease-soft) both;
+}
+.checkout-benefit-cards-accent li:nth-child(1) .checkout-benefit-icon { animation-delay: 0ms; }
+.checkout-benefit-cards-accent li:nth-child(2) .checkout-benefit-icon { animation-delay: 50ms; }
+.checkout-benefit-cards-accent li:nth-child(3) .checkout-benefit-icon { animation-delay: 100ms; }
+.checkout-benefit-cards-accent li:nth-child(4) .checkout-benefit-icon { animation-delay: 150ms; }
+@keyframes checkoutIconPop {
+  from { opacity: 0; transform: scale(.6); }
+  to { opacity: 1; transform: scale(1); }
+}
+.checkout-benefit-icon svg { width: 15px; height: 15px; }
+.checkout-benefit-cards strong { display: block; font-size: .88rem; color: var(--ink); }
+.checkout-benefit-cards small { display: block; margin-top: .15rem; font-size: .78rem; color: var(--ink-mute); line-height: 1.4; }
 
+.checkout-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.9rem 1.2rem;
+}
+.checkout-field { display: flex; flex-direction: column; gap: .6rem; min-width: 0; }
+.checkout-field-wide { grid-column: 1 / -1; }
+
+/* Icon + boxed input, label underneath — see checkout.html's step 1
+   fields. Each field is a bordered, rounded box (icon left, value
+   right) with its label as plain text below it, rather than the rest
+   of the site's label-above/underline-only pattern — this step asked
+   for that specific look as its own deliberate departure. */
+.checkout-field-box {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  width: 100%;
+  padding: .55rem .85rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  text-align: left;
+  cursor: text;
+  transition: border-color .25s var(--ease-out), box-shadow .25s var(--ease-out);
+}
+.checkout-field-box[hidden] { display: none; }
+.checkout-field-boxed:focus-within .checkout-field-box {
+  border-color: var(--moss);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--moss) 12%, transparent);
+}
+.checkout-field-boxed.is-invalid .checkout-field-box { border-color: var(--urgent); }
+.checkout-combo[data-open="true"] .checkout-combo-trigger { border-color: var(--moss); }
+.checkout-field-icon { flex: 0 0 auto; width: 1.05rem; height: 1.05rem; color: var(--ink-faint); transition: color .25s var(--ease-out); }
+.checkout-field-boxed:focus-within .checkout-field-icon { color: var(--moss); }
+
+/* Small inline check that fades + scales in once a field validates —
+   kept in flow (not absolutely positioned) with its own reserved space
+   so nothing reflows when it toggles. */
+.checkout-field-valid-check {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  color: var(--success);
+  opacity: 0;
+  transform: scale(.45);
+  transition: opacity .25s var(--ease-soft), transform .25s var(--ease-soft);
+}
+.checkout-field-boxed.is-valid .checkout-field-valid-check { opacity: 1; transform: scale(1); }
+.checkout-input-boxed {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: .92rem;
+  padding: 0;
+  line-height: inherit;
+}
+.checkout-input-boxed:focus { outline: none; }
+.checkout-input-boxed::placeholder { color: var(--ink-faint); }
+.checkout-field-label-below {
+  font-size: .8rem;
+  color: var(--ink-mute);
+}
+.checkout-field-req-dot { color: var(--urgent); margin-left: .2rem; }
+.checkout-field-optional-text { color: var(--ink-faint); }
+.checkout-field-box-fallback { margin-top: .55rem; }
+
+/* Phone field — icon, then the flag/lada picker, a thin divider, then
+   the number input, all inside the one field box. The picker is
+   purely cosmetic (see initCheckoutPhone() in main.js): it never
+   touches input[data-field="phone"]'s value. */
+.checkout-phone-box { padding-right: .7rem; position: relative; }
+.checkout-phone-combo { flex: 0 0 auto; }
+.checkout-phone-trigger {
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  color: var(--ink);
+}
+/* Real flag icons (same idea as the ES/EN nav toggle's inline SVG
+   flags, just sourced from flagcdn.com instead of hand-drawn — with
+   ~150 countries here vs. the toggle's 2, inlining accurate vector
+   flags for all of them isn't practical, and flagcdn.com's SVGs render
+   identically everywhere, unlike emoji flags which some Windows/
+   Chromium combinations fall back to showing as plain letters). */
+.checkout-phone-flag { flex: 0 0 auto; width: 18px; height: 13px; object-fit: cover; border-radius: 1px; display: block; }
+.checkout-phone-dial { font-size: .92rem; }
+.checkout-phone-trigger .checkout-combo-chevron { width: 12px; height: 12px; }
+.checkout-phone-combo[data-open="true"] .checkout-combo-chevron { transform: rotate(180deg); }
+.checkout-phone-sep { flex: 0 0 auto; width: 1px; height: 1.3rem; background: var(--line); }
+.checkout-phone-panel { left: -.85rem; right: auto; width: 17rem; }
+.checkout-phone-option { display: flex; align-items: center; gap: .55rem; }
+.checkout-phone-option-flag { flex: 0 0 auto; width: 18px; height: 13px; object-fit: cover; border-radius: 1px; display: block; }
+.checkout-phone-option-name { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.checkout-phone-option-dial { flex: 0 0 auto; color: var(--ink-mute); font-size: .85rem; }
+
+/* Custom país/ciudad combobox — a native <select>'s open list is drawn
+   by the OS/browser and can't be reliably themed (Safari especially
+   ignores almost all CSS on it), so this is a from-scratch widget that
+   stays fully on-brand: trigger button looks like every other
+   .checkout-field-box, panel below it in the DEEC palette/type/radius. */
+.checkout-combo { position: relative; }
+.checkout-combo-trigger {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  width: 100%;
+  padding: .55rem .85rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  transition: border-color .2s var(--ease-out);
+}
+.checkout-combo-trigger span {
+  color: var(--ink);
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: .92rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.checkout-combo-trigger span.is-placeholder { color: var(--ink-faint); }
+.checkout-combo-trigger:disabled { color: var(--ink-faint); cursor: not-allowed; }
+.checkout-combo-chevron {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  color: var(--ink-mute);
+  transition: transform .2s var(--ease-out);
+}
+.checkout-combo[data-open="true"] .checkout-combo-chevron { transform: rotate(180deg); }
+
+.checkout-combo-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
+  padding: .55rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+}
+.checkout-combo-panel[hidden] { display: none; }
+.checkout-combo-search {
+  width: 100%;
+  padding: .5rem .6rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: .9rem;
+}
+.checkout-combo-search:focus { outline: none; border-color: var(--moss); }
+.checkout-combo-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 232px;
+  overflow-y: auto;
+}
+.checkout-combo-option {
+  padding: .55rem .65rem;
+  border-radius: var(--radius-sm);
+  font-size: .92rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.checkout-combo-option.is-active,
+.checkout-combo-option:hover { background: var(--bg-2); color: var(--ink); }
+.checkout-combo-option.is-selected { font-weight: 700; color: var(--moss); }
+.checkout-combo-empty {
+  padding: .6rem .65rem;
+  font-size: .85rem;
+  color: var(--ink-faint);
+}
+.checkout-field input[data-geo-city-other] { margin-top: .6rem; }
+
+.checkout-includes-list { display: grid; gap: 1.1rem; }
+.checkout-includes-list li { display: flex; align-items: flex-start; gap: .9rem; }
+.checkout-includes-list strong { display: block; font-size: .92rem; font-weight: 600; color: var(--ink); }
+.checkout-includes-list small { display: block; margin-top: .15rem; font-size: .78rem; color: var(--ink-mute); line-height: 1.4; }
 .checkout-sublabel {
   margin: 1.4rem 0 .7rem;
   font-family: var(--mono);
@@ -2704,6 +2998,7 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   color: var(--ink-mute);
 }
 .checkout-sublabel:first-of-type { margin-top: 0; }
+.checkout-sublabel-accent { color: var(--success); }
 
 .checkout-benefits-list {
   display: grid;
@@ -2736,18 +3031,18 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   font-weight: 700;
 }
 
-.checkout-not-included-list { display: grid; gap: .7rem; list-style: none; padding: 0; margin: 0; }
+.checkout-not-included-list { display: grid; gap: .9rem; list-style: none; padding: 0; margin: 0; }
 .checkout-not-included-list li {
   display: flex;
   align-items: center;
-  gap: .7rem;
+  gap: .9rem;
   font-size: .92rem;
   color: var(--ink-mute);
 }
 .checkout-cross {
   flex: 0 0 auto;
-  width: 1.3rem;
-  height: 1.3rem;
+  width: 2rem;
+  height: 2rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2755,7 +3050,7 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   background: var(--ink-mute);
   opacity: .55;
 }
-.checkout-cross svg { width: 9px; height: 9px; stroke: var(--cream); }
+.checkout-cross svg { width: 11px; height: 11px; stroke: var(--cream); }
 
 .checkout-checkbox-row {
   display: flex;
@@ -2775,7 +3070,47 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 .checkout-checkbox-label a { text-decoration: underline; text-underline-offset: 2px; color: var(--moss); font-weight: 600; }
 .checkout-checkbox-label a:hover { color: var(--moss-2); }
 
-.checkout-summary-list { display: grid; gap: .7rem; margin-bottom: 1.2rem; }
+/* Compact variant — terms checkbox living inside the "Tu compra" sidebar
+   panel (between the price and the CTA) instead of its own step panel. */
+.checkout-checkbox-row-compact {
+  justify-content: center;
+  gap: .6rem;
+  margin-bottom: 1rem;
+}
+.checkout-checkbox-row-compact .checkout-checkbox { width: 1rem; height: 1rem; margin-top: .15rem; }
+.checkout-checkbox-row-compact .checkout-checkbox-label {
+  max-width: 21rem;
+  font-size: .76rem;
+  line-height: 1.45;
+  color: var(--ink-mute);
+  text-align: center;
+}
+
+.checkout-product-row {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+  margin: 0 0 1.75rem;
+}
+.checkout-product-thumb {
+  flex: none;
+  width: 3.4rem;
+  height: 3.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--moss-soft);
+  color: var(--moss);
+}
+.checkout-product-thumb svg { width: 1.4rem; height: 1.4rem; }
+.checkout-product-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.checkout-product-info { min-width: 0; }
+.checkout-product-name { font-weight: 700; font-size: .98rem; color: var(--ink); }
+.checkout-product-desc { margin-top: .15rem; font-size: .82rem; color: var(--ink-mute); }
+
+.checkout-summary-list { display: grid; gap: .85rem; margin-bottom: 1.6rem; }
 .checkout-summary-row {
   display: flex;
   justify-content: space-between;
@@ -2785,17 +3120,40 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 .checkout-summary-row dt { color: var(--ink-mute); }
 .checkout-summary-row dd { color: var(--ink); font-weight: 600; text-align: right; }
 .checkout-summary-row-wide dd { font-size: .78rem; letter-spacing: .01em; }
+.checkout-summary-note { display: block; margin-top: .15rem; font-weight: 400; font-size: .72rem; color: var(--ink-faint); }
 
 .checkout-price-row {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding-top: 1rem;
+  padding-top: 1.4rem;
   border-top: 1px solid var(--line-soft);
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.4rem;
 }
 .checkout-price-label { font-size: .82rem; color: var(--ink-mute); }
 .checkout-price-value { font-family: var(--display); font-weight: 800; font-size: 1.35rem; color: var(--ink); }
+
+/* Sits right under the CTA, centered and tight — a quiet "powered by"
+   credit, not a competing trust statement (that's the trust bar below). */
+.checkout-trust-powered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .32rem;
+  margin: .55rem 0 0;
+  font-size: .72rem;
+  letter-spacing: .02em;
+  color: var(--ink-faint);
+}
+.checkout-trust-mark {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  color: var(--ink);
+  text-decoration: none;
+  transition: color .2s var(--ease-out);
+}
+.checkout-trust-mark:hover { color: var(--moss); }
 
 .checkout-state-msg {
   min-height: 1.2em;
@@ -2805,13 +3163,119 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 }
 .checkout-state-msg:empty { margin-bottom: 0; }
 
-.checkout-continue-btn { width: 100%; }
+.checkout-continue-btn {
+  width: 100%;
+  margin-top: .9rem;
+  padding: .85rem 1.7rem;
+  font-size: .92rem;
+  letter-spacing: .02em;
+}
 .checkout-continue-btn[disabled] { opacity: .7; cursor: default; }
+.checkout-continue-btn[disabled]:hover { transform: none; }
+.checkout-continue-btn[disabled]::before {
+  content: "";
+  flex: none;
+  width: .9rem;
+  height: .9rem;
+  border: 2px solid color-mix(in srgb, var(--cream) 35%, transparent);
+  border-top-color: var(--cream);
+  border-radius: 50%;
+  animation: checkoutSpin .7s linear infinite;
+}
+.checkout-continue-arrow { display: inline-flex; flex: 0 0 auto; }
+.checkout-continue-arrow svg {
+  width: 1rem;
+  height: 1rem;
+  transition: transform .25s var(--ease-out);
+}
+.checkout-continue-btn:hover .checkout-continue-arrow svg,
+.checkout-step-continue-btn:hover .checkout-continue-arrow svg { transform: translateX(4px); }
+.checkout-continue-btn:active,
+.checkout-step-continue-btn:active,
+.checkout-step-back-pill:active { transform: scale(.98); transition-duration: .12s; }
+@keyframes checkoutSpin { to { transform: rotate(360deg); } }
+
+/* Compact 3-up trust row under the CTA — a lighter echo of the
+   benefit-card icons above, reusing the same icon style/size. */
+.checkout-trustbar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .6rem;
+  list-style: none;
+  padding: 0;
+  margin: 1.1rem 0 0;
+}
+.checkout-trustbar li { display: flex; flex-direction: column; align-items: center; text-align: center; gap: .4rem; }
+.checkout-trustbar svg { width: 17px; height: 17px; color: var(--ink-faint); }
+.checkout-trustbar strong { display: block; font-size: .72rem; font-weight: 700; color: var(--ink); }
+.checkout-trustbar small { display: block; margin-top: .1rem; font-size: .66rem; color: var(--ink-faint); line-height: 1.3; }
 
 /* Whop's embedded checkout iframe mounts inside this box — min-height
    avoids a layout jump from 0 to whatever size Whop's iframe resizes
    itself to once it loads. */
 .checkout-whop-mount { margin-top: 1.2rem; min-height: 420px; }
+
+/* FAQ block lives inside .checkout-summary-panel now (one unified card) —
+   a top border + generous margin/padding reads as a clear section break
+   without needing a second bordered card. */
+.checkout-faq-block {
+  margin-top: 2.2rem;
+  padding-top: 1.9rem;
+  border-top: 1px solid var(--line-soft);
+}
+.checkout-faq-heading {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.checkout-faq-heading-icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  color: var(--moss);
+}
+.checkout-faq-heading-icon svg { width: 1.2rem; height: 1.2rem; }
+.checkout-faq-block .checkout-panel-sub { margin-bottom: .2rem; }
+.checkout-faq-list.faq-list { max-width: none; margin: .6rem 0 0; }
+.checkout-faq-list[data-checkout-faq-list] [data-faq-item]:first-child { border-top: none; }
+.checkout-faq-list[data-checkout-faq-list] [data-faq-item]:last-child { border-bottom: none; }
+.checkout-faq-list .faq-trigger { padding-block: 1rem; font-size: .92rem; }
+.checkout-faq-list .faq-a > p { font-size: .88rem; padding-bottom: 1.1rem; }
+.checkout-faq-chevron {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  color: var(--ink-faint);
+  transition: transform .3s var(--ease-soft), color .2s var(--ease-out);
+}
+.checkout-faq-chevron svg { width: 100%; height: 100%; }
+.checkout-faq-list .accordion-item.is-open .checkout-faq-chevron { transform: rotate(180deg); color: var(--ink); }
+.checkout-faq-list .faq-a a { color: var(--moss); text-decoration: underline; text-underline-offset: 2px; font-weight: 600; }
+.checkout-faq-list .faq-a a:hover { color: var(--moss-2); }
+.checkout-faq-list .faq-a:has(> :last-child:not(p)) > p { padding-bottom: 0; }
+
+.checkout-faq-steps {
+  margin: 0 0 1.1rem;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: .55rem;
+  font-size: .82rem;
+  color: var(--ink-mute);
+  line-height: 1.5;
+}
+.checkout-faq-steps li::marker { color: var(--ink-faint); font-weight: 600; }
+.checkout-faq-steps strong { color: var(--ink); }
+
+.checkout-faq-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 1.1rem;
+  font-size: .86rem;
+  font-weight: 700;
+  color: var(--moss);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.checkout-faq-whatsapp:hover { color: var(--moss-2); }
 
 .checkout-result { padding-block: clamp(3rem, 8vw, 6rem); }
 .checkout-result-panel {
@@ -2839,6 +3303,7 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 .thankyou { padding-top: clamp(7.5rem, 16vw, 10.5rem); padding-bottom: clamp(3.5rem, 9vw, 6.5rem); overflow: hidden; }
 .thankyou-container { max-width: 74rem; margin-inline: auto; text-align: center; }
 
+.thankyou-stepper { margin-top: 0; }
 .thankyou-check {
   display: inline-flex;
   align-items: center;
@@ -2849,6 +3314,7 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   background: color-mix(in srgb, var(--success) 10%, var(--paper));
   color: var(--success);
   margin-bottom: 1.8rem;
+  animation: checkoutIconPop .4s var(--ease-soft) both;
 }
 .thankyou-check svg { width: 2.1rem; height: 2.1rem; }
 
@@ -3024,7 +3490,216 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   .checkout-grid { grid-template-columns: 1fr; }
   .checkout-side { position: static; }
 }
+
+/* Step 3 physically lives in .checkout-side (it doubles as the
+   always-on desktop sidebar for steps 1-2 — see further down), so once
+   it's the active step .checkout-main has nothing left to show and is
+   hidden by render() in main.js. On desktop that would leave an empty
+   wide column next to a narrow one; collapsing to a single, centered
+   column instead lets the payment panel take a sensible width of its
+   own, matching the "one panel at a time" composition from the step-3
+   reference render. */
+@media (min-width: 900px) {
+  .checkout-grid.checkout-grid-step3 { grid-template-columns: 1fr; max-width: 36rem; margin-left: auto; margin-right: auto; }
+}
+
+/* 3-step progressive wizard: initCheckoutSteps() (main.js). Only the
+   current step's panel is shown at a time — the other two are fully
+   hidden (display: none), not just collapsed — with a progress
+   stepper above indicating 1 → 2 → 3. Advancing is explicit (each
+   step's own "Continuar" button, gated on step 1's required fields)
+   and reversible ("Volver" goes back a step without losing anything
+   already typed, since panels are only ever hidden, never emptied).
+   Applies at every width: on desktop the side column (step 3 / the
+   order summary + trust + FAQ) stays visible throughout as a
+   persistent sidebar next to whichever main step is open — only its
+   own payment-specific controls (terms, pay button, Volver) gate on
+   step 3 being active — while on mobile (<900px, single column) every
+   panel including the sidebar one is fully step-gated like the rest. */
+.checkout-stepper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin: 2.8rem 0 2.2rem;
+}
+.checkout-stepper-item { display: flex; flex-direction: column; align-items: center; gap: .45rem; flex: 0 0 auto; width: 5.2rem; position: relative; z-index: 1; }
+.checkout-stepper-circle {
+  width: 1.7rem;
+  height: 1.7rem;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  background: var(--paper);
+  color: var(--ink-faint);
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: .78rem;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 35%, transparent);
+  transition: background-color .3s var(--ease-out), border-color .3s var(--ease-out), color .3s var(--ease-out), box-shadow .4s var(--ease-out), transform .4s var(--ease-soft);
+}
+.checkout-stepper-num { display: inline-flex; width: .85rem; height: .85rem; }
+.checkout-stepper-check { display: none; width: .8rem; height: .8rem; }
+.checkout-stepper-item.is-active .checkout-stepper-circle,
+.checkout-stepper-item.is-complete .checkout-stepper-circle {
+  color: var(--cream);
+  animation: checkoutStepperPop .45s var(--ease-soft);
+}
+/* Complete = confirmed (green); active = the step you're currently
+   acting on (navy) — the two read as distinct states instead of an
+   identical color for "done" and "doing". */
+.checkout-stepper-item.is-complete .checkout-stepper-circle {
+  border-color: var(--success);
+  background: var(--success);
+}
+.checkout-stepper-item.is-active .checkout-stepper-circle {
+  border-color: var(--moss);
+  background: var(--moss);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--moss) 14%, transparent);
+}
+.checkout-stepper-item.is-complete .checkout-stepper-num { display: none; }
+.checkout-stepper-item.is-complete .checkout-stepper-check { display: inline-flex; }
+.checkout-stepper-label { font-size: .68rem; letter-spacing: .01em; color: var(--ink-faint); text-align: center; line-height: 1.25; transition: color .3s var(--ease-out); }
+.checkout-stepper-item.is-active .checkout-stepper-label { color: var(--ink); font-weight: 700; }
+.checkout-stepper-item.is-complete .checkout-stepper-label { color: var(--ink-mute); }
+.checkout-stepper-connector { flex: 1 1 auto; height: 1px; margin: .85rem -1.9rem 0; max-width: 6.4rem; position: relative; z-index: 0; background: var(--line); overflow: hidden; }
+.checkout-stepper-connector::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--success);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .5s var(--ease-soft);
+}
+.checkout-stepper-connector.is-filled::after { transform: scaleX(1); }
+
+@keyframes checkoutStepperPop {
+  0% { transform: scale(.78); }
+  55% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+@keyframes checkoutPanelIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .checkout-panel[data-checkout-step].is-step-active,
+  .checkout-step3-actions,
+  .checkout-panel[data-checkout-step="3"].is-step-active > .checkout-panel-head,
+  .checkout-stepper-item.is-active .checkout-stepper-circle,
+  .checkout-stepper-item.is-complete .checkout-stepper-circle,
+  [data-checkout-form],
+  .checkout-benefit-cards-accent .checkout-benefit-icon,
+  .thankyou-check {
+    animation: none;
+  }
+  .checkout-stepper-connector::after { transition: none; }
+}
+
+.checkout-step-pill {
+  display: inline-block;
+  margin-bottom: .6rem;
+  padding: .3rem .75rem;
+  border-radius: 999px;
+  background: var(--moss-soft);
+  color: var(--moss);
+  font-family: var(--mono);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+/* Only the active step's whole panel renders; the other two (and
+   their num-badge, now redundant with the stepper above) disappear
+   entirely rather than collapsing to a bar. */
+.checkout-panel[data-checkout-step] { display: none; }
+.checkout-panel[data-checkout-step].is-step-active { display: block; animation: checkoutPanelIn .36s var(--ease-soft); }
+.checkout-panel[data-checkout-step] .checkout-panel-num { display: none; }
+.checkout-panel[data-checkout-step] .checkout-panel-title { font-size: 1.55rem; }
+
+.checkout-step-nav { display: flex; flex-direction: column; align-items: stretch; margin-top: 1.4rem; }
+.checkout-step-back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  width: 100%;
+  margin-top: .9rem;
+  padding: .4rem;
+  background: none;
+  border: none;
+  color: var(--ink-mute);
+  font: inherit;
+  font-size: .88rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.checkout-step-back-btn:hover { color: var(--ink); }
+.checkout-step-back-btn svg { width: 1rem; height: 1rem; }
+
+/* Step 2's nav only: Volver + Continuar sit side by side (Volver as a
+   bordered pill on the left, Continuar on the right) once there's room
+   for both — editorial/premium composition per the step-2 reference
+   render. Below that width it falls back to the shared stacked
+   (Continuar on top, Volver below) pattern used by every other step. */
+@media (min-width: 560px) {
+  .checkout-step-nav-split { flex-direction: row; align-items: center; justify-content: space-between; gap: 1rem; }
+  .checkout-step-nav-split .checkout-step-continue-btn { width: auto; margin-top: 0; order: 2; }
+  .checkout-step-nav-split .checkout-step-back-pill {
+    order: 1;
+    width: auto;
+    margin-top: 0;
+    padding: .85rem 1.5rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .checkout-step-nav-split .checkout-step-back-pill:hover { border-color: var(--moss); background: var(--bg-2); color: var(--ink); }
+}
+
+/* Desktop (>=900px): the step-3 panel doubles as the always-on side
+   column, so it opts out of the step-gating above; only the
+   payment-specific controls inside it (wrapped in
+   .checkout-step3-actions — terms checkbox, pay button, Volver,
+   powered-by mark) stay gated on step 3 being active. */
+@media (min-width: 900px) {
+  .checkout-panel[data-checkout-step="3"] { display: block; }
+  .checkout-step3-actions,
+  .checkout-panel[data-checkout-step="3"] > .checkout-step-pill,
+  .checkout-panel[data-checkout-step="3"] > .checkout-panel-head { display: none; }
+  .checkout-panel[data-checkout-step="3"].is-step-active .checkout-step3-actions { display: block; animation: checkoutPanelIn .36s var(--ease-soft); }
+  .checkout-panel[data-checkout-step="3"].is-step-active > .checkout-step-pill { display: inline-block; }
+  .checkout-panel[data-checkout-step="3"].is-step-active > .checkout-panel-head { display: flex; animation: checkoutPanelIn .36s var(--ease-soft); }
+}
+.checkout-step-continue-btn { width: 100%; padding: .85rem 1.7rem; font-size: .92rem; letter-spacing: .02em; }
+.checkout-step-error {
+  min-height: 1.2em;
+  margin-bottom: .6rem;
+  font-size: .82rem;
+  color: var(--urgent);
+}
+.checkout-step-error:empty { margin-bottom: 0; }
 @media (max-width: 599px) {
-  .checkout-fields { grid-template-columns: 1fr; }
+  /* País/Ciudad stay paired side by side even at phone width (per the
+     reference render) — only .checkout-field-wide items (name, email,
+     phone, business, website) span full width; the 2-col grid itself
+     is never forced to 1 column. */
+  .checkout-fields { gap: 1.6rem .7rem; }
   .checkout-panel { padding: 1.2rem; }
+
+  /* Match the nav pill's own inset (.nav: width: calc(100% - 1.5rem),
+     i.e. .75rem per side) instead of the site-wide .container gutter
+     (1.5rem per side) — on a phone the panels should line up edge to
+     edge with the nav bar above them. Scoped to .checkout-grid (the
+     panels) only, via a bleed on top of the container's padding — the
+     eyebrow/title/sub above stay exactly where they are, still inset
+     the normal 1.5rem like every other page. */
+  .checkout-grid { margin-inline: -.75rem; }
 }

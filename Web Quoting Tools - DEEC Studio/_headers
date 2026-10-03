@@ -125,14 +125,24 @@
 # their checkout can load a small script directly from a whop.com
 # subdomain depending on account/region — kept broad (wildcard) here only
 # because Whop itself asked for it, not guessed independently.
+#
+# https://flagcdn.com added to img-src only — found missing during a
+# 2026-10-03 audit. checkout.html's country/phone pickers (initCheckoutGeo/
+# initCheckoutPhone in main.js) load flag SVGs from flagcdn.com, but this
+# domain was never added here, so CSP was silently blocking every flag
+# image in production the whole time those pickers existed — invisible
+# locally because the dev server (`serve`) doesn't apply _headers at all,
+# so CSP was never actually enforced in any of the testing that built that
+# feature. Scoped to these two checkout blocks only (flagcdn.com is not
+# referenced anywhere outside checkout.html).
 /checkout.html
   ! Permissions-Policy
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self "https://whop.com" "https://cdn.whop.com")
   ! Content-Security-Policy
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://t.whop.tw https://connect.facebook.net https://cdn.whop.com https://whop.com https://*.whop.com https://applepay.cdn-apple.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com https://whop.com; frame-src https://www.facebook.com https://whop.com https://checkout.whop.com https://cdn.whop.com https://*.whop.com https://applepay.cdn-apple.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net https://cdn.whop.com https://checkout.whop.com https://*.whop.com https://applepay.cdn-apple.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com https://whop.com; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://t.whop.tw https://connect.facebook.net https://cdn.whop.com https://whop.com https://*.whop.com https://applepay.cdn-apple.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com https://whop.com https://flagcdn.com; frame-src https://www.facebook.com https://whop.com https://checkout.whop.com https://cdn.whop.com https://*.whop.com https://applepay.cdn-apple.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net https://cdn.whop.com https://checkout.whop.com https://*.whop.com https://applepay.cdn-apple.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com https://whop.com; object-src 'none'
 
 /checkout
   ! Permissions-Policy
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(self "https://whop.com" "https://cdn.whop.com")
   ! Content-Security-Policy
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://t.whop.tw https://connect.facebook.net https://cdn.whop.com https://whop.com https://*.whop.com https://applepay.cdn-apple.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com https://whop.com; frame-src https://www.facebook.com https://whop.com https://checkout.whop.com https://cdn.whop.com https://*.whop.com https://applepay.cdn-apple.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net https://cdn.whop.com https://checkout.whop.com https://*.whop.com https://applepay.cdn-apple.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com https://whop.com; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://t.whop.tw https://connect.facebook.net https://cdn.whop.com https://whop.com https://*.whop.com https://applepay.cdn-apple.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com https://whop.com https://flagcdn.com; frame-src https://www.facebook.com https://whop.com https://checkout.whop.com https://cdn.whop.com https://*.whop.com https://applepay.cdn-apple.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net https://cdn.whop.com https://checkout.whop.com https://*.whop.com https://applepay.cdn-apple.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com https://whop.com; object-src 'none'
