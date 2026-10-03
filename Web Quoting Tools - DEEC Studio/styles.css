@@ -2988,6 +2988,19 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 .checkout-includes-list li { display: flex; align-items: flex-start; gap: .9rem; }
 .checkout-includes-list strong { display: block; font-size: .92rem; font-weight: 600; color: var(--ink); }
 .checkout-includes-list small { display: block; margin-top: .15rem; font-size: .78rem; color: var(--ink-mute); line-height: 1.4; }
+.checkout-check {
+  flex: 0 0 auto;
+  width: 1.3rem;
+  height: 1.3rem;
+  margin-top: .05rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--success) 12%, var(--paper));
+  color: var(--success);
+}
+.checkout-check svg { width: 11px; height: 11px; }
 .checkout-sublabel {
   margin: 1.4rem 0 .7rem;
   font-family: var(--mono);
@@ -3051,6 +3064,13 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   opacity: .55;
 }
 .checkout-cross svg { width: 11px; height: 11px; stroke: var(--cream); }
+
+/* Used on the index.html "oferta" card only, where the not-included
+   list sits alongside the 1.3rem checkout-check circles (includes +
+   benefits) — keeps all three lists in that card the same icon size.
+   checkout.html's own not-included list is untouched (its icons match
+   its own 2rem checkout-benefit-icon badges). */
+.checkout-not-included-list-compact .checkout-cross { width: 1.3rem; height: 1.3rem; }
 
 .checkout-checkbox-row {
   display: flex;
