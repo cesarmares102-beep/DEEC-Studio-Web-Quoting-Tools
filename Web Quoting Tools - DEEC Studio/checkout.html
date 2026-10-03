@@ -425,7 +425,14 @@
               </li>
             </ul>
 
-            <div id="whop-checkout-mount" class="checkout-whop-mount" data-whop-mount hidden></div>
+            <div class="checkout-payment-stage" data-checkout-payment-stage hidden>
+              <div id="whop-checkout-mount" class="checkout-whop-mount" data-whop-mount></div>
+              <div class="checkout-payment-loading" data-checkout-payment-loading>
+                <span class="checkout-payment-loading-spinner" aria-hidden="true"></span>
+                <p class="checkout-payment-loading-title" data-i18n="checkout.paymentLoading.title">Preparando tu pago</p>
+                <p class="checkout-payment-loading-sub" data-i18n="checkout.paymentLoading.sub">Estamos cargando el pago seguro. Esto puede tardar unos segundos.</p>
+              </div>
+            </div>
 
             <div class="checkout-faq-block">
               <h2 class="checkout-panel-title checkout-faq-heading">

@@ -3237,8 +3237,46 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 
 /* Whop's embedded checkout iframe mounts inside this box — min-height
    avoids a layout jump from 0 to whatever size Whop's iframe resizes
-   itself to once it loads. */
-.checkout-whop-mount { margin-top: 1.2rem; min-height: 420px; }
+   itself to once it loads. Wrapped in .checkout-payment-stage so the
+   loading panel below can sit on top of it (same slot) while Whop
+   initializes, instead of the visitor staring at this empty box. */
+.checkout-payment-stage { position: relative; margin-top: 1.2rem; }
+.checkout-payment-stage[hidden] { display: none; }
+.checkout-whop-mount { min-height: 420px; }
+
+/* Covers the Whop mount box from the moment "Continuar al pago" is
+   clicked until the embed's iframe actually finishes loading (see
+   waitForWhopIframeLoad() in checkout.js) — the box above still gets
+   measured/mounted normally underneath, this is purely a visual cover
+   so there's never a blank gap while Whop initializes. */
+.checkout-payment-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .7rem;
+  text-align: center;
+  padding: 2rem 1.6rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+.checkout-payment-loading[hidden] { display: none; }
+.checkout-payment-loading-spinner {
+  width: 1.9rem;
+  height: 1.9rem;
+  border: 2.5px solid color-mix(in srgb, var(--moss) 20%, transparent);
+  border-top-color: var(--moss);
+  border-radius: 50%;
+  animation: checkoutSpin .8s linear infinite;
+}
+.checkout-payment-loading-title { font-size: 1rem; font-weight: 700; color: var(--ink); }
+.checkout-payment-loading-sub { font-size: .84rem; color: var(--ink-mute); max-width: 26rem; line-height: 1.5; }
+@media (prefers-reduced-motion: reduce) {
+  .checkout-payment-loading-spinner { animation: none; }
+}
 
 /* FAQ block lives inside .checkout-summary-panel now (one unified card) —
    a top border + generous margin/padding reads as a clear section break
