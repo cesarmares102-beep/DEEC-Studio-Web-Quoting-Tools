@@ -151,6 +151,28 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 [data-reveal][data-reveal-delay="3"] { transition-delay: .24s; }
 [data-reveal][data-reveal-delay="4"] { transition-delay: .32s; }
 [data-reveal][data-reveal-delay="5"] { transition-delay: .40s; }
+[data-reveal][data-reveal-delay="6"] { transition-delay: .48s; }
+[data-reveal][data-reveal-delay="7"] { transition-delay: .56s; }
+[data-reveal][data-reveal-delay="8"] { transition-delay: .64s; }
+[data-reveal][data-reveal-delay="9"] { transition-delay: .72s; }
+[data-reveal][data-reveal-delay="10"] { transition-delay: .80s; }
+
+/* Scroll-driven assembly — same [data-reveal]/.is-revealed mechanism
+   (initReveals() in main.js), just with a per-piece starting direction
+   instead of the default translateY(28px), and a quicker transition so
+   a dozen staggered pieces (see the hero mockup) finish converging in
+   about a second rather than reveal's usual slower single-element .8s.
+   Used on the hero product mockup: sidebar slides in from the left,
+   topbar from the top, everything else from below — reads as the UI
+   assembling itself rather than one block fading in. */
+[data-reveal][data-assembly-from] {
+  transition: opacity .45s var(--ease-soft), transform .45s var(--ease-soft);
+}
+/* :not(.is-revealed) so these never outrank [data-reveal].is-revealed's
+   own transform:none reset above — same specificity otherwise, and
+   without this the piece would stay stuck at its offset forever. */
+[data-reveal][data-assembly-from="left"]:not(.is-revealed) { transform: translateX(-28px); }
+[data-reveal][data-assembly-from="top"]:not(.is-revealed) { transform: translateY(-16px); }
 
 /* =============================================================
    4. Buttons
