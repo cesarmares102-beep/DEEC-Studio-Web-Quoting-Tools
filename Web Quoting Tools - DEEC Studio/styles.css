@@ -2845,7 +2845,11 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   background: transparent;
   color: var(--ink);
   font: inherit;
-  font-size: .92rem;
+  /* 16px, not the site's usual .92rem: iOS Safari auto-zooms on focus
+     for any text input under 16px — this is the fix, not a style
+     choice. The box's own padding/height are unaffected since those
+     are set on .checkout-field-box, not here. */
+  font-size: 16px;
   padding: 0;
   line-height: inherit;
 }
@@ -2957,7 +2961,8 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   background: var(--bg);
   color: var(--ink);
   font: inherit;
-  font-size: .9rem;
+  /* 16px — same iOS Safari auto-zoom fix as .checkout-input-boxed. */
+  font-size: 16px;
 }
 .checkout-combo-search:focus { outline: none; border-color: var(--moss); }
 .checkout-combo-list {
