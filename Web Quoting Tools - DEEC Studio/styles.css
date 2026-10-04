@@ -59,11 +59,15 @@
 html {
   -webkit-text-size-adjust: 100%;
   tab-size: 2;
-  scroll-behavior: smooth;
+  /* No scroll-behavior:smooth here on purpose — it used to make ALL
+     scrolling (mouse wheel/trackpad included, not just anchor jumps)
+     feel inertial/delayed instead of tracking the input 1:1. Every
+     place that actually wants a smooth scroll (nav anchor links,
+     checkout step transitions, the pv-mockup timeline/compare-carousel)
+     already requests it explicitly via scrollTo()/scrollIntoView()'s
+     own `behavior: "smooth"` option in main.js, so removing the
+     blanket CSS version doesn't lose anything. */
   overflow-x: clip;
-}
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
 }
 body {
   font-family: var(--sans);
@@ -1782,7 +1786,8 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   gap: clamp(1.2rem, 3vw, 2.5rem);
   align-items: center;
   background: var(--paper);
-  border-radius: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
   padding: clamp(1.5rem, 4vw, 2.5rem);
   box-shadow: var(--shadow-soft);
 }
@@ -1792,42 +1797,45 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   font-weight: 600;
   letter-spacing: .06em;
   text-transform: uppercase;
-  margin-bottom: .9rem;
+  margin-bottom: 1.1rem;
   color: var(--ink-mute);
 }
-.compare-after .compare-label { color: var(--moss-2); }
+.compare-after .compare-label { color: var(--success); }
 .compare-list {
   display: flex;
   flex-direction: column;
-  gap: .65rem;
+  gap: .75rem;
   font-size: .95rem;
 }
-.compare-before li {
+.compare-list li { display: flex; align-items: center; gap: .75rem; }
+.compare-before li { color: var(--ink-mute); }
+.compare-after li { color: var(--ink); font-weight: 600; }
+/* One distinct, meaningful icon per line (magnifier/calculator/pencil/
+   clipboard for "antes", tag/sliders/bolt/document for "con tu
+   cotizador") — same circular-badge treatment as
+   .checkout-benefit-icon, not a repeated check/cross glyph. Replaces
+   the old plain ×/✓ pseudo-elements, which also referenced
+   rgba(179,93,58,..)/--terracotta/--moss-2 — leftovers from a reverted
+   cream/terracotta rebrand (--moss-2 and --terracotta are undefined),
+   which is why this section rendered in a dull, slightly-off color
+   before this fix. */
+.compare-icon {
+  flex: none;
+  width: 1.9rem;
+  height: 1.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--bg-2);
   color: var(--ink-mute);
-  position: relative;
-  padding-left: 1.3rem;
 }
-.compare-before li::before {
-  content: "×";
-  position: absolute;
-  left: 0;
-  color: rgba(179, 93, 58, 0.6);
-  font-weight: 700;
+.compare-icon svg { width: 15px; height: 15px; }
+.compare-icon.is-accent {
+  background: color-mix(in srgb, var(--success) 10%, var(--paper));
+  color: var(--success);
 }
-.compare-after li {
-  color: var(--ink);
-  font-weight: 500;
-  position: relative;
-  padding-left: 1.3rem;
-}
-.compare-after li::before {
-  content: "✓";
-  position: absolute;
-  left: 0;
-  color: var(--moss-2);
-  font-weight: 700;
-}
-.compare-arrow { color: var(--terracotta); width: 32px; }
+.compare-arrow { color: var(--ink-faint); width: 28px; }
 @media (max-width: 719px) {
   .compare { grid-template-columns: 1fr; }
   .compare-arrow { transform: rotate(90deg); justify-self: center; }
@@ -2414,24 +2422,28 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 .price-was {
   font-weight: 600;
   font-size: .95rem;
-  color: var(--ink-mute);
+  color: var(--ink-faint);
   text-decoration: line-through;
-  text-decoration-color: var(--urgent);
+  text-decoration-color: var(--ink-faint);
   text-decoration-thickness: 1.5px;
 }
 .price-compare-hero .price-was { font-size: .78rem; }
+/* Soft success-tinted pill (not a solid red "sale sticker") — reads as
+   a quiet, premium confirmation of savings rather than an urgent
+   discount shout. Matches the --success treatment already used for
+   confirmation/positive states elsewhere (checkmarks, "Gracias" page). */
 .price-badge {
   font-weight: 700;
   font-size: .68rem;
   letter-spacing: .04em;
   text-transform: uppercase;
-  color: var(--cream);
-  background: var(--urgent);
-  padding: .22rem .5rem;
-  border-radius: 2px;
+  color: var(--success);
+  background: color-mix(in srgb, var(--success) 10%, var(--paper));
+  padding: .28rem .6rem;
+  border-radius: 999px;
   white-space: nowrap;
 }
-.price-compare-hero .price-badge { font-size: .6rem; padding: .16rem .4rem; }
+.price-compare-hero .price-badge { font-size: .6rem; padding: .18rem .5rem; }
 .offer-price {
   display: flex;
   align-items: baseline;
