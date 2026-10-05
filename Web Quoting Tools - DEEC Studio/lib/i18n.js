@@ -63,11 +63,15 @@
       "trust.paid": "Pago único",
       "trust.access": "Acceso permanente",
       "trust.ready": "Listo para usar",
+      "trust.paid.sub": "Sin suscripción",
+      "trust.access.sub": "A tu cotizador web",
+      "trust.ready.sub": "Sin instalación",
 
       "hero.kicker": "Cotizadores web personalizados",
       "hero.title": "Tu cotizador.<br>Tus precios. <em>Tu forma.</em>",
       "hero.sub": "Diseñamos y desarrollamos un cotizador web personalizado, configurado con los servicios, precios y opciones de tu negocio.",
       "hero.ctaHero": "Quiero mi cotizador",
+      "hero.ctaMoreInfo": "Más información",
 
       "marquee.1.title": "Cotiza más rápido",
       "marquee.1.desc": "Prepara tus presupuestos en minutos.",
@@ -573,6 +577,7 @@
       "hero.title": "Your quoter.<br>Your prices. <em>Your way.</em>",
       "hero.sub": "We design and build a personalized web quoting tool, configured with your business's services, prices and options.",
       "hero.ctaHero": "I want my quoter",
+      "hero.ctaMoreInfo": "More information",
 
       "marquee.1.title": "Quote faster",
       "marquee.1.desc": "Put together your quotes in minutes.",
