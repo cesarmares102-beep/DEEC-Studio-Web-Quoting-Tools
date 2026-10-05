@@ -787,6 +787,25 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   margin-inline: auto;
 }
 .hero-price-block { margin-bottom: .9rem; }
+.hero-price-block .price-tag { color: var(--ink-mute); }
+.hero-price-block .price-compare-hero { justify-content: center; margin-bottom: .5rem; }
+.hero-price-now {
+  margin-top: .3rem;
+  font-family: var(--display);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  font-size: clamp(2.75rem, 6.25vw, 3.75rem);
+  color: var(--ink);
+  line-height: 1;
+}
+.hero-price-unit {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: .45em;
+  color: var(--ink-mute);
+  margin-left: .25rem;
+}
+.hero-price-block .oferta-price-note { margin-top: .5rem; font-size: .9rem; color: var(--ink-mute); }
 .hero-price-legend {
   margin-top: .3rem;
   font-size: .85rem;
@@ -800,40 +819,6 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   font-weight: 600;
 }
 .btn-hero .btn-arrow { font-size: 1rem; line-height: 1; }
-.trust-row {
-  margin-top: 1rem;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: .6rem 1.4rem;
-}
-.trust-item {
-  display: inline-flex;
-  align-items: center;
-  gap: .4rem;
-  font-size: .82rem;
-  font-weight: 500;
-  color: var(--ink-mute);
-  letter-spacing: .01em;
-}
-.trust-icon { width: 15px; height: 15px; flex-shrink: 0; color: var(--moss-2); }
-.trust-row.trust-row-simple { margin-top: 1rem; justify-content: center; flex-wrap: nowrap; gap: 0; }
-.trust-row-simple .trust-item { padding: 0 .55rem; white-space: nowrap; }
-.trust-row-simple .trust-item + .trust-item { border-left: 1px solid var(--line); }
-@media (max-width: 599px) {
-  .trust-row.trust-row-simple { flex-wrap: nowrap; gap: 0; }
-  .trust-row-simple .trust-item {
-    padding: 0 .3rem;
-    gap: .25rem;
-    font-size: .62rem;
-    white-space: nowrap;
-  }
-  .trust-row-simple .trust-icon { width: 12px; height: 12px; }
-}
-@media (max-width: 340px) {
-  .trust-row-simple .trust-item { padding: 0 .12rem; font-size: .5rem; gap: .12rem; }
-  .trust-row-simple .trust-icon { width: 9px; height: 9px; }
-}
 .hero-meta-item {
   display: inline-flex;
   align-items: center;
@@ -1814,11 +1799,11 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
    clipboard for "antes", tag/sliders/bolt/document for "con tu
    cotizador") — same circular-badge treatment as
    .checkout-benefit-icon, not a repeated check/cross glyph. Replaces
-   the old plain ×/✓ pseudo-elements, which also referenced
-   rgba(179,93,58,..)/--terracotta/--moss-2 — leftovers from a reverted
-   cream/terracotta rebrand (--moss-2 and --terracotta are undefined),
-   which is why this section rendered in a dull, slightly-off color
-   before this fix. */
+   the old plain ×/✓ pseudo-elements, which used a hardcoded
+   rgba(179,93,58,..) and --terracotta — leftovers from a reverted
+   cream/terracotta rebrand that never matched this page's actual
+   navy/success palette, which is why this section rendered in a dull,
+   off-brand color before this fix. */
 .compare-icon {
   flex: none;
   width: 1.9rem;
@@ -1903,6 +1888,16 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 }
 .oferta-price-preview { padding-bottom: .5rem; }
 .oferta-price-final { padding-top: .8rem; }
+/* The oferta card's own padding (clamp 1.6rem-2.8rem per side) leaves
+   less room per column here than the hero's narrower, unpadded
+   .hero-cta context, so "Acceso permanente" was wrapping to 2 lines
+   and reading as cramped next to the single-line items either side.
+   Pull the trust bar out to the card's full width so it gets the same
+   breathing room as the hero's copy. */
+.oferta-price-final .checkout-trustbar {
+  margin-inline: calc(-1 * clamp(1.6rem, 4vw, 2.8rem));
+  padding-inline: clamp(.6rem, 2vw, 1.2rem);
+}
 .oferta-price-final .btn { margin-top: .8rem; }
 .oferta-price-note {
   margin-top: .3rem;
@@ -2410,12 +2405,6 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 /* =============================================================
    15g. Price display — Hero, Oferta
    ============================================================= */
-.hero-price-now {
-  font-weight: 800;
-  font-size: clamp(1.3rem, 2.6vw, 1.6rem);
-  color: var(--ink);
-  letter-spacing: -0.01em;
-}
 .price-compare { display: inline-flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
 .price-compare-center { justify-content: center; margin-bottom: .6rem; }
 .price-compare-hero { gap: .45rem; margin-bottom: 0; }

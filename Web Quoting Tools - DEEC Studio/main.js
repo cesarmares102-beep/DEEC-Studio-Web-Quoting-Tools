@@ -770,6 +770,7 @@
       if (!dots.length) return;
       var cards = $$(":scope > *", track);
       var ticking = false;
+      var activeIndex = 0;
 
       function updateActive() {
         ticking = false;
@@ -780,6 +781,7 @@
           var dist = Math.abs((card.offsetLeft + card.offsetWidth / 2) - center);
           if (dist < closestDist) { closestDist = dist; closest = i; }
         });
+        activeIndex = closest;
         dots.forEach(function (dot, i) { dot.classList.toggle("is-active", i === closest); });
       }
 
@@ -789,6 +791,56 @@
         requestAnimationFrame(updateActive);
       }, { passive: true });
       updateActive();
+
+      /* ---------------------------------------------------------
+         Autoplay — opt-in via data-carousel-autoplay (only the
+         "Así lo hacemos" steps carousel uses it today). Advances one
+         card every AUTOPLAY_MS; once past the last card it scrolls
+         straight back to the first ("se regresa al principio") rather
+         than looping forward through clones. Stops for good the
+         moment the visitor touches/wheels/drags the track themselves
+         — same "never fight a manual interaction" rule already used
+         for the industries auto-advance — and only runs while the
+         carousel is actually on screen, same as initPersonalizacion()'s
+         own auto-cycle.
+         --------------------------------------------------------- */
+      if (track.hasAttribute("data-carousel-autoplay") && !reduced) {
+        var AUTOPLAY_MS = 3800;
+        var timer = null;
+        var userInteracted = false;
+        ["pointerdown", "wheel", "touchstart"].forEach(function (evt) {
+          track.addEventListener(evt, function () { userInteracted = true; stop(); }, { passive: true });
+        });
+
+        function goToIndex(i) {
+          var card = cards[i];
+          if (!card) return;
+          track.scrollTo({ left: card.offsetLeft - (track.clientWidth - card.offsetWidth) / 2, behavior: "smooth" });
+        }
+        function tick() {
+          if (userInteracted) return;
+          var next = activeIndex + 1 >= cards.length ? 0 : activeIndex + 1;
+          goToIndex(next);
+        }
+        function start() {
+          if (timer || userInteracted) return;
+          timer = setInterval(tick, AUTOPLAY_MS);
+        }
+        function stop() {
+          clearInterval(timer);
+          timer = null;
+        }
+        if ("IntersectionObserver" in window) {
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) start(); else stop();
+            });
+          }, { threshold: 0.4 });
+          io.observe(root);
+        } else {
+          start();
+        }
+      }
     });
   }
 
