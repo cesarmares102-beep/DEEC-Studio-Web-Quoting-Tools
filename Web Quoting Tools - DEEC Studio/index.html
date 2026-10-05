@@ -14,7 +14,7 @@
      hit this specific request. See also the css/js Cache-Control in
      _headers/.htaccess (stale-while-revalidate/stale-if-error) for the
      other half of this fix. -->
-<link rel="stylesheet" href="styles.css?v=20261005a" />
+<link rel="stylesheet" href="styles.css?v=202610061i" />
 
 <!-- Whop tracking pixel + Meta Pixel: NOT loaded here anymore. Both are
      consent-gated — they only load if the visitor accepts the "Análisis
@@ -62,7 +62,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap">
 </noscript>
 
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=20261005a">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=202610061i">
 </head>
 <body>
 <a class="skip-link" href="#main" data-i18n="a11y.skipLink">Saltar al contenido</a>
@@ -142,23 +142,29 @@
     <h1 class="hero-title" data-i18n="hero.title">Tu cotizador.<br>Tus precios. <em>Tu forma.</em></h1>
     <p class="hero-sub" data-i18n="hero.sub">Diseñamos y desarrollamos un cotizador web personalizado, configurado con los servicios, precios y opciones de tu negocio.</p>
 
-    <div class="industries-marquee-wrap">
-      <div class="industries-marquee">
-        <div class="industries-track" data-marquee>
-          <span class="industries-item" data-i18n="industries.landscaping">Landscaping</span>
-          <span class="industries-sep" aria-hidden="true">·</span>
-          <span class="industries-item" data-i18n="industries.cleaning">Cleaning</span>
-          <span class="industries-sep" aria-hidden="true">·</span>
-          <span class="industries-item" data-i18n="industries.pressureWashing">Pressure Washing</span>
-          <span class="industries-sep" aria-hidden="true">·</span>
-          <span class="industries-item" data-i18n="industries.autoDetailing">Auto Detailing</span>
-          <span class="industries-sep" aria-hidden="true">·</span>
-          <span class="industries-item" data-i18n="industries.plumbing">Plumbing</span>
-          <span class="industries-sep" aria-hidden="true">·</span>
-          <span class="industries-item" data-i18n="industries.electrical">Electrical</span>
-          <span class="industries-sep" aria-hidden="true">·</span>
-          <span class="industries-item" data-i18n="industries.andMore">And More</span>
-          <span class="industries-sep" aria-hidden="true">·</span>
+    <div class="marquee-wrap">
+      <div class="marquee">
+        <div class="marquee-track" data-marquee>
+          <span class="marquee-item">
+            <span class="mi-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg></span>
+            <span class="mi-title" data-i18n="marquee.1.title">Cotiza más rápido</span>
+          </span>
+          <span class="marquee-item">
+            <span class="mi-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.57 3.3L4 3a1 1 0 0 0-1 1l.3 5.57a2 2 0 0 0 .54 1.42l9.58 9.59a2 2 0 0 0 2.83 0l4.34-4.34a2 2 0 0 0 0-2.83z"/><circle cx="7.5" cy="7.5" r="1" fill="currentColor" stroke="none"/></svg></span>
+            <span class="mi-title" data-i18n="marquee.2.title">Configura tus precios</span>
+          </span>
+          <span class="marquee-item">
+            <span class="mi-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><circle cx="14" cy="6" r="2"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="8" cy="12" r="2"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="16" cy="18" r="2"/></svg></span>
+            <span class="mi-title" data-i18n="marquee.3.title">Define tus reglas</span>
+          </span>
+          <span class="marquee-item">
+            <span class="mi-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg></span>
+            <span class="mi-title" data-i18n="marquee.4.title">Genera cotizaciones</span>
+          </span>
+          <span class="marquee-item">
+            <span class="mi-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/><circle cx="12" cy="12" r="4"/></svg></span>
+            <span class="mi-title" data-i18n="marquee.5.title">Sin suscripciones</span>
+          </span>
         </div>
       </div>
     </div>
@@ -381,38 +387,132 @@
       </ul>
     </div>
   </div>
+</section>
 
-  <div class="marquee-wrap">
-    <div class="marquee">
-      <div class="marquee-track" data-marquee>
-        <span class="marquee-item">
-          <span class="mi-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg></span>
-          <span class="mi-copy">
-            <span class="mi-title" data-i18n="marquee.1.title">Cotiza más rápido</span>
-            <span class="mi-desc" data-i18n="marquee.1.desc">Prepara tus presupuestos en minutos.</span>
-          </span>
-        </span>
-        <span class="marquee-item">
-          <span class="mi-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.9 6.26 6.9.6-5.2 4.53 1.57 6.77L12 16.9l-6.17 3.26 1.57-6.77-5.2-4.53 6.9-.6L12 2Z"/></svg></span>
-          <span class="mi-copy">
-            <span class="mi-title" data-i18n="marquee.2.title">Impresiona a tus clientes</span>
-            <span class="mi-desc" data-i18n="marquee.2.desc">Presenta presupuestos claros y profesionales.</span>
-          </span>
-        </span>
-        <span class="marquee-item">
-          <span class="mi-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg></span>
-          <span class="mi-copy">
-            <span class="mi-title" data-i18n="marquee.3.title">Enfócate en tu trabajo</span>
-            <span class="mi-desc" data-i18n="marquee.3.desc">Dedica menos tiempo a hacer cuentas.</span>
-          </span>
-        </span>
-        <span class="marquee-item">
-          <span class="mi-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 3 7v10l9 5 9-5V7l-9-5Z"/><path d="M3 7l9 5 9-5"/><path d="M12 12v10"/></svg></span>
-          <span class="mi-copy">
-            <span class="mi-title" data-i18n="marquee.4.title">Hecha para tu negocio</span>
-            <span class="mi-desc" data-i18n="marquee.4.desc">Personalizada con tus servicios y precios.</span>
-          </span>
-        </span>
+<!-- =========================================================
+     INDUSTRIAS (prueba visual de adaptabilidad del cotizador)
+     ========================================================= -->
+<section class="section industrias" id="industrias">
+  <div class="container">
+    <div class="section-head is-center" data-reveal>
+      <p class="eyebrow" data-i18n="industrias.eyebrow">Industrias</p>
+      <h2 class="industrias-headline" data-i18n="industrias.headline">Cotizadores personalizados para tu negocio.</h2>
+    </div>
+
+    <div class="carousel industrias-carousel" data-reveal data-reveal-delay="1">
+      <div class="industrias-carousel-row">
+      <button type="button" class="industrias-arrow industrias-arrow-prev" data-carousel-prev data-i18n-aria="a11y.industriasPrev" aria-label="Industria anterior">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+
+      <ol class="industrias-track" data-carousel-track data-carousel-autoplay data-carousel-autoplay-ms="3500">
+        <li class="industrias-card">
+          <div class="industrias-card-media is-contain">
+            <img src="assets/images/industries/construction.webp" alt="" loading="lazy" width="900" height="600">
+            <span class="industrias-card-caption" data-i18n="industrias.cardCaption">Ejemplo ilustrativo</span>
+            <span class="industrias-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg></span>
+          </div>
+          <div class="industrias-card-body">
+            <h3 data-i18n="industrias.1.title">Construcción / Remodeling</h3>
+            <p class="industrias-card-desc" data-i18n="industrias.1.desc">Cotiza proyectos de construcción y remodelación según medidas, materiales y acabados.</p>
+            <ul class="industrias-card-points">
+              <li data-i18n="industrias.1.point1">Obra nueva o remodelación</li>
+              <li data-i18n="industrias.1.point2">Materiales y acabados</li>
+              <li data-i18n="industrias.1.point3">Mano de obra e instalación</li>
+              <li data-i18n="industrias.extraPoint">Y muchas otras características</li>
+            </ul>
+            <a href="#" class="industrias-card-cta" data-industry-whatsapp="1"><span data-i18n="industrias.cta">Más información</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </li>
+
+        <li class="industrias-card">
+          <div class="industrias-card-media is-contain">
+            <img src="assets/images/industries/events.webp" alt="" loading="lazy" width="900" height="600">
+            <span class="industrias-card-caption" data-i18n="industrias.cardCaption">Ejemplo ilustrativo</span>
+            <span class="industrias-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+          </div>
+          <div class="industrias-card-body">
+            <h3 data-i18n="industrias.2.title">Eventos / Catering</h3>
+            <p class="industrias-card-desc" data-i18n="industrias.2.desc">Calcula el costo de tus eventos de forma automática según invitados, menú y servicios.</p>
+            <ul class="industrias-card-points">
+              <li data-i18n="industrias.2.point1">Tipo de evento</li>
+              <li data-i18n="industrias.2.point2">Número de invitados</li>
+              <li data-i18n="industrias.2.point3">Menú y servicios adicionales</li>
+              <li data-i18n="industrias.extraPoint">Y muchas otras características</li>
+            </ul>
+            <a href="#" class="industrias-card-cta" data-industry-whatsapp="2"><span data-i18n="industrias.cta">Más información</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </li>
+
+        <li class="industrias-card">
+          <div class="industrias-card-media is-contain">
+            <img src="assets/images/industries/fabrication.webp" alt="" loading="lazy" width="900" height="600">
+            <span class="industrias-card-caption" data-i18n="industrias.cardCaption">Ejemplo ilustrativo</span>
+            <span class="industrias-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+          </div>
+          <div class="industrias-card-body">
+            <h3 data-i18n="industrias.3.title">Fabricación e instalación personalizada</h3>
+            <p class="industrias-card-desc" data-i18n="industrias.3.desc">Cotiza productos a medida como carpintería, ventanas, puertas, vidrios, pérgolas y más.</p>
+            <ul class="industrias-card-points">
+              <li data-i18n="industrias.3.point1">Medidas y configuración</li>
+              <li data-i18n="industrias.3.point2">Materiales y acabados</li>
+              <li data-i18n="industrias.3.point3">Instalación y extras</li>
+              <li data-i18n="industrias.extraPoint">Y muchas otras características</li>
+            </ul>
+            <a href="#" class="industrias-card-cta" data-industry-whatsapp="3"><span data-i18n="industrias.cta">Más información</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </li>
+
+        <li class="industrias-card">
+          <div class="industrias-card-media is-contain">
+            <img src="assets/images/industries/home-services.webp" alt="" loading="lazy" width="900" height="600">
+            <span class="industrias-card-caption" data-i18n="industrias.cardCaption">Ejemplo ilustrativo</span>
+            <span class="industrias-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
+          </div>
+          <div class="industrias-card-body">
+            <h3 data-i18n="industrias.4.title">Mantenimiento y servicios del hogar</h3>
+            <p class="industrias-card-desc" data-i18n="industrias.4.desc">Cotiza servicios de fontanería, electricidad, reparación y más, de forma rápida y clara.</p>
+            <ul class="industrias-card-points">
+              <li data-i18n="industrias.4.point1">Tipo de servicio</li>
+              <li data-i18n="industrias.4.point2">Mano de obra y materiales</li>
+              <li data-i18n="industrias.4.point3">Urgencia y extras</li>
+              <li data-i18n="industrias.extraPoint">Y muchas otras características</li>
+            </ul>
+            <a href="#" class="industrias-card-cta" data-industry-whatsapp="4"><span data-i18n="industrias.cta">Más información</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </li>
+
+        <li class="industrias-card">
+          <div class="industrias-card-media is-contain">
+            <img src="assets/images/industries/automotive.webp" alt="" loading="lazy" width="900" height="600">
+            <span class="industrias-card-caption" data-i18n="industrias.cardCaption">Ejemplo ilustrativo</span>
+            <span class="industrias-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13l2.2-5.5A2 2 0 0 1 7 6.3h10a2 2 0 0 1 1.8 1.2L21 13"/><path d="M3 13h18v5a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-1H7v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><circle cx="7.5" cy="16" r="1"/><circle cx="16.5" cy="16" r="1"/></svg></span>
+          </div>
+          <div class="industrias-card-body">
+            <h3 data-i18n="industrias.5.title">Servicios automotrices</h3>
+            <p class="industrias-card-desc" data-i18n="industrias.5.desc">Calcula el costo de detailing, lavado, protección y otros servicios automotrices según el tipo de vehículo.</p>
+            <ul class="industrias-card-points">
+              <li data-i18n="industrias.5.point1">Tipo de vehículo</li>
+              <li data-i18n="industrias.5.point2">Paquetes y servicios</li>
+              <li data-i18n="industrias.5.point3">Condición y extras</li>
+              <li data-i18n="industrias.extraPoint">Y muchas otras características</li>
+            </ul>
+            <a href="#" class="industrias-card-cta" data-industry-whatsapp="5"><span data-i18n="industrias.cta">Más información</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </li>
+      </ol>
+
+      <button type="button" class="industrias-arrow industrias-arrow-next" data-carousel-next data-i18n-aria="a11y.industriasNext" aria-label="Industria siguiente">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+      </div>
+
+      <div class="industrias-dots" data-carousel-dots aria-hidden="true">
+        <span class="carousel-dot is-active"></span>
+        <span class="carousel-dot"></span>
+        <span class="carousel-dot"></span>
+        <span class="carousel-dot"></span>
+        <span class="carousel-dot"></span>
       </div>
     </div>
   </div>
@@ -1172,7 +1272,6 @@
           </div>
         </div>
       </div>
-      </div>
     </div>
   </div>
 </section>
@@ -1309,8 +1408,8 @@
   </div>
 </div>
 
-<script defer src="lib/manifest.js?v=20261005a"></script>
-<script defer src="lib/i18n.js?v=20261005a"></script>
-<script defer src="main.js?v=20261005a"></script>
+<script defer src="lib/manifest.js?v=202610061i"></script>
+<script defer src="lib/i18n.js?v=202610061i"></script>
+<script defer src="main.js?v=202610061i"></script>
 </body>
 </html>

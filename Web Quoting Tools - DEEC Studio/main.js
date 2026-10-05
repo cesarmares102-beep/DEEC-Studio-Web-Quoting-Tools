@@ -11,6 +11,7 @@
   var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   var refreshSocialProofToast = null; // set by initSocialProof(), called from applyLanguage()
   var refreshWhatsappLinks = null; // set by initWhatsapp(), called from applyLanguage()
+  var refreshIndustriesWhatsapp = null; // set by initIndustriesWhatsapp(), called from applyLanguage()
   var refreshCheckoutGeoLabels = null; // set by initCheckoutGeo(), called from applyLanguage()
   var refreshCheckoutPhoneLabels = null; // set by initCheckoutPhone(), called from applyLanguage()
 
@@ -127,6 +128,50 @@
         // what every CTA on the page does now instead of an embedded
         // checkout. Guarded so a blocked/failed pixel can't stop the
         // WhatsApp link from opening.
+        try {
+          if (window.fbq) window.fbq("track", "Contact");
+        } catch (err) { if (window.console) console.warn("[fbq Contact]", err); }
+      });
+    });
+  }
+
+  /* -------------------------------------------------------------
+     "Industrias" carousel CTAs — each card's [data-industry-whatsapp]
+     holds its index (1-5), used to look up that industry's own
+     "industrias.N.whatsappLabel" i18n key and build a WhatsApp
+     message from the shared "industrias.whatsappTemplate" ({industry}
+     placeholder). Same number/config/toast-fallback as initWhatsapp()
+     above — one source of truth for the phone number, five dynamic
+     messages instead of five hardcoded links.
+     ------------------------------------------------------------- */
+  function initIndustriesWhatsapp() {
+    var links = $$("[data-industry-whatsapp]");
+    if (!links.length) return;
+    var wa = data.whatsapp || {};
+    var configured = isWhatsappConfigured();
+
+    function hrefFor(a) {
+      var industry = t("industrias." + a.getAttribute("data-industry-whatsapp") + ".whatsappLabel");
+      var message = fillTemplate(t("industrias.whatsappTemplate"), { industry: industry });
+      return "https://wa.me/" + wa.number.replace(/\D/g, "") + "?text=" + encodeURIComponent(message);
+    }
+    function applyHrefs() {
+      links.forEach(function (a) { a.setAttribute("href", hrefFor(a)); });
+    }
+    refreshIndustriesWhatsapp = configured ? applyHrefs : null;
+    if (configured) applyHrefs();
+
+    links.forEach(function (a) {
+      if (configured) {
+        a.setAttribute("target", "_blank");
+        a.setAttribute("rel", "noopener");
+      }
+      a.addEventListener("click", function (e) {
+        if (!configured) {
+          e.preventDefault();
+          showToast(t("toast.whatsappNotConfigured"));
+          return;
+        }
         try {
           if (window.fbq) window.fbq("track", "Contact");
         } catch (err) { if (window.console) console.warn("[fbq Contact]", err); }
@@ -281,6 +326,7 @@
     // its own timer cycles it out.
     if (refreshSocialProofToast) refreshSocialProofToast();
     if (refreshWhatsappLinks) refreshWhatsappLinks();
+    if (refreshIndustriesWhatsapp) refreshIndustriesWhatsapp();
     if (refreshCheckoutGeoLabels) refreshCheckoutGeoLabels();
     if (refreshCheckoutPhoneLabels) refreshCheckoutPhoneLabels();
   }
@@ -792,52 +838,92 @@
       }, { passive: true });
       updateActive();
 
+      // Distance (px) from one card's start to the next's — used to step
+      // the track by exactly one card at a time, whether the layout shows
+      // one card centered (pasos, mobile) or several side by side
+      // (industrias, desktop/tablet): scrolling by this amount always
+      // lands on the next/previous card regardless of how many are
+      // visible at once. Measured fresh on every call (not cached) since
+      // web-font swap or a breakpoint resize can change card widths after
+      // init runs, which would otherwise silently desync a cached value.
+      function getStep() {
+        return cards.length > 1 ? (cards[1].offsetLeft - cards[0].offsetLeft) : 0;
+      }
+      function scrollByStep(dir) {
+        var step = getStep();
+        var target = dir > 0
+          ? Math.min(track.scrollWidth - track.clientWidth, track.scrollLeft + step)
+          : Math.max(0, track.scrollLeft - step);
+        track.scrollTo({ left: target, behavior: reduced ? "auto" : "smooth" });
+      }
+
+      // Set by the autoplay block below (if enabled for this track) so the
+      // arrow buttons can stop autoplay the moment someone steers manually.
+      var stopAutoplay = null;
+
       /* ---------------------------------------------------------
-         Autoplay — opt-in via data-carousel-autoplay (only the
-         "Así lo hacemos" steps carousel uses it today). Advances one
-         card every AUTOPLAY_MS; once past the last card it scrolls
-         straight back to the first ("se regresa al principio") rather
-         than looping forward through clones. Stops for good the
-         moment the visitor touches/wheels/drags the track themselves
-         — same "never fight a manual interaction" rule already used
-         for the industries auto-advance — and only runs while the
-         carousel is actually on screen, same as initPersonalizacion()'s
-         own auto-cycle.
+         Optional prev/next arrow buttons (e.g. the "Industrias"
+         carousel) — opt-in via [data-carousel-prev]/[data-carousel-next]
+         inside the same .carousel root.
+         --------------------------------------------------------- */
+      var prevBtn = root.querySelector("[data-carousel-prev]");
+      var nextBtn = root.querySelector("[data-carousel-next]");
+      if (prevBtn) prevBtn.addEventListener("click", function () { scrollByStep(-1); if (stopAutoplay) stopAutoplay(); });
+      if (nextBtn) nextBtn.addEventListener("click", function () { scrollByStep(1); if (stopAutoplay) stopAutoplay(); });
+
+      /* ---------------------------------------------------------
+         Autoplay — opt-in via data-carousel-autoplay (the "Así lo
+         hacemos" steps carousel and the "Industrias" carousel use
+         it). Advances one card every data-carousel-autoplay-ms
+         (defaults to 3800ms if absent). Once past the last card it
+         scrolls straight back to the first ("se regresa al
+         principio") rather than looping forward through clones.
+         Stops for good the moment the visitor touches/wheels/drags
+         the track or clicks an arrow themselves — never fight a
+         manual interaction — and pauses (resumable) on mouse hover
+         and whenever the carousel scrolls off screen, same as
+         initPersonalizacion()'s own auto-cycle.
          --------------------------------------------------------- */
       if (track.hasAttribute("data-carousel-autoplay") && !reduced) {
-        var AUTOPLAY_MS = 3800;
+        var AUTOPLAY_MS = parseInt(track.getAttribute("data-carousel-autoplay-ms"), 10) || 3800;
         var timer = null;
         var userInteracted = false;
+        var hovering = false;
+        var inView = false;
         ["pointerdown", "wheel", "touchstart"].forEach(function (evt) {
           track.addEventListener(evt, function () { userInteracted = true; stop(); }, { passive: true });
         });
+        track.addEventListener("mouseenter", function () { hovering = true; stop(); });
+        track.addEventListener("mouseleave", function () { hovering = false; start(); });
 
-        function goToIndex(i) {
-          var card = cards[i];
-          if (!card) return;
-          track.scrollTo({ left: card.offsetLeft - (track.clientWidth - card.offsetWidth) / 2, behavior: "smooth" });
-        }
         function tick() {
           if (userInteracted) return;
-          var next = activeIndex + 1 >= cards.length ? 0 : activeIndex + 1;
-          goToIndex(next);
+          if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 1) {
+            track.scrollTo({ left: 0, behavior: reduced ? "auto" : "smooth" });
+          } else {
+            scrollByStep(1);
+          }
         }
         function start() {
-          if (timer || userInteracted) return;
+          if (timer || userInteracted || hovering || !inView) return;
           timer = setInterval(tick, AUTOPLAY_MS);
         }
         function stop() {
           clearInterval(timer);
           timer = null;
         }
+        stopAutoplay = function () { userInteracted = true; stop(); };
+
         if ("IntersectionObserver" in window) {
           var io = new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {
-              if (entry.isIntersecting) start(); else stop();
+              inView = entry.isIntersecting;
+              if (inView) start(); else stop();
             });
           }, { threshold: 0.4 });
           io.observe(root);
         } else {
+          inView = true;
           start();
         }
       }
@@ -2143,6 +2229,7 @@
   function boot() {
     safe(initFontStylesheets, "initFontStylesheets");
     safe(initWhatsapp, "initWhatsapp");
+    safe(initIndustriesWhatsapp, "initIndustriesWhatsapp");
     safe(initNav, "initNav");
     safe(initNavHeight, "initNavHeight");
     safe(initMenuPanel, "initMenuPanel");
