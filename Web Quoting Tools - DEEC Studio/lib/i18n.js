@@ -59,6 +59,7 @@
       "hero.priceNow": "$149.99 USD",
       "hero.priceLegend": "Personalización y entrega en 24 horas.",
       "offer.badge": "Ahorra 20%",
+      "mockup.caption": "Ejemplo ilustrativo · Catering",
 
       "trust.paid": "Pago único",
       "trust.access": "Acceso permanente",
@@ -568,6 +569,7 @@
       "hero.priceNow": "$149.99 USD",
       "hero.priceLegend": "Personalization and delivery in 24 hours.",
       "offer.badge": "Save 20%",
+      "mockup.caption": "Illustrative example · Catering",
 
       "trust.paid": "One-time payment",
       "trust.access": "Lifetime access",
