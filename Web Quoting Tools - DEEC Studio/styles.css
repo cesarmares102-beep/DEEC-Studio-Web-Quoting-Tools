@@ -19,7 +19,6 @@
   --moss:      #102A43;
   --moss-2:    #071A2B;
   --moss-soft: #DCE6F0;
-  --terracotta:   #b35d3a;
   --urgent:      #c23b32;
   --success:     #1F7A4D; /* muted forest green — reserved for actual success/confirmation states (e.g. the "Gracias" checkmark), kept separate from --moss/--accent which despite its name is navy, not green */
   --title-accent: #102A43; /* headline emphasis color (em inside h1/h2) — not the brand accent */
@@ -817,7 +816,6 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   color: var(--ink-mute);
   margin-left: .25rem;
 }
-.hero-price-block .oferta-price-note { margin-top: .5rem; font-size: .9rem; color: var(--ink-mute); }
 .hero-price-legend {
   margin-top: .3rem;
   font-size: .85rem;
