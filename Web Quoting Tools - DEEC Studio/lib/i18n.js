@@ -56,7 +56,6 @@
       "hero.rating":
         "Más de 214 negocios han confiado en nosotros para crear sus cotizadores.",
 
-      "hero.priceNow": "$149.99 USD",
       "hero.priceLegend": "Personalización y entrega en 24 horas.",
       "offer.badge": "Ahorra 20%",
       "mockup.caption": "Ejemplo ilustrativo · Catering",
@@ -71,7 +70,6 @@
       "hero.kicker": "Cotizadores web personalizados",
       "hero.title": "Tu cotizador.<br>Tus precios. <em>Tu forma.</em>",
       "hero.sub": "Diseñamos y desarrollamos un cotizador web personalizado, configurado con los servicios, precios y opciones de tu negocio.",
-      "hero.ctaHero": "Quiero mi cotizador",
       "hero.ctaMoreInfo": "Más información",
 
       "marquee.1.title": "Cotiza más rápido",
@@ -566,7 +564,6 @@
       "hero.rating":
         "Trusted by more than 214 businesses to build their quoters.",
 
-      "hero.priceNow": "$149.99 USD",
       "hero.priceLegend": "Personalization and delivery in 24 hours.",
       "offer.badge": "Save 20%",
       "mockup.caption": "Illustrative example · Catering",
@@ -581,7 +578,6 @@
       "hero.kicker": "Custom web quoting tools",
       "hero.title": "Your quoter.<br>Your prices. <em>Your way.</em>",
       "hero.sub": "We design and build a personalized web quoting tool, configured with your business's services, prices and options.",
-      "hero.ctaHero": "I want my quoter",
       "hero.ctaMoreInfo": "More information",
 
       "marquee.1.title": "Quote faster",
