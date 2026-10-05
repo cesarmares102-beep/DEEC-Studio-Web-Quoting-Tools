@@ -572,6 +572,9 @@
       "trust.paid": "One-time payment",
       "trust.access": "Lifetime access",
       "trust.ready": "Ready to use",
+      "trust.paid.sub": "No subscription",
+      "trust.access.sub": "To your web quoting tool",
+      "trust.ready.sub": "No installation",
 
       "hero.kicker": "Custom web quoting tools",
       "hero.title": "Your quoter.<br>Your prices. <em>Your way.</em>",
