@@ -491,6 +491,18 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   filter: blur(30px);
   z-index: -1;
 }
+/* Small disclaimer under every product mockup on the page — they all
+   use the same illustrative catering example data (Nova Servicios,
+   wedding bookings, etc.), not a live screenshot of the real product
+   configured for the visitor's own business. */
+.mockup-caption {
+  margin-top: .6rem;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .03em;
+  color: var(--ink-faint);
+}
 /* --- Quote builder mockup (Hero) — static, non-functional replica of the
    real app's "New quote" screen (sidebar, topbar, stepper, collapsed
    steps, Review expanded). Own scoped tokens (Geist, amber accent), same
