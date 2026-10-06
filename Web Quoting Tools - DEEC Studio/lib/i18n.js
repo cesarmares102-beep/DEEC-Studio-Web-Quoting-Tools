@@ -59,7 +59,7 @@
         "Más de 214 negocios han confiado en nosotros para crear sus cotizadores.",
 
       "hero.priceLegend": "Personalización y entrega en 24 horas.",
-      "offer.badge": "Ahorra 20%",
+      "offer.badge": "Ahorra $37.50 USD",
       "mockup.caption": "Ejemplo ilustrativo · Catering",
       "industrias.cardCaption": "Ejemplo ilustrativo",
 
@@ -596,7 +596,7 @@
         "Trusted by more than 214 businesses to build their quoters.",
 
       "hero.priceLegend": "Personalization and delivery in 24 hours.",
-      "offer.badge": "Save 20%",
+      "offer.badge": "Save $37.50 USD",
       "mockup.caption": "Illustrative example · Catering",
       "industrias.cardCaption": "Illustrative example",
 
