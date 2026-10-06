@@ -215,6 +215,7 @@
 
       "industrias.eyebrow": "Industrias",
       "industrias.headline": "Cotizadores personalizados para tu negocio.",
+      "industrias.sub": "Una misma tecnología. Diferentes industrias. Configura tus productos, servicios, precios y reglas de cobro según la forma en que trabaja tu negocio.",
       "industrias.cta": "Más información",
       "industrias.extraPoint": "Y muchas otras características",
       "industrias.whatsappTemplate": "Hola, me interesa un cotizador para mi negocio de {industry}.",
@@ -743,7 +744,8 @@
       "qd.includes": "Includes: full service, equipment and assigned staff",
 
       "industrias.eyebrow": "Industries",
-      "industrias.headline": "Quoting tools ready for your industry.",
+      "industrias.headline": "Personalized quoting tools for your business.",
+      "industrias.sub": "Same technology. Different industries. Configure your products, services, prices and billing rules to match how your business works.",
       "industrias.cta": "More information",
       "industrias.extraPoint": "And many other features",
       "industrias.whatsappTemplate": "Hi, I'm interested in a quoting tool for my {industry} business.",
