@@ -462,12 +462,22 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   gap: 2rem;
   text-align: left;
 }
+/* Mobile-only reorder: the mockup sits right after the copy (kicker/
+   H1/description) and before the price block, instead of trailing
+   after the rating at the very bottom. Desktop's grid-template-areas
+   (further down) assigns explicit grid positions, which wins over
+   `order` regardless, so this is naturally inert at ≥960px without
+   needing its own override. */
+@media (max-width: 959px) {
+  .hero-copy { order: 1; }
+  .hero-visual { order: 2; }
+  .hero-cta { order: 3; }
+  .hero-inner .hero-rating { order: 4; }
+}
 .hero-copy { max-width: 34rem; min-width: 0; }
 .hero-mockup {
   position: relative;
   width: 100%;
-  max-width: 30rem;
-  margin-inline: auto;
   perspective: 1400px;
 }
 .hero-mockup .mockup { border-radius: 0; }
@@ -757,7 +767,7 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 @media (min-width: 960px) {
   .hero-inner {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-areas: "copy visual" "rating visual" "cta visual";
+    grid-template-areas: "copy visual" "cta visual" "rating visual";
     align-items: start;
     row-gap: 1.4rem;
   }
@@ -767,12 +777,25 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   .hero-visual { grid-area: visual; align-self: center; }
 }
 .hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
   font-family: var(--mono);
-  font-size: .78rem;
-  letter-spacing: .16em;
+  font-weight: 600;
+  font-size: .72rem;
+  letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: .45rem .9rem;
+  border-radius: 999px;
   margin-bottom: 1.4rem;
+}
+.hero-kicker::before {
+  content: "";
+  flex-shrink: 0;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent);
 }
 .hero-title {
   font-family: var(--display);
@@ -791,15 +814,54 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   line-height: 1.55;
 }
 .hero-cta {
-  margin-top: 2.2rem;
-  text-align: center;
+  margin-top: -.8rem;
+  text-align: left;
   width: 100%;
   max-width: 31rem;
-  margin-inline: auto;
 }
 .hero-price-block { margin-bottom: .9rem; }
 .hero-price-block .price-tag { color: var(--ink-mute); }
-.hero-price-block .price-compare-hero { justify-content: center; margin-bottom: .5rem; }
+.hero-price-block .price-compare-hero { justify-content: flex-start; margin-bottom: .5rem; }
+.hero-cta .checkout-trustbar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  column-gap: clamp(.35rem, 1.2vw, 1.2rem);
+  margin: 1.3rem 0 1.5rem;
+}
+.hero-cta .checkout-trustbar li {
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  gap: clamp(.2rem, 1vw, .5rem);
+}
+.hero-trust-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(22px, 5.5vw, 30px);
+  height: clamp(22px, 5.5vw, 30px);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--success) 10%, var(--paper));
+  color: var(--success);
+}
+.hero-trust-icon svg { width: 55%; height: 55%; }
+.hero-cta .checkout-trustbar strong { font-size: clamp(.76rem, 2.6vw, .92rem); font-weight: 400; white-space: nowrap; }
+@media (max-width: 359px) {
+  .hero-cta .checkout-trustbar { column-gap: .3rem; }
+  .hero-cta .checkout-trustbar li { gap: .2rem; }
+  .hero-trust-icon { width: 20px; height: 20px; }
+  .hero-cta .checkout-trustbar strong { font-size: .68rem; }
+}
+.btn-hero-whatsapp-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
 .hero-price-now {
   margin-top: .3rem;
   font-family: var(--display);
@@ -2585,6 +2647,7 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
 .hero-rating-score { font-weight: 700; color: var(--ink); }
 .hero-rating-sep { opacity: .5; }
 .hero-rating-center { justify-content: center; margin-inline: auto; margin-bottom: 1.2rem; }
+.hero-inner .hero-rating { flex-direction: column; align-items: flex-start; gap: .35rem; margin-top: -1rem; max-width: 20rem; }
 @media (max-width: 599px) { .hero-rating { font-size: .82rem; } }
 .sp-toast-body .hero-rating-lead { margin-bottom: .3rem; }
 
@@ -3974,4 +4037,529 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
      eyebrow/title/sub above stay exactly where they are, still inset
      the normal 1.5rem like every other page. */
   .checkout-grid { margin-inline: -.75rem; }
+}
+
+/* =============================================================
+   17. Hero mockup v4 — "dashboard" product screenshot
+   Self-contained, isolated token scope (.hero-mockup-v4 instead of
+   :root) so its --bg/--ink/--line/etc. names can't shadow the site's
+   own tokens of the same name. Rendered at its native 1440px design
+   width inside .v4-scale, then uniformly shrunk with a single
+   transform: scale() tied to the wrapper's own inline size via cqw
+   units — every pixel-based offset in the source (step connectors,
+   icon positions, etc.) stays internally consistent at any size, so
+   there's no need to port the original file's @media breakpoints.
+   Colors adapted to the DEEC house palette (navy, not SaaS-blue) —
+   see deec_studio_style_guide memory.
+   ============================================================= */
+.hero-mockup-v4 {
+  --bg:#f4f6fa;
+  --surface:#fff;
+  --surface-2:#f8fafc;
+  --ink:#111827;
+  --ink-2:#253149;
+  --muted:#69758a;
+  --muted-2:#98a2b3;
+  --line:#e5e9f0;
+  --line-2:#d8dee8;
+  --navy: var(--moss);
+  --blue: var(--moss);
+  --blue-soft: var(--moss-soft);
+  --green: var(--success);
+  --green-soft:#eaf8f0;
+  --shadow:0 18px 45px rgba(18,31,52,.08);
+  --shadow-soft:0 4px 14px rgba(18,31,52,.045);
+
+  position: relative;
+  width: 100%;
+  container-type: inline-size;
+  aspect-ratio: 1440 / 953;
+  overflow: hidden;
+  background: var(--surface);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--ink);
+}
+.hero-mockup-v4 *{box-sizing:border-box}
+.hero-mockup-v4 button,.hero-mockup-v4 input,.hero-mockup-v4 select{font:inherit}
+.hero-mockup-v4 button{cursor:pointer}
+
+.hero-mockup-v4 .v4-scale{
+  position: absolute;
+  top: 0; left: 0;
+  width: 1440px;
+  transform: scale(calc(100cqw / 1440px));
+  transform-origin: top left;
+}
+/* At the Hero's mobile width the whole 1440px canvas was scaling down
+   to ~0.23x — small source text (13.5px sidebar labels, 11px card
+   copy) was rendering at ~3px, unreadable, and the busy "Vista previa"
+   phone panel on the right became indistinct noise. Below 768px, zoom
+   into the top-left ~950x713 region instead (brand, steps, sidebar,
+   "Información general" + "Tipo de cotizador" cards) by scaling
+   against that narrower reference width — same top-left anchor, just
+   a bigger scale factor — and crop the rest via the aspect-ratio box,
+   which keeps everything legible at the size this card actually
+   renders at on a phone. */
+@media (max-width: 767px) {
+  .hero-mockup-v4 { aspect-ratio: 950 / 713; }
+  .hero-mockup-v4 .v4-scale { transform: scale(calc(100cqw / 950px)); }
+}
+.hero-mockup-v4 .app{
+  width: 1440px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+/* TOP NAV */
+.hero-mockup-v4 .topbar{
+  height:88px;
+  display:flex;
+  align-items:center;
+  padding:0 28px;
+  border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.98);
+}
+.hero-mockup-v4 .brand{
+  width:230px;
+  flex:0 0 230px;
+  font-size:27px;
+  letter-spacing:-1.7px;
+}
+.hero-mockup-v4 .brand b{font-weight:800}
+.hero-mockup-v4 .brand span{font-weight:300;color:#8d96a5}
+
+.hero-mockup-v4 .steps{
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-self:stretch;
+  min-width:0;
+}
+.hero-mockup-v4 .step{
+  position:relative;
+  width:112px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  color:#788499;
+  font-size:12px;
+  white-space:nowrap;
+}
+.hero-mockup-v4 .step:not(:last-child)::after{
+  content:"";
+  position:absolute;
+  width:72px;
+  height:1px;
+  background:#dce2eb;
+  top:33px;
+  left:76px;
+}
+.hero-mockup-v4 .step-number{
+  width:28px;
+  height:28px;
+  border:1px solid #dce2e9;
+  background:#f5f7fa;
+  color:#69768b;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:12px;
+  font-weight:700;
+  position:relative;
+  z-index:2;
+}
+.hero-mockup-v4 .step.active{color:var(--ink);font-weight:600}
+.hero-mockup-v4 .step.active .step-number{
+  color:#fff;
+  background:var(--navy);
+  border-color:var(--navy);
+}
+.hero-mockup-v4 .top-actions{
+  width:205px;
+  flex:0 0 205px;
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  gap:20px;
+}
+.hero-mockup-v4 .draft{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#4e5b70;
+  font-size:13px;
+  white-space:nowrap;
+}
+.hero-mockup-v4 .icon-btn{
+  width:34px;height:34px;
+  display:grid;place-items:center;
+  border:0;background:transparent;color:#4b5870;
+  border-radius:8px;font-size:20px;
+}
+
+/* BODY */
+.hero-mockup-v4 .body{
+  display:grid;
+  grid-template-columns:245px minmax(600px,1fr) 335px;
+  min-height:780px;
+}
+.hero-mockup-v4 .sidebar{
+  border-right:1px solid var(--line);
+  padding:24px 15px;
+  background:#fff;
+}
+.hero-mockup-v4 .side-label{
+  padding:4px 13px 12px;
+  color:#a0a8b6;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+}
+.hero-mockup-v4 .nav-item{
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:0 13px;
+  margin:3px 0;
+  border-radius:9px;
+  color:#56647a;
+  font-size:13.5px;
+}
+.hero-mockup-v4 .nav-item.active{
+  color:#172033;
+  background:#edf4ff;
+  font-weight:650;
+  box-shadow:inset 3px 0 0 var(--blue);
+}
+.hero-mockup-v4 .nav-icon{
+  width:21px;
+  height:21px;
+  color:#6a7890;
+  display:grid;
+  place-items:center;
+  flex:none;
+}
+.hero-mockup-v4 .nav-item.active .nav-icon{color:var(--blue)}
+
+.hero-mockup-v4 .workspace{
+  padding:30px 30px 32px;
+  background:#fafbfd;
+  min-width:0;
+}
+.hero-mockup-v4 .heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:22px;
+}
+.hero-mockup-v4 .heading h1{
+  margin:0;
+  font-size:27px;
+  letter-spacing:-.75px;
+  line-height:1.15;
+}
+.hero-mockup-v4 .heading p{
+  margin:6px 0 0;
+  color:var(--muted);
+  font-size:14px;
+}
+.hero-mockup-v4 .status{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:#607087;
+  font-size:11px;
+  padding-top:4px;
+}
+.hero-mockup-v4 .status-dot{
+  width:7px;height:7px;border-radius:50%;background:#22a15f;
+  box-shadow:0 0 0 3px #e6f6ed;
+}
+
+.hero-mockup-v4 .card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+  margin-bottom:16px;
+  box-shadow:var(--shadow-soft);
+  overflow:hidden;
+}
+.hero-mockup-v4 .card-head{
+  min-height:53px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 18px;
+  border-bottom:1px solid #edf0f4;
+  font-size:14px;
+  font-weight:700;
+}
+.hero-mockup-v4 .card-head .head-icon{
+  width:27px;height:27px;
+  border-radius:7px;
+  display:grid;place-items:center;
+  color:#4e6687;
+  background:#f1f5fa;
+}
+.hero-mockup-v4 .card-body{padding:18px}
+.hero-mockup-v4 .grid-2{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 225px;
+  gap:22px;
+}
+.hero-mockup-v4 .field{margin-bottom:15px}
+.hero-mockup-v4 .field:last-child{margin-bottom:0}
+.hero-mockup-v4 label{
+  display:block;
+  margin:0 0 7px;
+  color:#4d5a70;
+  font-size:12px;
+  font-weight:550;
+}
+.hero-mockup-v4 .input,.hero-mockup-v4 .select{
+  width:100%;
+  height:42px;
+  display:flex;
+  align-items:center;
+  padding:0 12px;
+  border:1px solid var(--line-2);
+  border-radius:8px;
+  background:#fff;
+  color:#263247;
+  font-size:13px;
+  box-shadow:inset 0 1px 1px rgba(20,35,55,.02);
+}
+.hero-mockup-v4 .input.placeholder{color:#9aa4b4}
+.hero-mockup-v4 .logo-upload{
+  height:105px;
+  border:1px dashed #cbd5e3;
+  border-radius:9px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  background:#fbfcfe;
+  color:#66748b;
+  font-size:11px;
+}
+.hero-mockup-v4 .logo-upload strong{display:block;color:#4a5870;font-size:12px;margin-bottom:3px}
+
+/* TYPES */
+.hero-mockup-v4 .types{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.hero-mockup-v4 .type{
+  position:relative;
+  min-height:126px;
+  border:1px solid var(--line-2);
+  border-radius:10px;
+  padding:16px 12px;
+  text-align:center;
+  background:#fff;
+}
+.hero-mockup-v4 .type.selected{
+  border:1.5px solid var(--blue);
+  background:#f8fbff;
+  box-shadow:0 0 0 3px rgba(16,42,67,.07);
+}
+.hero-mockup-v4 .check{
+  position:absolute;
+  right:9px;top:9px;
+  width:19px;height:19px;
+  border-radius:50%;
+  background:var(--blue);
+  color:#fff;
+  display:none;
+  place-items:center;
+  font-size:11px;
+}
+.hero-mockup-v4 .type.selected .check{display:grid}
+.hero-mockup-v4 .type-icon{
+  width:34px;height:34px;
+  margin:0 auto 9px;
+  border-radius:9px;
+  display:grid;place-items:center;
+  background:#f1f5fa;
+  color:#536987;
+}
+.hero-mockup-v4 .type.selected .type-icon{background:var(--blue-soft);color:var(--blue)}
+.hero-mockup-v4 .type strong{font-size:13px}
+.hero-mockup-v4 .type p{margin:6px auto 0;max-width:145px;color:#718096;font-size:11px;line-height:1.45}
+
+/* REGIONAL */
+.hero-mockup-v4 .regional{display:grid;grid-template-columns:1.2fr .8fr 1fr;gap:15px}
+.hero-mockup-v4 .select{justify-content:space-between;gap:10px}
+.hero-mockup-v4 .chevron{color:#78859a;font-size:12px}
+
+/* BUTTON */
+.hero-mockup-v4 .continue{display:flex;justify-content:flex-end;margin-top:4px}
+.hero-mockup-v4 .continue button{
+  min-width:137px;
+  height:43px;
+  border:0;
+  border-radius:9px;
+  background:var(--navy);
+  color:#fff;
+  font-size:13px;
+  font-weight:650;
+  box-shadow:0 6px 14px rgba(7,20,38,.14);
+}
+
+/* PREVIEW */
+.hero-mockup-v4 .preview{
+  border-left:1px solid var(--line);
+  padding:28px 18px 24px;
+  background:#f7f9fc;
+}
+.hero-mockup-v4 .preview-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+}
+.hero-mockup-v4 .preview h2{margin:0;font-size:15px;letter-spacing:-.2px}
+.hero-mockup-v4 .device-pill{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  padding:3px;
+  border-radius:22px;
+  background:#e8edf4;
+  margin-bottom:17px;
+}
+.hero-mockup-v4 .device-pill span{
+  height:31px;
+  display:grid;place-items:center;
+  border-radius:18px;
+  color:#657289;
+  font-size:11px;
+}
+.hero-mockup-v4 .device-pill .selected{
+  color:#fff;
+  background:var(--navy);
+  font-weight:650;
+  box-shadow:0 2px 5px rgba(10,22,39,.12);
+}
+.hero-mockup-v4 .preview-shell{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:10px;
+  box-shadow:var(--shadow-soft);
+}
+.hero-mockup-v4 .phone{
+  border:1px solid #e2e7ee;
+  border-radius:12px;
+  background:#fff;
+  min-height:585px;
+  padding:17px 15px 15px;
+}
+.hero-mockup-v4 .phone-top{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:29px;
+}
+.hero-mockup-v4 .mini-brand{font-size:12px;font-weight:800;letter-spacing:-.5px}
+.hero-mockup-v4 .mini-brand span{font-weight:300;color:#9aa3b1}
+.hero-mockup-v4 .hamburger{font-size:17px;color:#27344a}
+.hero-mockup-v4 .phone h3{
+  margin:0 0 6px;
+  font-size:19px;
+  letter-spacing:-.45px;
+}
+.hero-mockup-v4 .phone-sub{
+  margin:0 0 20px;
+  color:#78869a;
+  font-size:11px;
+  line-height:1.5;
+}
+.hero-mockup-v4 .progress{display:grid;gap:7px;margin-bottom:23px}
+.hero-mockup-v4 .progress-item{
+  display:flex;align-items:center;gap:10px;
+  color:#7a879a;font-size:11px;
+}
+.hero-mockup-v4 .progress-item b{
+  width:25px;height:25px;border-radius:50%;
+  display:grid;place-items:center;
+  background:#f0f3f7;color:#6c7890;font-weight:600;
+}
+.hero-mockup-v4 .progress-item.active{color:#182235;font-weight:650}
+.hero-mockup-v4 .progress-item.active b{background:var(--navy);color:#fff}
+.hero-mockup-v4 .preview-card{
+  border:1px solid #e6eaf0;
+  border-radius:9px;
+  padding:10px;
+}
+.hero-mockup-v4 .preview-image{
+  height:112px;border-radius:7px;
+  background:linear-gradient(145deg,#edf2f8,#e5ebf3);
+  display:grid;place-items:center;
+  color:#b6c1d0;font-size:31px;
+}
+.hero-mockup-v4 .preview-lines{display:grid;gap:7px;margin-top:11px}
+.hero-mockup-v4 .preview-lines span{height:7px;border-radius:5px;background:#edf0f5}
+.hero-mockup-v4 .preview-lines span:last-child{width:68%}
+.hero-mockup-v4 .preview-total{
+  display:flex;justify-content:space-between;
+  margin-top:15px;padding-top:11px;
+  border-top:1px solid #edf0f4;
+  font-size:11px;color:#68768c;
+}
+.hero-mockup-v4 .preview-total strong{color:#172236;font-size:13px}
+
+/* Icons */
+.hero-mockup-v4 .svg-icon{
+  width:18px;
+  height:18px;
+  flex:0 0 18px;
+  display:block;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.hero-mockup-v4 .nav-icon-box{
+  width:30px;height:30px;
+  flex:0 0 30px;
+  display:grid;
+  place-items:center;
+  border-radius:8px;
+  background:#f2f5f9;
+  color:#62728a;
+}
+.hero-mockup-v4 .nav-item.active .nav-icon-box{
+  background:var(--blue-soft);
+  color:var(--blue);
+}
+.hero-mockup-v4 .head-icon{
+  width:28px;height:28px;
+  flex:0 0 28px;
+  display:grid;
+  place-items:center;
+  border-radius:7px;
+  background:#f1f5fa;
+  color:#536987;
+}
+.hero-mockup-v4 .type-icon{
+  width:34px;height:34px;
+  margin:0 auto 9px;
+  display:grid;
+  place-items:center;
+  border-radius:9px;
+  background:#f1f5fa;
+  color:#536987;
+}
+.hero-mockup-v4 .type.selected .type-icon{
+  background:var(--blue-soft);
+  color:var(--blue);
+}
+.hero-mockup-v4 .upload-icon{
+  width:32px;height:32px;
+  margin:0 auto 6px;
+  border:1px solid #d7dee9;
+  border-radius:8px;
+  display:grid;
+  place-items:center;
+  color:#60718a;
+  background:#fff;
 }
