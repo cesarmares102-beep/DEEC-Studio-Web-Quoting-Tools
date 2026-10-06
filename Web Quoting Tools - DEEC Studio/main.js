@@ -815,11 +815,11 @@
       var dots = $$(".carousel-dot", dotsRoot);
       if (!dots.length) return;
       var cards = $$(":scope > *", track);
-      var ticking = false;
+      if (!cards.length) return;
+
       var activeIndex = 0;
 
-      function updateActive() {
-        ticking = false;
+      function nearestIndex() {
         var center = track.scrollLeft + track.clientWidth / 2;
         var closest = 0;
         var closestDist = Infinity;
@@ -827,39 +827,89 @@
           var dist = Math.abs((card.offsetLeft + card.offsetWidth / 2) - center);
           if (dist < closestDist) { closestDist = dist; closest = i; }
         });
-        activeIndex = closest;
-        dots.forEach(function (dot, i) { dot.classList.toggle("is-active", i === closest); });
+        return closest;
+      }
+      function updateDots() {
+        dots.forEach(function (dot, i) { dot.classList.toggle("is-active", i === activeIndex); });
       }
 
+      // Jump straight to card N by its real, live offsetLeft — not by
+      // adding a cached "step" distance repeatedly (that drifted: each
+      // addition could round differently, and a stale step measured
+      // before a web-font swap or breakpoint resize silently desynced
+      // from the actual card positions). This is the only thing that
+      // ever moves the track, whether triggered by an arrow, autoplay,
+      // or touch landing on a snap point — one path, one source of truth.
+      function goTo(index) {
+        var i = ((index % cards.length) + cards.length) % cards.length;
+        var card = cards[i];
+        if (!card) return;
+        track.scrollTo({ left: card.offsetLeft, behavior: reduced ? "auto" : "smooth" });
+      }
+
+      /* ---------------------------------------------------------
+         Autoplay — opt-in via data-carousel-autoplay (the "Así lo
+         hacemos" steps carousel and the "Industrias" carousel use
+         it), exactly data-carousel-autoplay-ms apart (defaults to
+         3800ms if absent — Industrias sets 3500 explicitly). A
+         single rescheduling setTimeout, not setInterval: every
+         scroll settling — whether from autoplay's own goTo(), an
+         arrow click, or the visitor swiping/dragging by hand — runs
+         through the same debounced handler below, which re-syncs
+         the active dot AND re-arms this timer for another full
+         interval. That's the single source of truth: there is only
+         ever one timer reference, manual interaction can never kill
+         autoplay (it just resets the clock, as requested) or spawn a
+         second timer racing the first. Paused (resumable) on mouse
+         hover and whenever the carousel scrolls off screen.
+         --------------------------------------------------------- */
+      var autoplayEnabled = track.hasAttribute("data-carousel-autoplay") && !reduced;
+      var AUTOPLAY_MS = parseInt(track.getAttribute("data-carousel-autoplay-ms"), 10) || 3800;
+      var timer = null;
+      var hovering = false;
+      var inView = false;
+
+      function clearAutoplayTimer() {
+        if (timer) { clearTimeout(timer); timer = null; }
+      }
+      function scheduleAutoplay() {
+        clearAutoplayTimer();
+        if (!autoplayEnabled || hovering || !inView) return;
+        timer = setTimeout(advance, AUTOPLAY_MS);
+      }
+      // Self-sustaining: advance() re-arms its own next timer directly,
+      // right after moving — it does NOT wait for the scroll-settle
+      // handler below to do it. That handler calling scheduleAutoplay()
+      // too (on every scroll, including this one) is still correct
+      // (clearAutoplayTimer() first makes both callers idempotent-safe,
+      // "last call wins"), but it must never be the ONLY path: that was
+      // the actual bug — if a settle timeout ever got delayed or
+      // throttled (tab briefly backgrounded, a janky frame), nothing
+      // else would ever re-arm autoplay and it stalled for good.
+      function advance() {
+        goTo(activeIndex + 1);
+        scheduleAutoplay();
+      }
+
+      // Debounced "scroll settled" — fires ~120ms after scrolling stops,
+      // from ANY cause (autoplay's goTo, an arrow click, or a manual
+      // swipe/drag/wheel). Syncs the active dot to wherever the track
+      // actually ended up and re-arms the autoplay timer from there, so
+      // manual interaction resets the countdown to a full, consistent
+      // AUTOPLAY_MS instead of leaving it mid-count — never fired
+      // mid-gesture, never doubled.
+      var settleTimer = null;
       track.addEventListener("scroll", function () {
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(updateActive);
+        clearTimeout(settleTimer);
+        settleTimer = setTimeout(function () {
+          activeIndex = nearestIndex();
+          updateDots();
+          scheduleAutoplay();
+        }, 120);
       }, { passive: true });
-      updateActive();
 
-      // Distance (px) from one card's start to the next's — used to step
-      // the track by exactly one card at a time, whether the layout shows
-      // one card centered (pasos, mobile) or several side by side
-      // (industrias, desktop/tablet): scrolling by this amount always
-      // lands on the next/previous card regardless of how many are
-      // visible at once. Measured fresh on every call (not cached) since
-      // web-font swap or a breakpoint resize can change card widths after
-      // init runs, which would otherwise silently desync a cached value.
-      function getStep() {
-        return cards.length > 1 ? (cards[1].offsetLeft - cards[0].offsetLeft) : 0;
-      }
-      function scrollByStep(dir) {
-        var step = getStep();
-        var target = dir > 0
-          ? Math.min(track.scrollWidth - track.clientWidth, track.scrollLeft + step)
-          : Math.max(0, track.scrollLeft - step);
-        track.scrollTo({ left: target, behavior: reduced ? "auto" : "smooth" });
-      }
-
-      // Set by the autoplay block below (if enabled for this track) so the
-      // arrow buttons can stop autoplay the moment someone steers manually.
-      var stopAutoplay = null;
+      activeIndex = nearestIndex();
+      updateDots();
 
       /* ---------------------------------------------------------
          Optional prev/next arrow buttons (e.g. the "Industrias"
@@ -868,63 +918,41 @@
          --------------------------------------------------------- */
       var prevBtn = root.querySelector("[data-carousel-prev]");
       var nextBtn = root.querySelector("[data-carousel-next]");
-      if (prevBtn) prevBtn.addEventListener("click", function () { scrollByStep(-1); if (stopAutoplay) stopAutoplay(); });
-      if (nextBtn) nextBtn.addEventListener("click", function () { scrollByStep(1); if (stopAutoplay) stopAutoplay(); });
+      if (prevBtn) prevBtn.addEventListener("click", function () { goTo(activeIndex - 1); });
+      if (nextBtn) nextBtn.addEventListener("click", function () { goTo(activeIndex + 1); });
 
-      /* ---------------------------------------------------------
-         Autoplay — opt-in via data-carousel-autoplay (the "Así lo
-         hacemos" steps carousel and the "Industrias" carousel use
-         it). Advances one card every data-carousel-autoplay-ms
-         (defaults to 3800ms if absent). Once past the last card it
-         scrolls straight back to the first ("se regresa al
-         principio") rather than looping forward through clones.
-         Stops for good the moment the visitor touches/wheels/drags
-         the track or clicks an arrow themselves — never fight a
-         manual interaction — and pauses (resumable) on mouse hover
-         and whenever the carousel scrolls off screen, same as
-         initPersonalizacion()'s own auto-cycle.
-         --------------------------------------------------------- */
-      if (track.hasAttribute("data-carousel-autoplay") && !reduced) {
-        var AUTOPLAY_MS = parseInt(track.getAttribute("data-carousel-autoplay-ms"), 10) || 3800;
-        var timer = null;
-        var userInteracted = false;
-        var hovering = false;
-        var inView = false;
-        ["pointerdown", "wheel", "touchstart"].forEach(function (evt) {
-          track.addEventListener(evt, function () { userInteracted = true; stop(); }, { passive: true });
-        });
-        track.addEventListener("mouseenter", function () { hovering = true; stop(); });
-        track.addEventListener("mouseleave", function () { hovering = false; start(); });
-
-        function tick() {
-          if (userInteracted) return;
-          if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 1) {
-            track.scrollTo({ left: 0, behavior: reduced ? "auto" : "smooth" });
-          } else {
-            scrollByStep(1);
-          }
-        }
-        function start() {
-          if (timer || userInteracted || hovering || !inView) return;
-          timer = setInterval(tick, AUTOPLAY_MS);
-        }
-        function stop() {
-          clearInterval(timer);
-          timer = null;
-        }
-        stopAutoplay = function () { userInteracted = true; stop(); };
+      if (autoplayEnabled) {
+        root.addEventListener("mouseenter", function () { hovering = true; clearAutoplayTimer(); });
+        root.addEventListener("mouseleave", function () { hovering = false; scheduleAutoplay(); });
 
         if ("IntersectionObserver" in window) {
           var io = new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {
               inView = entry.isIntersecting;
-              if (inView) start(); else stop();
+              if (inView) scheduleAutoplay(); else clearAutoplayTimer();
             });
-          }, { threshold: 0.4 });
+          }, { threshold: 0.3 });
           io.observe(root);
+          // Fallback for landing directly on a #hash link (e.g. a nav
+          // link straight to #industrias): the browser's own hash-scroll
+          // can land a tick after this observer's first callback already
+          // fired — reporting "not in view" for the pre-scroll position —
+          // with no further intersection change afterward to ever
+          // re-trigger it, stalling autoplay for good. One delayed manual
+          // recheck closes that gap without weakening the normal
+          // IntersectionObserver-driven pause/resume behavior.
+          setTimeout(function () {
+            if (inView) return;
+            var r = root.getBoundingClientRect();
+            var visible = Math.max(0, Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0));
+            if (r.height > 0 && visible / r.height >= 0.3) {
+              inView = true;
+              scheduleAutoplay();
+            }
+          }, 1000);
         } else {
           inView = true;
-          start();
+          scheduleAutoplay();
         }
       }
     });
