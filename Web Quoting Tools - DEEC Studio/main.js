@@ -14,6 +14,7 @@
   var refreshIndustriesWhatsapp = null; // set by initIndustriesWhatsapp(), called from applyLanguage()
   var refreshCheckoutGeoLabels = null; // set by initCheckoutGeo(), called from applyLanguage()
   var refreshCheckoutPhoneLabels = null; // set by initCheckoutPhone(), called from applyLanguage()
+  var refreshHeroTermsLayout = null; // set by initHeroMatrix(), called from applyLanguage()
 
   function safe(fn, name) {
     try { fn(); } catch (e) { if (window.console) console.warn("[" + name + "]", e); }
@@ -329,6 +330,7 @@
     if (refreshIndustriesWhatsapp) refreshIndustriesWhatsapp();
     if (refreshCheckoutGeoLabels) refreshCheckoutGeoLabels();
     if (refreshCheckoutPhoneLabels) refreshCheckoutPhoneLabels();
+    if (refreshHeroTermsLayout) refreshHeroTermsLayout();
   }
 
   function initLangToggle() {
@@ -682,6 +684,220 @@
         behavior: reduced ? "auto" : "smooth"
       });
     });
+  }
+
+  /* -------------------------------------------------------------
+     Hero "matrix" background — a fine grid (.hero-grid, pure CSS)
+     with a handful of small circular nodes (.matrix-node) that get
+     moved, by JS, to a freshly-picked spot from a runtime-built pool
+     of up to ~50 grid positions (see buildHeroMatrixPool() below) —
+     never fixed coordinates. Each node independently loops: new
+     position -> dot lights -> its badge fades in with a quote term
+     and a random blue/sky-blue/green/gray tint -> both hold -> both
+     fade out -> position freed -> wait -> repeat with a different
+     position. Purely decorative (aria-hidden, pointer-events:none,
+     absolutely positioned inside .hero's own overflow:hidden box) —
+     never touches layout.
+     ------------------------------------------------------------- */
+  var HERO_TERMS = [
+    "$12,450", "$8,900 MXN", "MXN", "IVA", "+IVA", "PRECIO", "TOTAL",
+    "SUBTOTAL", "DESCUENTO", "COTIZACIÓN", "COTIZAR", "CLIENTE",
+    "SERVICIO", "SERVICIOS", "PRODUCTO", "PRODUCTOS", "CANTIDAD",
+    "UNIDAD", "OPCIONES", "EXTRAS", "PAQUETE", "INSTALACIÓN",
+    "MATERIAL", "MANO DE OBRA", "ENVÍO", "ANTICIPO", "SALDO",
+    "IMPUESTO", "PRECIO FINAL", "PRECIO UNITARIO", "PRESUPUESTO",
+    "VIGENCIA", "NOTA", "CONDICIONES", "$15,800", "$24,500",
+    "3 UNIDADES", "5 SERVICIOS", "10%", "16% IVA",
+    "$1,250", "$2,450 USD", "USD", "TAX", "+TAX", "PRICE", "TOTAL",
+    "SUBTOTAL", "DISCOUNT", "QUOTE", "QUOTING", "CUSTOMER", "SERVICE",
+    "SERVICES", "PRODUCT", "PRODUCTS", "QUANTITY", "UNIT", "OPTIONS",
+    "EXTRAS", "PACKAGE", "INSTALLATION", "MATERIAL", "LABOR",
+    "SHIPPING", "DEPOSIT", "BALANCE", "FINAL PRICE", "UNIT PRICE",
+    "ESTIMATE", "VALID UNTIL", "NOTE", "TERMS", "$1,850", "$3,200",
+    "3 UNITS", "5 SERVICES", "10% OFF", "SALES TAX",
+    "MXN · USD", "IVA · TAX", "PRECIO · PRICE", "SERVICIO · SERVICE",
+    "PRODUCTO · PRODUCT", "COTIZACIÓN · QUOTE", "CLIENTE · CUSTOMER",
+    "$ + TAX", "$ + IVA", "QTY × PRICE", "UNIT × QTY",
+    "SUBTOTAL + TAX", "DEPOSIT · 50%", "TOTAL ESTIMADO",
+    "ESTIMATED TOTAL", "CUSTOM PRICE", "PRECIO PERSONALIZADO",
+    "FROM $1,250", "DESDE $12,450", "+1", "+2", "3×", "5×"
+  ];
+  var HERO_TERM_ICONS = {
+    file: "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M7 3h8l3 3v15H7z\"/><path d=\"M15 3v4h4M9.5 15.5h5M9.5 12h3\"/></svg>",
+    tag: "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M13 3 4 14h7l-1 7 10-11h-7l0-7Z\"/></svg>",
+    dot: "<svg viewBox=\"0 0 24 24\"><rect x=\"8\" y=\"8\" width=\"8\" height=\"8\" fill=\"currentColor\"/></svg>"
+  };
+  function heroTermIcon(term) {
+    if (/PDF|COTIZA|QUOTE|NOTA|NOTE|TERMS|CONDICIONES|ESTIMATE|PRESUPUESTO|VIGENCIA|VALID/.test(term)) return "file";
+    if (/\$|USD|MXN|TAX|IVA|%|PRECIO|PRICE|TOTAL|SUBTOTAL|DESCUENTO|DISCOUNT|SALDO|BALANCE|ANTICIPO|DEPOSIT/.test(term)) return "tag";
+    return "dot";
+  }
+  var HERO_BADGE_COLORS = ["c-blue", "c-skyblue", "c-green", "c-gray"];
+  /* Builds the pool of ~50 possible node positions: every grid-cell
+     intersection inside .hero that falls OUTSIDE the real content's
+     bounding box (.hero-inner, padded) and clear of .hero's own
+     edges. Recomputed on init, resize and language toggle (translated
+     copy reflows to a different height/number of lines), so the pool
+     always matches the actual clean zone rather than a guess. */
+  function buildHeroMatrixPool() {
+    var hero = $(".hero");
+    var content = $(".hero-inner");
+    if (!hero || !content) return {};
+    var mobile = matchMedia("(max-width: 767px)").matches;
+    var heroRect = hero.getBoundingClientRect();
+    var contentRect = content.getBoundingClientRect();
+    var cell = mobile ? 40 : 56;
+    var edgeMargin = mobile ? 26 : 40;
+    var pad = mobile ? 16 : 32;
+    var navBottom = $(".nav") ? $(".nav").getBoundingClientRect().bottom - heroRect.top : edgeMargin;
+    var topMargin = Math.max(edgeMargin, navBottom + 18);
+    var keepLeft = contentRect.left - heroRect.left - pad;
+    var keepRight = contentRect.right - heroRect.left + pad;
+    var keepTop = contentRect.top - heroRect.top - pad;
+    var keepBottom = contentRect.bottom - heroRect.top + pad;
+    var w = heroRect.width, h = heroRect.height;
+    var pool = [];
+    for (var y = topMargin; y <= h - edgeMargin; y += cell) {
+      for (var x = edgeMargin; x <= w - edgeMargin; x += cell) {
+        if (x > keepLeft && x < keepRight && y > keepTop && y < keepBottom) continue;
+        pool.push({ x: x, y: y });
+      }
+    }
+    if (pool.length > 50) {
+      for (var i = pool.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+      }
+      pool = pool.slice(0, 50);
+    }
+    return { pool: pool, heroW: w };
+  }
+  /* Drives the small, fixed set of reusable .matrix-node elements —
+     each one independently loops: pick a free position from the
+     current pool (never its own last spot, never a spot another node
+     is occupying right now) -> move there -> light the dot -> fade in
+     the badge with a random term + blue/sky-blue/green/gray tint ->
+     hold -> fade badge out -> dim the dot -> free the position -> wait
+     -> repeat. Because there are only a handful of DOM nodes sharing
+     up to 50 possible spots, and each one rests between cycles, the
+     board never shows all its positions (or even all its nodes) lit
+     at once — "no quiero todos los nodos visibles ni todos los
+     badges simultáneamente" is just a property of this loop, not a
+     separate cap to enforce. */
+  function initHeroMatrix() {
+    var nodes = $$(".matrix-node");
+    if (!nodes.length) return;
+    var pool = [];
+    var heroW = 0;
+    var occupied = {}; // "x,y" -> true, while a node currently sits there
+    function refresh() {
+      var built = buildHeroMatrixPool();
+      pool = built.pool || [];
+      heroW = built.heroW || 0;
+    }
+    function slotCount() {
+      return matchMedia("(max-width: 767px)").matches ? 2 : 6;
+    }
+    function key(p) { return p.x + "," + p.y; }
+    function pickPosition(lastKey) {
+      var candidates = pool.filter(function (p) {
+        var k = key(p);
+        return !occupied[k] && k !== lastKey;
+      });
+      if (!candidates.length) candidates = pool.filter(function (p) { return !occupied[key(p)]; });
+      if (!candidates.length) return null;
+      return candidates[Math.floor(Math.random() * candidates.length)];
+    }
+    function setBadge(badge, term) {
+      var icon = HERO_TERM_ICONS[heroTermIcon(term)];
+      badge.innerHTML =
+        "<span class=\"node-badge-icon\">" + icon + "</span>" +
+        "<span class=\"node-badge-text\"></span>";
+      badge.querySelector(".node-badge-text").textContent = term;
+    }
+    function paint(el, color) {
+      HERO_BADGE_COLORS.forEach(function (c) { el.classList.remove(c); });
+      el.classList.add(color);
+    }
+    function cycle(node, lastKey) {
+      var enabled = node.classList.contains("is-enabled");
+      if (!enabled) { setTimeout(function () { cycle(node, lastKey); }, 1500); return; }
+      var pos = pickPosition(lastKey);
+      if (!pos) { setTimeout(function () { cycle(node, lastKey); }, 1200); return; }
+      // Reserve the spot NOW, not after the wait below — otherwise two
+      // nodes idling at the same moment could both pick the same free
+      // position (neither has claimed it yet) and land on top of each
+      // other once their waits elapse.
+      var k = key(pos);
+      occupied[k] = true;
+      var wait = 500 + Math.random() * 2800;
+      setTimeout(function () {
+        if (!node.classList.contains("is-enabled")) { delete occupied[k]; cycle(node, lastKey); return; }
+        node.style.left = pos.x + "px";
+        node.style.top = pos.y + "px";
+        var dot = node.querySelector(".matrix-dot");
+        var badge = node.querySelector(".node-badge");
+        var color = HERO_BADGE_COLORS[Math.floor(Math.random() * HERO_BADGE_COLORS.length)];
+        paint(dot, color);
+        dot.classList.add("is-lit");
+        badge.classList.toggle("dir-left", pos.x > heroW / 2);
+        setTimeout(function () {
+          setBadge(badge, HERO_TERMS[Math.floor(Math.random() * HERO_TERMS.length)]);
+          paint(badge, color);
+          requestAnimationFrame(function () { badge.classList.add("is-visible"); });
+        }, 350);
+        var hold = 2600 + Math.random() * 2400;
+        setTimeout(function () {
+          badge.classList.remove("is-visible");
+          setTimeout(function () {
+            dot.classList.remove("is-lit");
+            delete occupied[k];
+            cycle(node, k);
+          }, 300);
+        }, 350 + hold);
+      }, wait);
+    }
+    if (reduced) {
+      refresh();
+      nodes.forEach(function (node, i) {
+        if (!node.classList.contains("is-enabled")) return;
+        var pos = pool[i % Math.max(pool.length, 1)];
+        if (!pos) return;
+        occupied[key(pos)] = true;
+        node.style.left = pos.x + "px";
+        node.style.top = pos.y + "px";
+        var dot = node.querySelector(".matrix-dot");
+        var badge = node.querySelector(".node-badge");
+        var color = HERO_BADGE_COLORS[Math.floor(Math.random() * HERO_BADGE_COLORS.length)];
+        paint(dot, color);
+        dot.classList.add("is-lit");
+        badge.classList.toggle("dir-left", pos.x > heroW / 2);
+        setBadge(badge, HERO_TERMS[Math.floor(Math.random() * HERO_TERMS.length)]);
+        paint(badge, color);
+        badge.classList.add("is-visible");
+      });
+      return;
+    }
+    function enableForBreakpoint() {
+      var count = slotCount();
+      nodes.forEach(function (node, i) { node.classList.toggle("is-enabled", i < count); });
+    }
+    refresh();
+    enableForBreakpoint();
+    nodes.forEach(function (node, i) {
+      setTimeout(function () { cycle(node, null); }, i * 500);
+    });
+
+    var resizeRaf;
+    function onLayoutChange() {
+      enableForBreakpoint();
+      refresh();
+    }
+    window.addEventListener("resize", function () {
+      cancelAnimationFrame(resizeRaf);
+      resizeRaf = requestAnimationFrame(onLayoutChange);
+    });
+    refreshHeroTermsLayout = onLayoutChange;
   }
 
   /* -------------------------------------------------------------
@@ -1165,33 +1381,6 @@
         card.style.setProperty("--ry", cy.toFixed(2) + "deg");
         raf = (Math.abs(tx - cx) > 0.05 || Math.abs(ty - cy) > 0.05) ? requestAnimationFrame(loop) : null;
       }
-    });
-  }
-
-  /* -------------------------------------------------------------
-     Hero mockup 3D tilt — cursor-following rotation, fine-hover only
-     ------------------------------------------------------------- */
-  function initMockupTilt() {
-    if (!fineHover) return;
-    var wrap = document.querySelector("[data-mockup-tilt]");
-    var card = wrap ? wrap.querySelector(".mockup") : null;
-    if (!wrap || !card) return;
-    wrap.addEventListener("mousemove", function (e) {
-      var rect = wrap.getBoundingClientRect();
-      var px = (e.clientX - rect.left) / rect.width - 0.5;
-      var py = (e.clientY - rect.top) / rect.height - 0.5;
-      var ry = px * 14 - 8;
-      var rx = py * -10 + 2;
-      card.style.transform = "rotateY(" + ry + "deg) rotateX(" + rx + "deg)";
-    });
-    wrap.addEventListener("mouseover", function (e) {
-      if (wrap.contains(e.relatedTarget)) return;
-      wrap.classList.add("is-active");
-    });
-    wrap.addEventListener("mouseout", function (e) {
-      if (wrap.contains(e.relatedTarget)) return;
-      wrap.classList.remove("is-active");
-      card.style.transform = "";
     });
   }
 
@@ -2264,6 +2453,7 @@
     safe(initSmoothAnchors, "initSmoothAnchors");
     safe(initFooterAccordion, "initFooterAccordion");
     safe(initLegalVersioning, "initLegalVersioning");
+    safe(initHeroMatrix, "initHeroMatrix");
     safe(initReveals, "initReveals");
     safe(initTransformShowcase, "initTransformShowcase");
     safe(initPersonalizacion, "initPersonalizacion");
@@ -2271,7 +2461,6 @@
     safe(initStepsCarousel, "initStepsCarousel");
     safe(initCarousels, "initCarousels");
     safe(initTilt, "initTilt");
-    safe(initMockupTilt, "initMockupTilt");
     safe(initAccordion, "initAccordion");
     safe(initCheckoutFaq, "initCheckoutFaq");
     safe(initCheckoutGeo, "initCheckoutGeo");
