@@ -419,21 +419,21 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
    z-index 0 so it always sits behind the real content) instead of any
    grid/nodes/badges. The center stays clean — it's just dark solid
    color behind the (now light-colored) copy, no overlay there. */
+/* Full-viewport at every breakpoint — the Hero is the entire first
+   screen, nothing from the next section peeks in before the visitor
+   scrolls. Content is vertically centered within that full-height box
+   via flex; if content ever runs taller than the viewport (very long
+   translated copy, huge zoom level) the box just grows to fit it
+   instead of clipping. */
 .hero {
   position: relative;
   background: linear-gradient(165deg, var(--moss) 0%, var(--ink) 55%, var(--moss-2) 100%);
   padding-top: clamp(7.5rem, 16vw, 10.5rem);
   padding-bottom: clamp(3rem, 6vw, 5rem);
   overflow: hidden;
-}
-/* Full-viewport on phones — the Hero is the entire first screen,
-   nothing from the next section peeks in before the visitor scrolls. */
-@media (max-width: 767px) {
-  .hero {
-    min-height: 100svh;
-    display: flex;
-    align-items: center;
-  }
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
 }
 .hero-artwork {
   position: absolute;
@@ -467,27 +467,6 @@ em { font-style: normal; color: var(--title-accent); font-family: inherit; font-
   .hero-artwork-shape-2 { width: 80vw; height: 80vw; bottom: -30%; right: -30%; }
   .hero-artwork-shape-3 { display: none; }
 }
-/* Fine square grid over the navy base — the "cuadrados" from the
-   earlier tech-matrix treatment, brought back as a light-on-dark
-   texture (no nodes/badges this time). Faded out toward the center
-   via mask so it reads as ambient texture in the margins rather than
-   competing with the content. */
-.hero-grid {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, .08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, .08) 1px, transparent 1px);
-  background-size: 40px 40px;
-  -webkit-mask-image: radial-gradient(ellipse 65% 60% at 50% 42%, transparent 25%, #000 75%);
-  mask-image: radial-gradient(ellipse 65% 60% at 50% 42%, transparent 25%, #000 75%);
-}
-@media (min-width: 768px) {
-  .hero-grid { background-size: 56px 56px; }
-}
-
 /* --- The "luces" + small tooltips from the earlier tech-matrix
    treatment, brought back on top of the grid above — restyled as a
    light-on-dark glass look instead of the old white cards. A handful
