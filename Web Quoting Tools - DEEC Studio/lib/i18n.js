@@ -563,8 +563,8 @@
       "trust.ready.sub": "No installation",
 
       "hero.kicker": "Custom web quoting tools",
-      "hero.title": "Your quoter.<br>Your prices. <em>Your way.</em>",
-      "hero.sub": "We design and build a personalized web quoting tool, configured with your business's services, prices and options.",
+      "hero.title": "<span class=\"hero-title-accent\">Calculate and send</span> your <br class=\"hero-title-break\">quotes in minutes.",
+      "hero.sub": "Your personalized web system with your services, products, prices, options, pricing rules and visual identity.",
       "hero.ctaMoreInfo": "More information",
 
       "marquee.1.title": "Quote faster",
