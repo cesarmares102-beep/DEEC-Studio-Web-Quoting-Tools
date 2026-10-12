@@ -2117,6 +2117,21 @@
   }
 
   /* -------------------------------------------------------------
+     Cotizador mockup iframe — it posts its content height to us so we
+     can resize the iframe to match instead of using a fixed height.
+     ------------------------------------------------------------- */
+  function initCotizadorMockupFrame() {
+    var iframe = $("[data-cotizador-mockup-frame]");
+    if (!iframe) return;
+    window.addEventListener("message", function (e) {
+      if (!e.data || e.data.type !== "cotizador-mockup-height") return;
+      if (e.source !== iframe.contentWindow) return;
+      var h = parseInt(e.data.height, 10);
+      if (h > 0) iframe.style.height = h + "px";
+    });
+  }
+
+  /* -------------------------------------------------------------
      Cookie consent gate — blocks interaction with the rest of the
      page (a full-screen backdrop above nav/cta-bar/FAB stack, plus a
      locked body scroll) until "Entendido" is clicked. On purpose,
@@ -2285,8 +2300,7 @@
     gapMaxMs: 24000
   };
   var SP_ICONS = {
-    visitors: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>',
-    purchase: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1"/><circle cx="17" cy="20" r="1"/><path d="M1 1h3l2.4 12.4a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.6L21 6H5"/><path d="M14 9l2 2 4-4"/></svg>'
+    visitors: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/></svg>'
   };
   var STAR_PATH = "M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L1.3 7.8l6.1-.7L10 1.5Z";
   function starsSvg(instanceId) {
@@ -2322,54 +2336,22 @@
     var stack = $("[data-sp-stack]");
     if (!stack) return;
     var sp = data.socialProof;
-    if (!sp || !sp.names || !sp.names.length) return;
+    if (!sp || !sp.visitorCounts || !sp.visitorCounts.length) return;
 
-    var lastType = null;
-
-    function nextType() {
-      var types = ["visitors", "purchase", "rating"].filter(function (ty) { return ty !== lastType; });
-      var type = pickRandom(types);
-      lastType = type;
-      return type;
-    }
-
-    var lastCountry = null;
-    function nextLocation() {
-      var locations = sp.locations || [];
-      if (!locations.length) return null;
-      var pool = locations.filter(function (loc) { return loc.country !== lastCountry; });
-      var loc = pickRandom(pool.length ? pool : locations);
-      lastCountry = loc.country;
-      return loc;
-    }
-
-    // Data (type/name/location/count) is picked once per toast; the text is
-    // rebuilt from that same data whenever the language changes, so a
-    // relanguage doesn't also reroll which toast is showing.
+    // Data (count) is picked once per toast; the text is rebuilt from that
+    // same data whenever the language changes, so a relanguage doesn't also
+    // reroll which count is showing.
     var currentState = null;
-    function pickState(type) {
-      if (type === "visitors") return { type: type, count: pickRandom(sp.visitorCounts || [3]) };
-      if (type === "purchase") return { type: type, name: pickRandom(sp.names), loc: nextLocation() };
-      return { type: type };
+    function pickState() {
+      return { count: pickRandom(sp.visitorCounts) };
     }
 
     function buildMessage(state) {
-      if (state.type === "visitors") {
-        return {
-          icon: SP_ICONS.visitors,
-          text: fillTemplate(t("socialproof.visitors"), { count: state.count }),
-          meta: ""
-        };
-      }
-      if (state.type === "purchase") {
-        var product = t("socialproof.product") || sp.product || data.name;
-        return {
-          icon: SP_ICONS.purchase,
-          text: fillTemplate(t("socialproof.purchase"), { name: state.name, city: state.loc ? state.loc.city : "", product: product }),
-          meta: t("socialproof.timeAgo")
-        };
-      }
-      return { isRating: true, score: sp.rating || 4.8, text: t("socialproof.ratingText") };
+      return {
+        icon: SP_ICONS.visitors,
+        text: fillTemplate(t("socialproof.visitors"), { count: state.count }),
+        meta: ""
+      };
     }
 
     // Rebuilds the toast markup from currentState in the current language.
@@ -2379,32 +2361,17 @@
       var msg = buildMessage(currentState);
       var wasVisible = !!$("[data-sp-toast].is-visible", stack);
 
-      if (msg.isRating) {
-        // sección 2.4 — reutiliza la estructura .hero-rating-lead del Hero/Oferta
-        stack.innerHTML =
-          '<div class="sp-toast is-rating' + (wasVisible ? " is-visible" : "") + '" data-sp-toast>' +
-            '<div class="sp-toast-body">' +
-              '<span class="hero-rating-lead">' +
-                '<span class="hero-rating-stars" aria-hidden="true">' + starsSvg("toast") + "</span>" +
-                '<strong class="hero-rating-score">' + msg.score + "</strong>" +
-              "</span>" +
-              "<p>" + msg.text + "</p>" +
-            "</div>" +
-          "</div>";
-      } else {
-        stack.innerHTML =
-          '<div class="sp-toast' + (wasVisible ? " is-visible" : "") + '" data-sp-toast>' +
-            '<span class="sp-toast-icon">' + msg.icon + "</span>" +
-            '<span class="sp-toast-body">' +
-              "<span class=\"sp-toast-text\">" + msg.text + "</span>" +
-              (msg.meta ? '<span class="sp-toast-meta">' + msg.meta + "</span>" : "") +
-            "</span>" +
-          "</div>";
-      }
+      stack.innerHTML =
+        '<div class="sp-toast' + (wasVisible ? " is-visible" : "") + '" data-sp-toast>' +
+          '<span class="sp-toast-icon">' + msg.icon + "</span>" +
+          '<span class="sp-toast-body">' +
+            "<span class=\"sp-toast-text\">" + msg.text + "</span>" +
+          "</span>" +
+        "</div>";
     }
 
     function showSpToast() {
-      currentState = pickState(nextType());
+      currentState = pickState();
       renderToast();
       // Forced reflow instead of requestAnimationFrame — see the menu
       // panel's open() above for why (throttled rAF can leave the toast
@@ -2467,6 +2434,7 @@
     safe(initCheckoutPhone, "initCheckoutPhone");
     safe(initCheckoutSteps, "initCheckoutSteps");
     safe(initFabTooltips, "initFabTooltips");
+    safe(initCotizadorMockupFrame, "initCotizadorMockupFrame");
     safe(initCookieConsent, "initCookieConsent");
     safe(mountRatingStars, "mountRatingStars");
     safe(initSocialProof, "initSocialProof");
