@@ -44,35 +44,13 @@
     },
 
     /* ⚠️ DATOS DE DEMOSTRACIÓN — declarado explícitamente.
-       Estos nombres/ubicaciones/contadores NO son eventos reales. Antes de publicar,
-       decide: (a) dejar isDemoData:true y mantenerlos como contenido ilustrativo, o
-       (b) poner isDemoData:false y conectar names/visitorCounts a datos reales
-       (webhook de ventas, analytics), nunca presentar la lista fija como compras reales. */
+       Estos contadores NO son eventos reales. Antes de publicar, decide:
+       (a) dejar isDemoData:true y mantenerlos como contenido ilustrativo, o
+       (b) poner isDemoData:false y conectar visitorCounts a datos reales
+       (analytics), nunca presentar un número fijo como una métrica real. */
     socialProof: {
       isDemoData: true,
-      product: "su cotizador personalizado", // fallback only — the i18n keys (socialproof.product) take priority
-      names: ["Andrea", "Luis", "Marcela", "Jorge", "Paola", "Daniel"],
-      /* Ubicaciones de compra — MX y US mezcladas a propósito. main.js
-         alterna el país entre toasts consecutivos (misma lógica que ya usa
-         para alternar el tipo de mensaje) para que ningún país se sienta
-         dominante ni la mezcla se vea forzada. */
-      locations: [
-        { city: "CDMX", country: "MX" },
-        { city: "Guadalajara", country: "MX" },
-        { city: "Monterrey", country: "MX" },
-        { city: "Puebla", country: "MX" },
-        { city: "Querétaro", country: "MX" },
-        { city: "Los Angeles, CA", country: "US" },
-        { city: "Houston, TX", country: "US" },
-        { city: "Dallas, TX", country: "US" },
-        { city: "San Diego, CA", country: "US" },
-        { city: "Phoenix, AZ", country: "US" },
-        { city: "Chicago, IL", country: "US" },
-        { city: "Miami, FL", country: "US" },
-        { city: "Las Vegas, NV", country: "US" }
-      ],
-      visitorCounts: [6, 9, 12, 14, 18],
-      rating: 4.8
+      visitorCounts: [6, 9, 12, 14, 18]
     }
   };
 })();

@@ -49,11 +49,6 @@
         "Hola, vi el anuncio de cotizadores para negocios de {vertical}. Tengo algunas dudas, ¿podrían ayudarme?",
 
       "socialproof.visitors": "{count} personas están viendo esta página ahora",
-      "socialproof.purchase": "{name} de {city} acaba de comprar {product}",
-      "socialproof.product": "su cotizador personalizado",
-      "socialproof.timeAgo": "Hace un momento",
-      "socialproof.ratingText":
-        "Negocios en México y Estados Unidos ya confían en DEEC Studio para crear sus cotizadores",
 
       "hero.rating":
         "Más de 214 negocios han confiado en nosotros para crear sus cotizadores.",
@@ -70,8 +65,8 @@
       "trust.ready.sub": "Sin instalación",
 
       "hero.kicker": "Cotizadores web personalizados",
-      "hero.title": "Tu cotizador.<br>Tus precios. <em>Tu forma.</em>",
-      "hero.sub": "Haz cotizaciones y presupuestos más rápido con un cotizador configurado con tus servicios, precios, opciones y reglas de cobro.",
+      "hero.title": "<span class=\"hero-title-accent\">Calcula y envía</span> tus <br class=\"hero-title-break\">cotizaciones en minutos.",
+      "hero.sub": "Tu sistema web personalizado con tus servicios, productos, precios, opciones, reglas de cálculo e identidad visual.",
       "hero.ctaMoreInfo": "Más información",
 
       "marquee.1.title": "Cotiza más rápido",
@@ -552,11 +547,6 @@
         "Hi, I saw the ad for quote builders for {vertical} businesses. I have a few questions, could you help me?",
 
       "socialproof.visitors": "{count} people are viewing this page right now",
-      "socialproof.purchase": "{name} from {city} just bought {product}",
-      "socialproof.product": "their personalized quoting tool",
-      "socialproof.timeAgo": "Just now",
-      "socialproof.ratingText":
-        "Businesses in Mexico and the United States already trust DEEC Studio to build their quoting tools",
 
       "hero.rating":
         "Trusted by more than 214 businesses to build their quoters.",
