@@ -1,1 +1,744 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DEEC Studio — Cotizador | Mockup</title>
+<!-- Imágenes embebidas: el mockup funciona sin conexión ni recursos externos. -->
+<style>
+:root{
+  --bg:#f4f6fa;
+  --surface:#fff;
+  --surface-2:#f8fafc;
+  --ink:#111827;
+  --ink-2:#253149;
+  --muted:#69758a;
+  --muted-2:#98a2b3;
+  --line:#e5e9f0;
+  --line-2:#d8dee8;
+  --navy:#0b1728;
+  --blue:#287cf0;
+  --blue-soft:#edf5ff;
+  --green:#17834b;
+  --green-soft:#eaf8f0;
+  --shadow:0 18px 45px rgba(18,31,52,.08);
+  --shadow-soft:0 4px 14px rgba(18,31,52,.045);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:transparent}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{
+  width:min(1440px,100%);
+  margin:0 auto;
+  background:var(--surface);
+  border:1px solid #dbe1ea;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 30px 80px rgba(19,31,51,.12);
+}
 
+/* TOP NAV */
+.topbar{
+  height:88px;
+  display:flex;
+  align-items:center;
+  padding:0 28px;
+  border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.98);
+}
+.brand{
+  width:230px;
+  flex:0 0 230px;
+  font-size:27px;
+  letter-spacing:-1.7px;
+}
+.brand b{font-weight:800}
+.brand span{font-weight:300;color:#8d96a5}
+
+.steps{
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-self:stretch;
+  min-width:0;
+}
+.step{
+  position:relative;
+  width:112px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  color:#788499;
+  font-size:12px;
+  white-space:nowrap;
+}
+.step:not(:last-child)::after{
+  content:"";
+  position:absolute;
+  width:72px;
+  height:1px;
+  background:#dce2eb;
+  top:33px;
+  left:76px;
+}
+.step-number{
+  width:28px;
+  height:28px;
+  border:1px solid #dce2e9;
+  background:#f5f7fa;
+  color:#69768b;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:12px;
+  font-weight:700;
+  position:relative;
+  z-index:2;
+}
+.step.active{color:var(--ink);font-weight:600}
+.step.active .step-number{
+  color:#fff;
+  background:var(--navy);
+  border-color:var(--navy);
+}
+.top-actions{
+  width:205px;
+  flex:0 0 205px;
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  gap:20px;
+}
+.draft{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#4e5b70;
+  font-size:13px;
+  white-space:nowrap;
+}
+.icon-btn{
+  width:34px;height:34px;
+  display:grid;place-items:center;
+  border:0;background:transparent;color:#4b5870;
+  border-radius:8px;font-size:20px;
+}
+
+/* BODY */
+.body{
+  display:grid;
+  grid-template-columns:245px minmax(600px,1fr) 335px;
+  min-height:780px;
+}
+.sidebar{
+  border-right:1px solid var(--line);
+  padding:24px 15px;
+  background:#fff;
+}
+.side-label{
+  padding:4px 13px 12px;
+  color:#a0a8b6;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+}
+.nav-item{
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:0 13px;
+  margin:3px 0;
+  border-radius:9px;
+  color:#56647a;
+  font-size:13.5px;
+}
+.nav-item.active{
+  color:#172033;
+  background:#edf4ff;
+  font-weight:650;
+  box-shadow:inset 3px 0 0 var(--blue);
+}
+.nav-icon{
+  width:21px;
+  height:21px;
+  color:#6a7890;
+  display:grid;
+  place-items:center;
+  flex:none;
+}
+.nav-item.active .nav-icon{color:var(--blue)}
+
+.workspace{
+  padding:30px 30px 32px;
+  background:#fafbfd;
+  min-width:0;
+}
+.heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:22px;
+}
+.heading h1{
+  margin:0;
+  font-size:27px;
+  letter-spacing:-.75px;
+  line-height:1.15;
+}
+.heading p{
+  margin:6px 0 0;
+  color:var(--muted);
+  font-size:14px;
+}
+.status{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:#607087;
+  font-size:11px;
+  padding-top:4px;
+}
+.status-dot{
+  width:7px;height:7px;border-radius:50%;background:#22a15f;
+  box-shadow:0 0 0 3px #e6f6ed;
+}
+
+.card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+  margin-bottom:16px;
+  box-shadow:var(--shadow-soft);
+  overflow:hidden;
+}
+.card-head{
+  min-height:53px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 18px;
+  border-bottom:1px solid #edf0f4;
+  font-size:14px;
+  font-weight:700;
+}
+.card-head .head-icon{
+  width:27px;height:27px;
+  border-radius:7px;
+  display:grid;place-items:center;
+  color:#4e6687;
+  background:#f1f5fa;
+}
+.card-body{padding:18px}
+.grid-2{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 225px;
+  gap:22px;
+}
+.field{margin-bottom:15px}
+.field:last-child{margin-bottom:0}
+label{
+  display:block;
+  margin:0 0 7px;
+  color:#4d5a70;
+  font-size:12px;
+  font-weight:550;
+}
+.input,.select{
+  width:100%;
+  height:42px;
+  display:flex;
+  align-items:center;
+  padding:0 12px;
+  border:1px solid var(--line-2);
+  border-radius:8px;
+  background:#fff;
+  color:#263247;
+  font-size:13px;
+  box-shadow:inset 0 1px 1px rgba(20,35,55,.02);
+}
+.input.placeholder{color:#9aa4b4}
+.logo-upload{
+  height:105px;
+  border:1px dashed #cbd5e3;
+  border-radius:9px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  background:#fbfcfe;
+  color:#66748b;
+  font-size:11px;
+}
+.upload-icon{
+  width:31px;height:31px;
+  margin:0 auto 6px;
+  border:1px solid #d7dee9;
+  border-radius:8px;
+  display:grid;place-items:center;
+  color:#66758c;
+  background:#fff;
+  font-size:15px;
+}
+.logo-upload strong{display:block;color:#4a5870;font-size:12px;margin-bottom:3px}
+
+/* TYPES */
+.types{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.type{
+  position:relative;
+  min-height:126px;
+  border:1px solid var(--line-2);
+  border-radius:10px;
+  padding:16px 12px;
+  text-align:center;
+  background:#fff;
+  transition:none;
+}
+.type.selected{
+  border:1.5px solid var(--blue);
+  background:#f8fbff;
+  box-shadow:0 0 0 3px rgba(40,124,240,.07);
+}
+.check{
+  position:absolute;
+  right:9px;top:9px;
+  width:19px;height:19px;
+  border-radius:50%;
+  background:var(--blue);
+  color:#fff;
+  display:none;
+  place-items:center;
+  font-size:11px;
+}
+.type.selected .check{display:grid}
+.type-icon{
+  width:33px;height:33px;
+  margin:0 auto 9px;
+  border-radius:9px;
+  display:grid;place-items:center;
+  background:#f1f5fa;
+  color:#536987;
+  font-size:16px;
+}
+.type.selected .type-icon{background:#e7f1ff;color:var(--blue)}
+.type strong{font-size:13px}
+.type p{margin:6px auto 0;max-width:145px;color:#718096;font-size:11px;line-height:1.45}
+
+/* REGIONAL */
+.regional{display:grid;grid-template-columns:1.2fr .8fr 1fr;gap:15px}
+.select{justify-content:space-between;gap:10px}
+.chevron{color:#78859a;font-size:12px}
+
+/* BUTTON */
+.continue{display:flex;justify-content:flex-end;margin-top:4px}
+.continue button{
+  min-width:137px;
+  height:43px;
+  border:0;
+  border-radius:9px;
+  background:var(--navy);
+  color:#fff;
+  font-size:13px;
+  font-weight:650;
+  box-shadow:0 6px 14px rgba(7,20,38,.14);
+}
+
+/* PREVIEW */
+.preview{
+  border-left:1px solid var(--line);
+  padding:28px 18px 24px;
+  background:#f7f9fc;
+}
+.preview-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+}
+.preview h2{margin:0;font-size:15px;letter-spacing:-.2px}
+.device-pill{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  padding:3px;
+  border-radius:22px;
+  background:#e8edf4;
+  margin-bottom:17px;
+}
+.device-pill span{
+  height:31px;
+  display:grid;place-items:center;
+  border-radius:18px;
+  color:#657289;
+  font-size:11px;
+}
+.device-pill .selected{
+  color:#fff;
+  background:var(--navy);
+  font-weight:650;
+  box-shadow:0 2px 5px rgba(10,22,39,.12);
+}
+.preview-shell{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:10px;
+  box-shadow:var(--shadow-soft);
+}
+.phone{
+  border:1px solid #e2e7ee;
+  border-radius:12px;
+  background:#fff;
+  min-height:585px;
+  padding:17px 15px 15px;
+}
+.phone-top{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:29px;
+}
+.mini-brand{font-size:12px;font-weight:800;letter-spacing:-.5px}
+.mini-brand span{font-weight:300;color:#9aa3b1}
+.hamburger{font-size:17px;color:#27344a}
+.phone h3{
+  margin:0 0 6px;
+  font-size:19px;
+  letter-spacing:-.45px;
+}
+.phone-sub{
+  margin:0 0 20px;
+  color:#78869a;
+  font-size:11px;
+  line-height:1.5;
+}
+.progress{display:grid;gap:7px;margin-bottom:23px}
+.progress-item{
+  display:flex;align-items:center;gap:10px;
+  color:#7a879a;font-size:11px;
+}
+.progress-item b{
+  width:25px;height:25px;border-radius:50%;
+  display:grid;place-items:center;
+  background:#f0f3f7;color:#6c7890;font-weight:600;
+}
+.progress-item.active{color:#182235;font-weight:650}
+.progress-item.active b{background:var(--navy);color:#fff}
+.preview-card{
+  border:1px solid #e6eaf0;
+  border-radius:9px;
+  padding:10px;
+}
+.preview-image{
+  height:112px;border-radius:7px;
+  background:linear-gradient(145deg,#edf2f8,#e5ebf3);
+  display:grid;place-items:center;
+  color:#b6c1d0;font-size:31px;
+}
+.preview-lines{display:grid;gap:7px;margin-top:11px}
+.preview-lines span{height:7px;border-radius:5px;background:#edf0f5}
+.preview-lines span:last-child{width:68%}
+.preview-total{
+  display:flex;justify-content:space-between;
+  margin-top:15px;padding-top:11px;
+  border-top:1px solid #edf0f4;
+  font-size:11px;color:#68768c;
+}
+.preview-total strong{color:#172236;font-size:13px}
+
+
+/* ICONOS PROFESIONALES */
+.svg-icon{
+  width:18px;
+  height:18px;
+  flex:0 0 18px;
+  display:block;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.nav-icon-box{
+  width:30px;height:30px;
+  flex:0 0 30px;
+  display:grid;
+  place-items:center;
+  border-radius:8px;
+  background:#f2f5f9;
+  color:#62728a;
+}
+.nav-item.active .nav-icon-box{
+  background:#e6f1ff;
+  color:var(--blue);
+}
+.head-icon{
+  width:28px;height:28px;
+  flex:0 0 28px;
+  display:grid;
+  place-items:center;
+  border-radius:7px;
+  background:#f1f5fa;
+  color:#536987;
+}
+.type-icon{
+  width:34px;height:34px;
+  margin:0 auto 9px;
+  display:grid;
+  place-items:center;
+  border-radius:9px;
+  background:#f1f5fa;
+  color:#536987;
+}
+.type.selected .type-icon{
+  background:#e7f1ff;
+  color:var(--blue);
+}
+.upload-icon{
+  width:32px;height:32px;
+  margin:0 auto 6px;
+  border:1px solid #d7dee9;
+  border-radius:8px;
+  display:grid;
+  place-items:center;
+  color:#60718a;
+  background:#fff;
+}
+
+/* IMÁGENES DE RELLENO PARA MOCKUP */
+.type-image{
+  width:100%; height:72px; object-fit:cover; border-radius:8px;
+  display:block; margin-bottom:11px; border:1px solid #e2e7ef;
+}
+.image-preview{position:relative;overflow:hidden;border-radius:8px;height:112px;background:#e9eef5}
+.image-preview img{width:100%;height:100%;object-fit:cover;display:block}
+.image-preview::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,20,35,.02),rgba(10,20,35,.18));pointer-events:none}
+.gallery-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}
+.gallery-strip img{width:100%;height:48px;object-fit:cover;border-radius:6px;border:1px solid #e1e6ee;display:block}
+.logo-preview{display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px 10px;border:1px solid #e6eaf0;border-radius:8px;background:#fff;color:#526179;font-size:11px}
+.logo-preview-mark{width:24px;height:24px;border-radius:6px;display:grid;place-items:center;background:#101c30;color:#fff;font-size:10px;font-weight:800}
+
+/* Below its natural width, the desktop dashboard is scaled down as a
+   whole (via JS, see .app-scale-wrap + fitDesktopApp()) instead of
+   restructuring into a simplified mobile layout — it always keeps the
+   full desktop proportions, just contained/zoomed to fit. */
+.app-scale-wrap{ width:100%; overflow:hidden; }
+.app{ width:1440px; max-width:none; transform-origin:top left; }
+</style>
+</head>
+
+<body>
+<div class="mockup-stage">
+  <div class="app-scale-wrap">
+  <div class="app desktop-view">
+
+
+  <header class="topbar">
+    <div class="brand"><b>DEEC</b><span>STUDIO</span></div>
+
+    <div class="steps">
+      <div class="step active"><div class="step-number">1</div><div>Configuración</div></div>
+      <div class="step"><div class="step-number">2</div><div>Servicios</div></div>
+      <div class="step"><div class="step-number">3</div><div>Opciones</div></div>
+      <div class="step"><div class="step-number">4</div><div>Precios</div></div>
+      <div class="step"><div class="step-number">5</div><div>Revisar</div></div>
+      <div class="step"><div class="step-number">6</div><div>Cotización</div></div>
+    </div>
+
+    <div class="top-actions">
+      <div class="draft"><svg class="svg-icon" viewBox="0 0 24 24" fill="none"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h8V3M8 15h8v6H8z"/></svg> Guardar borrador</div>
+      <button class="icon-btn" aria-label="Más opciones">⋮</button>
+    </div>
+  </header>
+
+  <main class="body">
+
+    <aside class="sidebar">
+      <div class="side-label">Configuración</div>
+      <div class="nav-item active"><span class="nav-icon-box"><svg class="svg-icon" viewBox="0 0 24 24" fill="none"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.7 1.7-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20h-2.4v-.2a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-1.7-1.7.06-.06A1.7 1.7 0 0 0 8.46 15a1.7 1.7 0 0 0-1.56-1.03h-.2v-2.4h.2A1.7 1.7 0 0 0 8.46 10a1.7 1.7 0 0 0-.34-1.88l-.06-.06 1.7-1.7.06.06a1.7 1.7 0 0 0 1.88.34A1.7 1.7 0 0 0 12.73 5.2V5h2.4v.2a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 1.7 1.7-.06.06A1.7 1.7 0 0 0 19.4 10a1.7 1.7 0 0 0 1.56 1.03h.2v2.4h-.2A1.7 1.7 0 0 0 19.4 15Z"/></svg></span>Configuración</div>
+      <div class="nav-item"><span class="nav-icon-box"><svg class="svg-icon" viewBox="0 0 24 24" fill="none"><path d="M9 4.5A2.5 2.5 0 1 1 14 6v2h2a2.5 2.5 0 1 1 1.5 4.5H16v2h-2a2.5 2.5 0 1 1-4.5 1.5H7.5A2.5 2.5 0 1 1 6 11.5H8v-2H6a2.5 2.5 0 1 1 3-5Z"/></svg></span>Servicios y productos</div>
+      <div class="nav-item"><span class="nav-icon-box"><svg class="svg-icon" viewBox="0 0 24 24" fill="none"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.7 1.7-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20h-2.4v-.2a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-1.7-1.7.06-.06A1.7 1.7 0 0 0 8.46 15a1.7 1.7 0 0 0-1.56-1.03h-.2v-2.4h.2A1.7 1.7 0 0 0 8.46 10a1.7 1.7 0 0 0-.34-1.88l-.06-.06 1.7-1.7.06.06a1.7 1.7 0 0 0 1.88.34A1.7 1.7 0 0 0 12.73 5.2V5h2.4v.2a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 1.7 1.7-.06.06A1.7 1.7 0 0 0 19.4 10a1.7 1.7 0 0 0 1.56 1.03h.2v2.4h-.2A1.7 1.7 0 0 0 19.4 15Z"/></svg></span>Opciones y extras</div>
+      <div class="nav-item"><span class="nav-icon-box"><svg class="svg-icon" viewBox="0 0 24 24" fill="none"><path d="m20 13-7 7-9-9V4h7l9 9Z"/><circle cx="7.5" cy="7.5" r="1"/></svg></span>Precios y reglas</div>
+      <div class="nav-item"><span class="nav-icon-box"><svg class="svg-icon" viewBox="0 0 24 24" fill="none"><path d="M7 3h8l3 3v15H7z"/><path d="M15 3v4h4M10 11h5M10 15h5M10 19h3"/></svg></span>Impuestos</div>
+      <div class="nav-item"><span class="nav-icon-box"><svg class="svg-icon" viewBox="0 0 24 24" fill="none"><path d="M12 4a8 8 0 0 0 0 16h1.2a1.8 1.8 0 0 0 0-3.6H12a1.7 1.7 0 0 1 0-3.4h2.5A5.5 5.5 0 0 0 20 7.5 7.98 7.98 0 0 0 12 4Z"/><circle cx="7.5" cy="10" r=".7"/><circle cx="10" cy="7" r=".7"/><circle cx="14" cy="7" r=".7"/></svg></span>Diseño y branding</div>
+      <div class="nav-item"><span class="nav-icon-box"><svg class="svg-icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg></span>Correos y notificaciones</div>
+      <div class="nav-item"><span class="nav-icon-box"><svg class="svg-icon" viewBox="0 0 24 24" fill="none"><path d="m9 15 6-6"/><path d="M7 17H5a4 4 0 0 1 0-8h4M17 7h2a4 4 0 0 1 0 8h-4"/></svg></span>Integraciones</div>
+    </aside>
+
+    <section class="workspace">
+      <div class="heading">
+        <div>
+          <h1>Configuración inicial</h1>
+          <p>Define la información básica de tu cotizador.</p>
+        </div>
+        <div class="status"><span class="status-dot"></span> Guardado automáticamente</div>
+      </div>
+
+      <section class="card">
+        <div class="card-head">
+          <span class="head-icon"><svg class="svg-icon" viewBox="0 0 24 24" fill="none"><path d="M4 20V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14"/><path d="M8 8h2M14 8h2M8 12h2M14 12h2M8 16h2M14 16h2M3 20h18"/></svg></span>
+          Información general
+        </div>
+        <div class="card-body grid-2">
+          <div>
+            <div class="field">
+              <label>Nombre del cotizador</label>
+              <div class="input">Mi Cotizador</div>
+            </div>
+            <div class="field">
+              <label>Descripción breve <span style="color:#9aa4b4">(opcional)</span></label>
+              <div class="input placeholder">Describe tu negocio o los servicios que ofreces...</div>
+            </div>
+          </div>
+          <div>
+            <label>Logo de tu negocio <span style="color:#9aa4b4">(opcional)</span></label>
+            <div class="logo-upload">
+              <div>
+                <div class="upload-icon"><svg class="svg-icon" viewBox="0 0 24 24" fill="none"><path d="M12 16V4M8 8l4-4 4 4"/><path d="M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg></div>
+                <strong>Sube tu logo</strong>
+                PNG, JPG o SVG
+              </div>
+            </div>
+            <div class="logo-preview">
+              <div class="logo-preview-mark">MC</div>
+              <span>Vista previa de tu marca</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <span class="nav-icon-box"><svg class="svg-icon" viewBox="0 0 24 24" fill="none"><path d="M9 4.5A2.5 2.5 0 1 1 14 6v2h2a2.5 2.5 0 1 1 1.5 4.5H16v2h-2a2.5 2.5 0 1 1-4.5 1.5H7.5A2.5 2.5 0 1 1 6 11.5H8v-2H6a2.5 2.5 0 1 1 3-5Z"/></svg></span>
+          Tipo de cotizador
+        </div>
+        <div class="card-body types">
+          <div class="type selected">
+            <span class="check">✓</span>
+            <img class="type-image" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MDAgMzYwIj4KPGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMCIgeDI9IjEiIHkxPSIwIiB5Mj0iMSI+PHN0b3Agc3RvcC1jb2xvcj0iI2RmZTlmNSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzlkYjVjZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNjAwIiBoZWlnaHQ9IjM2MCIgZmlsbD0idXJsKCNhKSIvPjxyZWN0IHk9IjI0MCIgd2lkdGg9IjYwMCIgaGVpZ2h0PSIxMjAiIGZpbGw9IiM4ZmEzN2YiLz4KPHBhdGggZD0iTTgwIDI1MFYxMzVsOTUtNzAgOTUgNzB2MTE1IiBmaWxsPSIjZjdmOGZhIi8+PHBhdGggZD0iTTU1IDI1MGgyNDUiIHN0cm9rZT0iIzUzNjc3ZCIgc3Ryb2tlLXdpZHRoPSIxMiIvPgo8cGF0aCBkPSJNMTc1IDI1MHYtNzBoNTV2NzAiIGZpbGw9IiNjOGQyZGQiLz48cGF0aCBkPSJNMTE1IDE1MGg0NXYzNWgtNDV6TTIyMCAxNTBoNDV2MzVoLTQ1eiIgZmlsbD0iIzhiYTdiZCIvPgo8L3N2Zz4=" alt="">
+            <strong>Servicios</strong>
+            <p>Ideal para negocios basados en servicios.</p>
+          </div>
+          <div class="type">
+            <img class="type-image" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MDAgMzYwIj4KPGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiIiB4MT0iMCIgeDI9IjEiPjxzdG9wIHN0b3AtY29sb3I9IiNlYWQ5YzgiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNiODlhN2MiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSIzNjAiIGZpbGw9InVybCgjYikiLz48cmVjdCB5PSIyMzUiIHdpZHRoPSI2MDAiIGhlaWdodD0iMTI1IiBmaWxsPSIjZDljN2I0Ii8+CjxjaXJjbGUgY3g9IjMwMCIgY3k9IjE1NSIgcj0iNzgiIGZpbGw9IiNmZmYiIG9wYWNpdHk9Ii45MiIvPjxjaXJjbGUgY3g9IjMwMCIgY3k9IjE1NSIgcj0iNTUiIGZpbGw9IiNlN2M5OGYiLz4KPHBhdGggZD0iTTE1MCAyNjBjMjUtODAgNjUtMTE1IDEwMC0xMTVNNDUwIDI2MGMtMjUtODAtNjUtMTE1LTEwMC0xMTUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxOCIgb3BhY2l0eT0iLjc1Ii8+CjxjaXJjbGUgY3g9IjE0MCIgY3k9IjIxMCIgcj0iMzQiIGZpbGw9IiM3ZjliN2IiLz48Y2lyY2xlIGN4PSI0NjUiIGN5PSIyMDUiIHI9IjM4IiBmaWxsPSIjNmU4ZDcyIi8+Cjwvc3ZnPg==" alt="">
+            <strong>Productos</strong>
+            <p>Ideal para catálogos de productos.</p>
+          </div>
+          <div class="type">
+            <img class="type-image" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MDAgMzYwIj4KPGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJjIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agc3RvcC1jb2xvcj0iIzU2NjU3NSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzIwMmIzNyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNjAwIiBoZWlnaHQ9IjM2MCIgZmlsbD0idXJsKCNjKSIvPjxyZWN0IHk9IjI1MCIgd2lkdGg9IjYwMCIgaGVpZ2h0PSIxMTAiIGZpbGw9IiMzNDNlNDgiLz4KPHBhdGggZD0iTTkwIDI1MFYxMDVoNDIwdjE0NSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYzlhNjZiIiBzdHJva2Utd2lkdGg9IjE2Ii8+CjxwYXRoIGQ9Ik0xNDUgMjUwVjE1MGg5MHYxMDBNMzY1IDI1MFYxNTBoOTB2MTAwIiBmaWxsPSIjNzk4ODk4Ii8+CjxwYXRoIGQ9Ik05MCAxMDVoNDIwIiBzdHJva2U9IiNlYWQxOWYiIHN0cm9rZS13aWR0aD0iMTAiLz4KPC9zdmc+" alt="">
+            <strong>Servicios y productos</strong>
+            <p>Combina servicios y productos.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <span class="head-icon"><svg class="svg-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span>
+          Configuración regional
+        </div>
+        <div class="card-body regional">
+          <div class="field">
+            <label>Moneda</label>
+            <div class="select">USD - Dólar estadounidense <span class="chevron">⌄</span></div>
+          </div>
+          <div class="field">
+            <label>Idioma</label>
+            <div class="select">Español <span class="chevron">⌄</span></div>
+          </div>
+          <div class="field">
+            <label>Zona horaria</label>
+            <div class="select">(GMT-6) Ciudad de México <span class="chevron">⌄</span></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="continue"><button>Continuar&nbsp;&nbsp; →</button></div>
+    </section>
+
+    <aside class="preview">
+      <div class="preview-top">
+        <h2>Vista previa</h2>
+        <span style="font-size:11px;color:#8793a5">● En vivo</span>
+      </div>
+
+      <div class="device-pill">
+        <span class="selected">Escritorio</span>
+        <span>Móvil</span>
+      </div>
+
+      <div class="preview-shell">
+        <div class="phone">
+          <div class="phone-top">
+            <div class="mini-brand"><svg class="svg-icon" style="display:inline-block;vertical-align:-4px;width:15px;height:15px" viewBox="0 0 24 24" fill="none"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg> TU <span>LOGO</span></div>
+            <div class="hamburger">☰</div>
+          </div>
+          <h3>Nueva cotización</h3>
+          <p class="phone-sub">Completa los detalles y genera una cotización profesional.</p>
+
+          <div class="progress">
+            <div class="progress-item active"><b>1</b> Cliente</div>
+            <div class="progress-item"><b>2</b> Servicios</div>
+            <div class="progress-item"><b>3</b> Opciones</div>
+            <div class="progress-item"><b>4</b> Revisar</div>
+            <div class="progress-item"><b>5</b> Cotización</div>
+          </div>
+
+          <div class="preview-card">
+            <div class="image-preview">
+              <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3MDAgNDIwIj4KPGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJkIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agc3RvcC1jb2xvcj0iI2RmZThmMSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzcxODg5ZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNzAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0idXJsKCNkKSIvPjxyZWN0IHk9IjI5MCIgd2lkdGg9IjcwMCIgaGVpZ2h0PSIxMzAiIGZpbGw9IiM2OTc0N2QiLz4KPHJlY3QgeD0iMTAwIiB5PSI4NSIgd2lkdGg9IjUwMCIgaGVpZ2h0PSIyMzAiIHJ4PSIxMiIgZmlsbD0iI2U4ZWRmMCIvPgo8cmVjdCB4PSIxMjUiIHk9IjExMCIgd2lkdGg9IjQ1MCIgaGVpZ2h0PSIxNjAiIHJ4PSI4IiBmaWxsPSIjYjljYWQ3Ii8+CjxwYXRoIGQ9Ik0xNzAgMjUwbDEwNS0xMDAgODAgNzUgNTUtNTIgMTE1IDc3IiBmaWxsPSJub25lIiBzdHJva2U9IiNmNWY3ZjgiIHN0cm9rZS13aWR0aD0iMTgiLz4KPGNpcmNsZSBjeD0iMjIwIiBjeT0iMTU1IiByPSIyMiIgZmlsbD0iI2Y0Yzc3ZCIvPgo8L3N2Zz4=" alt="">
+            </div>
+            <div class="gallery-strip">
+              <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MDAgMzYwIj4KPGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMCIgeDI9IjEiIHkxPSIwIiB5Mj0iMSI+PHN0b3Agc3RvcC1jb2xvcj0iI2RmZTlmNSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzlkYjVjZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNjAwIiBoZWlnaHQ9IjM2MCIgZmlsbD0idXJsKCNhKSIvPjxyZWN0IHk9IjI0MCIgd2lkdGg9IjYwMCIgaGVpZ2h0PSIxMjAiIGZpbGw9IiM4ZmEzN2YiLz4KPHBhdGggZD0iTTgwIDI1MFYxMzVsOTUtNzAgOTUgNzB2MTE1IiBmaWxsPSIjZjdmOGZhIi8+PHBhdGggZD0iTTU1IDI1MGgyNDUiIHN0cm9rZT0iIzUzNjc3ZCIgc3Ryb2tlLXdpZHRoPSIxMiIvPgo8cGF0aCBkPSJNMTc1IDI1MHYtNzBoNTV2NzAiIGZpbGw9IiNjOGQyZGQiLz48cGF0aCBkPSJNMTE1IDE1MGg0NXYzNWgtNDV6TTIyMCAxNTBoNDV2MzVoLTQ1eiIgZmlsbD0iIzhiYTdiZCIvPgo8L3N2Zz4=" alt="">
+              <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MDAgMzYwIj4KPGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiIiB4MT0iMCIgeDI9IjEiPjxzdG9wIHN0b3AtY29sb3I9IiNlYWQ5YzgiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNiODlhN2MiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSIzNjAiIGZpbGw9InVybCgjYikiLz48cmVjdCB5PSIyMzUiIHdpZHRoPSI2MDAiIGhlaWdodD0iMTI1IiBmaWxsPSIjZDljN2I0Ii8+CjxjaXJjbGUgY3g9IjMwMCIgY3k9IjE1NSIgcj0iNzgiIGZpbGw9IiNmZmYiIG9wYWNpdHk9Ii45MiIvPjxjaXJjbGUgY3g9IjMwMCIgY3k9IjE1NSIgcj0iNTUiIGZpbGw9IiNlN2M5OGYiLz4KPHBhdGggZD0iTTE1MCAyNjBjMjUtODAgNjUtMTE1IDEwMC0xMTVNNDUwIDI2MGMtMjUtODAtNjUtMTE1LTEwMC0xMTUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxOCIgb3BhY2l0eT0iLjc1Ii8+CjxjaXJjbGUgY3g9IjE0MCIgY3k9IjIxMCIgcj0iMzQiIGZpbGw9IiM3ZjliN2IiLz48Y2lyY2xlIGN4PSI0NjUiIGN5PSIyMDUiIHI9IjM4IiBmaWxsPSIjNmU4ZDcyIi8+Cjwvc3ZnPg==" alt="">
+              <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MDAgMzYwIj4KPGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJjIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agc3RvcC1jb2xvcj0iIzU2NjU3NSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzIwMmIzNyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPgo8cmVjdCB3aWR0aD0iNjAwIiBoZWlnaHQ9IjM2MCIgZmlsbD0idXJsKCNjKSIvPjxyZWN0IHk9IjI1MCIgd2lkdGg9IjYwMCIgaGVpZ2h0PSIxMTAiIGZpbGw9IiMzNDNlNDgiLz4KPHBhdGggZD0iTTkwIDI1MFYxMDVoNDIwdjE0NSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYzlhNjZiIiBzdHJva2Utd2lkdGg9IjE2Ii8+CjxwYXRoIGQ9Ik0xNDUgMjUwVjE1MGg5MHYxMDBNMzY1IDI1MFYxNTBoOTB2MTAwIiBmaWxsPSIjNzk4ODk4Ii8+CjxwYXRoIGQ9Ik05MCAxMDVoNDIwIiBzdHJva2U9IiNlYWQxOWYiIHN0cm9rZS13aWR0aD0iMTAiLz4KPC9zdmc+" alt="">
+            </div>
+            <div class="preview-lines"><span></span><span></span></div>
+            <div class="preview-total"><span>Total estimado</span><strong>$3,850 USD</strong></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  </main>
+</div>
+  </div>
+</div>
+
+<style>
+.mockup-stage{padding-top:0}
+</style>
+
+<script>
+/* Below its natural 1440px width, the dashboard is scaled down as a
+   whole (zoomed out) rather than restructured into a simplified mobile
+   layout, so it always keeps the full desktop proportions, contained
+   to fit. transform:scale() doesn't affect layout flow, so the wrap's
+   height is set explicitly to the post-scale rendered height. */
+function fitDesktopApp(){
+  var wrap = document.querySelector('.app-scale-wrap');
+  var app = document.querySelector('.app.desktop-view');
+  if (!wrap || !app) return;
+  var scale = Math.min(1, wrap.clientWidth / 1440);
+  app.style.transform = scale < 1 ? 'scale(' + scale + ')' : 'none';
+  wrap.style.height = app.getBoundingClientRect().height + 'px';
+}
+
+/* Reports this document's height to the parent page so the embedding
+   iframe can resize to fit its content. */
+function postMockupHeight(){
+  try{
+    parent.postMessage({ type:'cotizador-mockup-height', height: document.body.scrollHeight }, '*');
+  }catch(e){}
+}
+
+function fitAndReport(){
+  fitDesktopApp();
+  postMockupHeight();
+}
+fitAndReport();
+window.addEventListener('load', fitAndReport);
+window.addEventListener('resize', fitAndReport);
+</script>
+</body>
+</html>
