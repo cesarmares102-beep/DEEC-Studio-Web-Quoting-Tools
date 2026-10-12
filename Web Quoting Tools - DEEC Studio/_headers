@@ -31,13 +31,20 @@
 # showed up as blocked connect-src attempts during testing — NOT
 # allowlisted here on purpose, they don't look like standard Meta
 # infrastructure and weren't verified as legitimate.
+#
+# frame-src includes 'self' — the Hero's cotizador mockup preview
+# (assets/mockups/cotizador-mockup.html) is embedded via an own-origin
+# <iframe>. Without 'self' here, frame-src's allowlist (facebook.com only)
+# replaces the default-src 'self' fallback for framing, so the browser
+# blocked even this same-origin iframe outright (confirmed live: it
+# rendered as a broken/blocked-content box instead of the mockup).
 
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
   X-Frame-Options: SAMEORIGIN
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://t.whop.tw https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com; frame-src https://www.facebook.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://t.whop.tw https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' https://api.fontshare.com https://cdn.fontshare.com https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com; frame-src 'self' https://www.facebook.com; connect-src 'self' https://whop.com https://t.whop.tw https://www.facebook.com https://connect.facebook.net; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.facebook.com; object-src 'none'
   Strict-Transport-Security: max-age=31536000; includeSubDomains
 
 /*.html
